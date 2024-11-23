@@ -1,4 +1,5 @@
 import 'package:beginapp01/Screens/appoinment_screen.dart';
+import 'package:beginapp01/Screens/bill_screen.dart';
 import 'package:beginapp01/Screens/doctor_screen.dart';
 import 'package:beginapp01/Screens/login_screen.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
@@ -13,4 +14,5 @@ Map<String, WidgetBuilder> routes = {
   DoctorScreen.routeName : (context) => DoctorScreen(),
   PatientScreen.routeName : (context) => PatientScreen(),
   AppoinmentScreen.routeName : (context) => AppoinmentScreen(),
+  BillScreen.routeName : (context) => BillScreen(),
 };
