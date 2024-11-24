@@ -24,8 +24,8 @@ class Appoinment {
   @override 
   String toString() {
     if (allPatient.containsKey(_patientID) && allDoctors.containsKey(_doctorID) ) {
-      return 'Bệnh nhân: ${allPatient[_patientID]!.getLastName()} ${allPatient[_patientID]!.getFirstName()} \n'
-              'Bác sĩ phụ trách: ${allDoctors[_doctorID]!.getLastName()} ${allDoctors[_doctorID]!.getFirstName()} ' ;
+      return 'Bệnh nhân: ${allPatient[_patientID]!.lastName} ${allPatient[_patientID]!.firstName} \n'
+              'Bác sĩ phụ trách: ${allDoctors[_doctorID]!.lastName} ${allDoctors[_doctorID]!.firstName} ' ;
     } else {
       return 'Bệnh nhân không tồn tại';
     }

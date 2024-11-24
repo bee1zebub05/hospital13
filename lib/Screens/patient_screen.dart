@@ -189,11 +189,11 @@ class _PatientScreenState extends State<PatientScreen> {
                     width: MediaQuery.of(context).size.width / 7,
                     child: Column(
                       children: [
-                        _adjustblank(lastName, 'Họ', patient.getLastName()),
+                        _adjustblank(lastName, 'Họ', patient.lastName),
                         const SizedBox(height: 10),
-                        _adjustblank(age, 'Tuổi', patient.getAge().toString()),
+                        _adjustblank(age, 'Tuổi', patient.age.toString()),
                         const SizedBox(height: 10),
-                        _adjustblank(gender, 'Giới Tính' ,patient.getGender().toString()),
+                        _adjustblank(gender, 'Giới Tính' ,patient.gender.toString()),
                       ],
                     ),
                   ),
@@ -203,11 +203,11 @@ class _PatientScreenState extends State<PatientScreen> {
                     width: MediaQuery.of(context).size.width / 7,
                     child: Column(
                       children: [
-                        _adjustblank(firstName, 'Tên',patient.getFirstName()),
+                        _adjustblank(firstName, 'Tên',patient.firstName),
                         const SizedBox(height: 10),
-                        _adjustblank(phone, 'Số điện thoại',patient.getPhone()),
+                        _adjustblank(phone, 'Số điện thoại',patient.phone),
                         const SizedBox(height: 10),
-                        _adjustblank(address, 'Quê quán',patient.getAddress()),
+                        _adjustblank(address, 'Quê quán',patient.address),
                       ],
                     ),
                   ),
@@ -414,13 +414,13 @@ class _PatientScreenState extends State<PatientScreen> {
                                   ),
                                   tableText(patient.patientID ),
                                   const SizedBox(width: defaultPadding,),
-                                  tableText(patient.getLastName() ),
+                                  tableText(patient.lastName ),
                                   const SizedBox(width: defaultPadding,),
-                                  tableText(patient.getFirstName() ),
+                                  tableText(patient.firstName ),
                                   const SizedBox(width: defaultPadding,),
-                                  tableText(patient.getPhone()),
+                                  tableText(patient.phone),
                                   const SizedBox(width: defaultPadding,),
-                                  tableText(patient.getAddress()),
+                                  tableText(patient.address),
                                   const SizedBox(width: defaultPadding,),
                                   IconButton(
                                     onPressed: () => adjustPatient(patient), 
@@ -546,28 +546,28 @@ class _PatientScreenState extends State<PatientScreen> {
       case 2: setState(() {
         entries = allPatient.entries.toList();
         entries.sort((a,b){
-          int result = a.value.getLastName().compareTo(b.value.getLastName());
+          int result = a.value.lastName.compareTo(b.value.lastName);
           return listTypeReverse ? result : -result;
         });
       });
       case 3: setState(() {
         entries = allPatient.entries.toList();
         entries.sort((a,b){
-          int result = a.value.getFirstName().compareTo(b.value.getFirstName());
+          int result = a.value.firstName.compareTo(b.value.firstName);
           return listTypeReverse ? result : -result;
         });
       });
       case 4: setState(() {
         entries = allPatient.entries.toList();
         entries.sort((a,b){
-          int result =a.value.getPhone().compareTo(b.value.getPhone());
+          int result =a.value.phone.compareTo(b.value.phone);
           return listTypeReverse ? result : -result;
         });
       });
       case 5: setState(() {
         entries = allPatient.entries.toList();
         entries.sort((a,b){
-          int result = a.value.getAddress().compareTo(b.value.getAddress());
+          int result = a.value.address.compareTo(b.value.address);
           return listTypeReverse ? result : -result;
         });
       });
@@ -576,8 +576,8 @@ class _PatientScreenState extends State<PatientScreen> {
         List<MapEntry<String,Patient>> findEntries =[] ;
         for (var entry in entries) {
           Patient tmp = entry.value;
-          String needToFind = tmp.patientID + tmp.getLastName() + tmp.getFirstName() 
-          + tmp.getPhone() + tmp.getAddress() ;
+          String needToFind = tmp.patientID + tmp.lastName + tmp.firstName 
+          + tmp.phone + tmp.address ;
           if( needToFind.contains(findController.text) ){
             findEntries.add(entry);
           }

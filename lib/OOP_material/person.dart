@@ -14,12 +14,12 @@ class Person {
   ;
 
   //getter
-  String getLastName() => _lastName;
-  String getFirstName() => _firstName;
-  int getAge() => _age;
-  GenderEnum getGender() => _gender;
-  String getPhone() => _phone;
-  String getAddress() => _address;
+  String get lastName => _lastName;
+  String get firstName => _firstName;
+  int get age => _age;
+  GenderEnum get gender => _gender;
+  String get phone => _phone;
+  String get address => _address;
 
   //setter
   set firstName(String value) => _firstName = value;

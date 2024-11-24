@@ -1,4 +1,5 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:beginapp01/Screens/splash_screen.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:beginapp01/routes.dart';
@@ -6,6 +7,24 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(HospitalApp());
+}
+
+void showErorrFlushBar(BuildContext context, String title){
+  Flushbar(
+    backgroundColor: selectedColor,
+    duration: Duration(seconds: 3),
+    title: 'Lỗi',
+    titleSize: 24,
+    messageSize: 24,
+    message: title,
+    messageColor: textWhiteColor,
+    icon: const Icon(
+      Icons.warning_amber_rounded,
+      size: 28,
+      color: Colors.yellow,
+    ),
+    flushbarPosition: FlushbarPosition.BOTTOM,
+  ).show(context);
 }
 
 class HospitalApp extends StatelessWidget {
@@ -25,6 +44,15 @@ class HospitalApp extends StatelessWidget {
          // Thêm localizations tùy chỉnh
       ],
       theme: ThemeData.light().copyWith(
+        
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: selectedColor,
+          contentTextStyle:TextStyle(
+            color: textBlackColor,
+            fontSize: 17,
+            height: 0.5,
+          ), 
+        ),
         datePickerTheme: const DatePickerThemeData(
           backgroundColor: lightGreenBackground,
         ),

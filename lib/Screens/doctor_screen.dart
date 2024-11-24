@@ -2,6 +2,7 @@ import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/person.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
 import 'package:beginapp01/const_color.dart';
+import 'package:beginapp01/main-Beelzebub.dart';
 import 'package:flutter/material.dart';
 
 Container _fillblank(final TextEditingController _controller, String s) {
@@ -198,11 +199,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                     width: MediaQuery.of(context).size.width / 7,
                     child: Column(
                       children: [
-                        _adjustblank(lastName, 'Họ', doctor.getLastName()),
+                        _adjustblank(lastName, 'Họ', doctor.lastName),
                         const SizedBox(height: 10),
-                        _adjustblank(age, 'Tuổi', doctor.getAge().toString()),
+                        _adjustblank(age, 'Tuổi', doctor.age.toString()),
                         const SizedBox(height: 10),
-                        _adjustblank(gender, 'Giới Tính' ,doctor.getGender().toString()),
+                        _adjustblank(gender, 'Giới Tính' ,doctor.gender.toString()),
                       ],
                     ),
                   ),
@@ -212,11 +213,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                     width: MediaQuery.of(context).size.width / 7,
                     child: Column(
                       children: [
-                        _adjustblank(firstName, 'Tên',doctor.getFirstName()),
+                        _adjustblank(firstName, 'Tên',doctor.firstName),
                         const SizedBox(height: 10),
-                        _adjustblank(phone, 'Số điện thoại',doctor.getPhone()),
+                        _adjustblank(phone, 'Số điện thoại',doctor.phone),
                         const SizedBox(height: 10),
-                        _adjustblank(address, 'Quê quán',doctor.getAddress()),
+                        _adjustblank(address, 'Quê quán',doctor.address),
                       ],
                     ),
                   ),
@@ -243,35 +244,21 @@ class _DoctorScreenState extends State<DoctorScreen> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  if (IDWorker.text != latestID){
-                    allDoctors.remove(latestID);
-                    allDoctors[IDWorker.text] = Doctor(
-                      firstName: firstName.text,
-                      lastName: lastName.text,
-                      age: int.parse(age.text),
-                      gender: GenderEnum.male,
-                      phone: phone.text,
-                      address: address.text,
-                      IDWorker: IDWorker.text,
-                      salary: double.parse(salary.text),
-                      speciality: speciality.text,
-                    );
+                  if (IDWorker.text != latestID && allDoctors.containsKey(IDWorker.text)){
+                    showErorrFlushBar(context, 'Đã có bác sĩ mang ID này');
                   }
-                  else{
-                    allDoctors[IDWorker.text] = Doctor(
-                      firstName: firstName.text,
-                      lastName: lastName.text,
-                      age: int.parse(age.text),
-                      gender: GenderEnum.male,
-                      phone: phone.text,
-                      address: address.text,
-                      IDWorker: IDWorker.text,
-                      salary: double.parse(salary.text),
-                      speciality: speciality.text,
-                    );
-                  }
+                  else{allDoctors[IDWorker.text] = Doctor(
+                    firstName: firstName.text,
+                    lastName: lastName.text,
+                    age: int.parse(age.text),
+                    gender: GenderEnum.male,
+                    phone: phone.text,
+                    address: address.text,
+                    IDWorker: IDWorker.text,
+                    salary: double.parse(salary.text),
+                    speciality: speciality.text,
+                  );}
                 });
-                Navigator.of(context).pop(); // Đóng dialog
               },
               child: const Text(
                 'Lưu',
@@ -430,13 +417,13 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                   ),
                                   tableText(doctor.IDWorker ),
                                   const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.getLastName() ),
+                                  tableText(doctor.lastName ),
                                   const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.getFirstName() ),
+                                  tableText(doctor.firstName ),
                                   const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.getPhone()),
+                                  tableText(doctor.phone),
                                   const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.getAddress()),
+                                  tableText(doctor.address),
                                   const SizedBox(width: defaultPadding,),
                                   tableText(doctor.speciality),
                                   IconButton(
@@ -565,28 +552,28 @@ class _DoctorScreenState extends State<DoctorScreen> {
       case 2: setState(() {
         entries = allDoctors.entries.toList();
         entries.sort((a,b){
-          int result = a.value.getLastName().compareTo(b.value.getLastName());
+          int result = a.value.lastName.compareTo(b.value.lastName);
           return listTypeReverse ? result : -result;
         });
       });
       case 3: setState(() {
         entries = allDoctors.entries.toList();
         entries.sort((a,b){
-          int result = a.value.getFirstName().compareTo(b.value.getFirstName());
+          int result = a.value.firstName.compareTo(b.value.firstName);
           return listTypeReverse ? result : -result;
         });
       });
       case 4: setState(() {
         entries = allDoctors.entries.toList();
         entries.sort((a,b){
-          int result =a.value.getPhone().compareTo(b.value.getPhone());
+          int result =a.value.phone.compareTo(b.value.phone);
           return listTypeReverse ? result : -result;
         });
       });
       case 5: setState(() {
         entries = allDoctors.entries.toList();
         entries.sort((a,b){
-          int result = a.value.getAddress().compareTo(b.value.getAddress());
+          int result = a.value.address.compareTo(b.value.address);
           return listTypeReverse ? result : -result;
         });
       });
@@ -602,8 +589,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
         List<MapEntry<String,Doctor>> findEntries =[] ;
         for (var entry in entries) {
           Doctor tmp = entry.value;
-          String needToFind = tmp.IDWorker + tmp.getLastName() + tmp.getFirstName() 
-          + tmp.getPhone() + tmp.getAddress() + tmp.speciality;
+          String needToFind = tmp.IDWorker + tmp.lastName + tmp.firstName 
+          + tmp.phone + tmp.address + tmp.speciality;
           if( needToFind.contains(findController.text) ){
             findEntries.add(entry);
           }
