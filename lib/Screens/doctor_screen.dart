@@ -24,6 +24,47 @@ Container _fillblank(final TextEditingController _controller, String s) {
   );
 }
 
+Container _adjustGenderDropdown(GenderEnum selectedGender) {
+  return Container(
+    decoration: BoxDecoration(
+      color: lightGreenBackground,
+      borderRadius: BorderRadius.circular(defaultPadding * 2),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(defaultPadding),
+      child: DropdownButton<GenderEnum>(
+        value: selectedGender,
+        isExpanded: true,
+        onChanged: (GenderEnum? value) {
+          
+        } ,
+        items: GenderEnum.values.map((GenderEnum gender) {
+          return DropdownMenuItem<GenderEnum>(
+            value: gender,
+            child: Text(
+              _genderToString(gender),
+              style: const TextStyle(fontSize: 16),
+            ),
+          );
+        }).toList(),
+        underline: const SizedBox(), // Loại bỏ gạch dưới
+      ),
+    ),
+  );
+}
+
+String _genderToString(GenderEnum gender) {
+  switch (gender) {
+    case GenderEnum.male:
+      return 'Nam';
+    case GenderEnum.female:
+      return 'Nữ';
+    case GenderEnum.other:
+      return 'Khác';
+  }
+}
+
+
 Container _adjustblank(final TextEditingController _controller, String label, String init) {
   _controller.text = init;
   return Container(
@@ -61,10 +102,10 @@ class _DoctorScreenState extends State<DoctorScreen> {
   final TextEditingController findController = TextEditingController();
   //METHOD LÀM VIỆC VỚI MAP LƯU CÁC DOCTOR
   void addADoctor() {
+    GenderEnum _selectedGender = GenderEnum.male;
     final TextEditingController firstName = TextEditingController();
     final TextEditingController lastName = TextEditingController();
     final TextEditingController age = TextEditingController();
-    final TextEditingController gender = TextEditingController();
     final TextEditingController phone = TextEditingController();
     final TextEditingController address = TextEditingController();
     final TextEditingController IDWorker = TextEditingController();
@@ -73,224 +114,359 @@ class _DoctorScreenState extends State<DoctorScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Thêm một bác sĩ mới',
-            style: TextStyle(color: textBlackColor),
-          ),
-          content: SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width / 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  // Cột thứ nhất
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 7,
-                    child: Column(
-                      children: [
-                        _fillblank(lastName, 'Họ'),
-                        const SizedBox(height: 10),
-                        _fillblank(age, 'Tuổi'),
-                        const SizedBox(height: 10),
-                        _fillblank(gender, 'Giới Tính'),
-                      ],
-                    ),
+        return StatefulBuilder(
+          builder: (BuildContext context, void Function(void Function()) setState) {
+            return AlertDialog(
+              title: const Text(
+                'Thêm một bác sĩ mới',
+                style: TextStyle(color: textBlackColor),
+              ),
+              content: SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Spacer(),
+                      // Cột thứ nhất
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 7,
+                        child: Column(
+                          children: [
+                            _fillblank(lastName, 'Họ'),
+                            const SizedBox(height: 10),
+                            _fillblank(age, 'Tuổi'),
+                            const SizedBox(height: 10),
+                            Container(
+                                padding: const EdgeInsets.all(defaultPadding),
+                                decoration: BoxDecoration(
+                                  color: Colors.green.shade100,
+                                  borderRadius: BorderRadius.circular(defaultPadding*2),
+                                ),
+                                child: DropdownButton<GenderEnum>(
+                                  dropdownColor: lightGreenBackground,
+                                  borderRadius: BorderRadius.circular(defaultPadding*2),
+                                  underline: Container(
+                                    color: textBlackColor,
+                                  ),
+                                  value: _selectedGender,
+                                  hint: const Text('Chọn giới tính'),
+                                  isExpanded: true,
+                                  items: GenderEnum.values.map((GenderEnum gender) {
+                                    return DropdownMenuItem<GenderEnum>(
+                                      value: gender,
+                                      child: Text(_genderToString(gender)),
+                                    );
+                                  }).toList(),
+                                  onChanged: (GenderEnum? newValue) {
+                                    setState(() {
+                                      _selectedGender = newValue!; // Cập nhật giới tính
+                                    });
+                                  },
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      Spacer(),
+                      // Cột thứ hai
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 7,
+                        child: Column(
+                          children: [
+                            _fillblank(firstName, 'Tên'),
+                            const SizedBox(height: 10),
+                            _fillblank(phone, 'Số điện thoại'),
+                            const SizedBox(height: 10),
+                            _fillblank(address, 'Quê quán'),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      // Cột thứ ba
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 7,
+                        child: Column(
+                          children: [
+                            _fillblank(IDWorker, 'Mã nhân viên'),
+                            const SizedBox(height: 10),
+                            _fillblank(salary, 'Lương'),
+                            const SizedBox(height: 10),
+                            _fillblank(speciality, 'Chuyên ngành'),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                    ],
                   ),
-                  Spacer(),
-                  // Cột thứ hai
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 7,
-                    child: Column(
-                      children: [
-                        _fillblank(firstName, 'Tên'),
-                        const SizedBox(height: 10),
-                        _fillblank(phone, 'Số điện thoại'),
-                        const SizedBox(height: 10),
-                        _fillblank(address, 'Quê quán'),
-                      ],
-                    ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    if( allDoctors.containsKey(IDWorker.text) ){
+                      showErorrFlushBar(context, 'Đã tồn tại bác sĩ mang ID này');
+                    }
+                    else{
+                      allDoctors[IDWorker.text] = Doctor(
+                        firstName: firstName.text,
+                        lastName: lastName.text,
+                        age: int.parse(age.text),
+                        gender: _selectedGender,
+                        phone: phone.text,
+                        address: address.text,
+                        IDWorker: IDWorker.text,
+                        salary: double.parse(salary.text),
+                        speciality: speciality.text,);
+                      showCompleteFlushBar(context, 'Thêm thành công');
+                      Future.delayed(const Duration(seconds: 3), () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => DoctorScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return child;
+                          },
+                        ),
+                      );
+                    });
+                    }
+                  },
+                  child: const Text(
+                    'Lưu',
+                    style: TextStyle(color: textBlackColor, fontSize: 18),
                   ),
-                  const Spacer(),
-                  // Cột thứ ba
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 7,
-                    child: Column(
-                      children: [
-                        _fillblank(IDWorker, 'Mã nhân viên'),
-                        const SizedBox(height: 10),
-                        _fillblank(salary, 'Lương'),
-                        const SizedBox(height: 10),
-                        _fillblank(speciality, 'Chuyên ngành'),
-                      ],
-                    ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Đóng dialog
+                  },
+                  child: const Text(
+                    'Hủy',
+                    style: TextStyle(color: textBlackColor, fontSize: 18),
                   ),
-                  const Spacer(),
-                ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void adjustDoctor(Doctor doctor) {
+  GenderEnum _selectedGender = doctor.gender; // Giới tính hiện tại
+  String latestID = doctor.IDWorker;
+
+  final TextEditingController firstName = TextEditingController(text: doctor.firstName);
+  final TextEditingController lastName = TextEditingController(text: doctor.lastName);
+  final TextEditingController age = TextEditingController(text: doctor.age.toString());
+  final TextEditingController phone = TextEditingController(text: doctor.phone);
+  final TextEditingController address = TextEditingController(text: doctor.address);
+  final TextEditingController IDWorker = TextEditingController(text: doctor.IDWorker);
+  final TextEditingController salary = TextEditingController(text: doctor.salary.toString());
+  final TextEditingController speciality = TextEditingController(text: doctor.speciality);
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, void Function(void Function()) setState) {
+          return AlertDialog(
+            title: const Text(
+              'Thông tin về bác sĩ này',
+              style: TextStyle(color: textBlackColor),
+            ),
+            content: SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    // Cột thứ nhất
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 7,
+                      child: Column(
+                        children: [
+                          _adjustblank(lastName, 'Họ', doctor.lastName),
+                          const SizedBox(height: 10),
+                          _adjustblank(age, 'Tuổi', doctor.age.toString()),
+                          const SizedBox(height: 10),
+                          Container(
+                            padding: const EdgeInsets.all(defaultPadding),
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade100,
+                              borderRadius: BorderRadius.circular(defaultPadding*2),
+                            ),
+                            child: DropdownButton<GenderEnum>(
+                              dropdownColor: lightGreenBackground,
+                              borderRadius: BorderRadius.circular(defaultPadding*2),
+                              underline: Container(
+                                color: textBlackColor,
+                              ),
+                              value: _selectedGender,
+                              hint: const Text('Chọn giới tính'),
+                              isExpanded: true,
+                              items: GenderEnum.values.map((GenderEnum gender) {
+                                return DropdownMenuItem<GenderEnum>(
+                                  value: gender,
+                                  child: Text(_genderToString(gender)),
+                                );
+                              }).toList(),
+                              onChanged: (GenderEnum? newValue) {
+                                setState(() {
+                                  _selectedGender = newValue!; // Cập nhật giới tính
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // Cột thứ hai
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 7,
+                      child: Column(
+                        children: [
+                          _adjustblank(firstName, 'Tên', doctor.firstName),
+                          const SizedBox(height: 10),
+                          _adjustblank(phone, 'Số điện thoại', doctor.phone),
+                          const SizedBox(height: 10),
+                          _adjustblank(address, 'Quê quán', doctor.address),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // Cột thứ ba
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 7,
+                      child: Column(
+                        children: [
+                          _adjustblank(IDWorker, 'Mã nhân viên', doctor.IDWorker),
+                          const SizedBox(height: 10),
+                          _adjustblank(salary, 'Lương', doctor.salary.toString()),
+                          const SizedBox(height: 10),
+                          _adjustblank(speciality, 'Chuyên ngành', doctor.speciality),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
               ),
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  allDoctors[IDWorker.text] = Doctor(
-                    firstName: firstName.text,
-                    lastName: lastName.text,
-                    age: int.parse(age.text),
-                    gender: GenderEnum.male,
-                    phone: phone.text,
-                    address: address.text,
-                    IDWorker: IDWorker.text,
-                    salary: double.parse(salary.text),
-                    speciality: speciality.text,
+            actions: [
+              TextButton(
+                onPressed: () {
+                  if (IDWorker.text != latestID && allDoctors.containsKey(IDWorker.text)) {
+                    showErorrFlushBar(context, 'Đã có bác sĩ mang ID này');
+                  } else if (IDWorker.text != latestID && !allDoctors.containsKey(IDWorker.text)) {
+                    try {
+                        allDoctors.remove(latestID);
+                        allDoctors[IDWorker.text] = Doctor(
+                        firstName: firstName.text,
+                        lastName: lastName.text,
+                        age: int.parse(age.text),
+                        gender: _selectedGender,
+                        phone: phone.text,
+                        address: address.text,
+                        IDWorker: IDWorker.text,
+                        salary: double.parse(salary.text),
+                        speciality: speciality.text,
+                      );
+                      showCompleteFlushBar(context, 'Lưu thành công');
+                      Future.delayed(const Duration(seconds: 3), () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => DoctorScreen(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return child;
+                            },
+                          ),
+                        );
+                      });
+
+                      
+                    } catch (e) {
+                      showErorrFlushBar(context, '$e');
+                    }
+                  } else {
+                    try {
+                        allDoctors[latestID]?.firstName = firstName.text;
+                        allDoctors[latestID]?.lastName = lastName.text;
+                        allDoctors[latestID]?.age = int.parse(age.text);
+                        allDoctors[latestID]?.gender = _selectedGender;
+                        allDoctors[latestID]?.phone = phone.text;
+                        allDoctors[latestID]?.address = address.text;
+                        allDoctors[latestID]?.IDWorker = IDWorker.text;
+                        allDoctors[latestID]?.salary = double.parse(salary.text);
+                        allDoctors[latestID]?.speciality = speciality.text;
+                        showCompleteFlushBar(context, 'Lưu thành công');
+                        Future.delayed(const Duration(seconds: 3), () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => DoctorScreen(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return child;
+                            },
+                          ),
+                        );
+                      });
+
+                    } catch (e) {
+                      showErorrFlushBar(context, '$e');
+                    }
+                  }
+                },
+                child: const Text(
+                  'Lưu',
+                  style: TextStyle(color: textBlackColor, fontSize: 18),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    allDoctors.remove(latestID);
+                  });
+                  showCompleteFlushBar(context, 'Xóa thành công');
+                  Future.delayed(const Duration(seconds: 3), () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => DoctorScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return child;
+                      },
+                    ),
                   );
                 });
-                Navigator.of(context).pop(); // Đóng dialog
-              },
-              child: const Text(
-                'Lưu',
-                style: TextStyle(color: textBlackColor, fontSize: 18),
+                },
+                child: const Text(
+                  'Xóa bác sĩ',
+                  style: TextStyle(color: textBlackColor, fontSize: 18),
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Đóng dialog
-              },
-              child: const Text(
-                'Hủy',
-                style: TextStyle(color: textBlackColor, fontSize: 18),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Đóng dialog
+                },
+                child: const Text(
+                  'Hủy',
+                  style: TextStyle(color: textBlackColor, fontSize: 18),
+                ),
               ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-  void adjustDoctor(Doctor doctor) {
-    String latestID = doctor.IDWorker;
-    final TextEditingController firstName = TextEditingController();
-    final TextEditingController lastName = TextEditingController();
-    final TextEditingController age = TextEditingController();
-    final TextEditingController gender = TextEditingController();
-    final TextEditingController phone = TextEditingController();
-    final TextEditingController address = TextEditingController();
-    final TextEditingController IDWorker = TextEditingController();
-    final TextEditingController salary = TextEditingController();
-    final TextEditingController speciality = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Thông tin về bác sĩ này',
-            style: TextStyle(color: textBlackColor),
-          ),
-          content: SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width / 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  // Cột thứ nhất
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 7,
-                    child: Column(
-                      children: [
-                        _adjustblank(lastName, 'Họ', doctor.lastName),
-                        const SizedBox(height: 10),
-                        _adjustblank(age, 'Tuổi', doctor.age.toString()),
-                        const SizedBox(height: 10),
-                        _adjustblank(gender, 'Giới Tính' ,doctor.gender.toString()),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  // Cột thứ hai
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 7,
-                    child: Column(
-                      children: [
-                        _adjustblank(firstName, 'Tên',doctor.firstName),
-                        const SizedBox(height: 10),
-                        _adjustblank(phone, 'Số điện thoại',doctor.phone),
-                        const SizedBox(height: 10),
-                        _adjustblank(address, 'Quê quán',doctor.address),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  // Cột thứ ba
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 7,
-                    child: Column(
-                      children: [
-                        _adjustblank(IDWorker, 'Mã nhân viên',doctor.IDWorker),
-                        const SizedBox(height: 10),
-                        _adjustblank(salary, 'Lương',doctor.salary.toString()),
-                        const SizedBox(height: 10),
-                        _adjustblank(speciality, 'Chuyên ngành',doctor.speciality),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  if (IDWorker.text != latestID && allDoctors.containsKey(IDWorker.text)){
-                    showErorrFlushBar(context, 'Đã có bác sĩ mang ID này');
-                  }
-                  else{allDoctors[IDWorker.text] = Doctor(
-                    firstName: firstName.text,
-                    lastName: lastName.text,
-                    age: int.parse(age.text),
-                    gender: GenderEnum.male,
-                    phone: phone.text,
-                    address: address.text,
-                    IDWorker: IDWorker.text,
-                    salary: double.parse(salary.text),
-                    speciality: speciality.text,
-                  );}
-                });
-              },
-              child: const Text(
-                'Lưu',
-                style: TextStyle(color: textBlackColor, fontSize: 18),
-              ),
-            ),
-            TextButton(
-              onPressed: (){
-                setState(() {
-                  allDoctors.remove(latestID);
-                });
-                Navigator.of(context).pop(); // Đóng dialog
-              }, 
-              child: const Text(
-                'Xóa bác sĩ',
-                style: TextStyle(color: textBlackColor, fontSize: 18),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Đóng dialog
-              },
-              child: const Text(
-                'Hủy',
-                style: TextStyle(color: textBlackColor, fontSize: 18),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
   void searchDoctor(){
     findController.text = "";
     showDialog(
@@ -321,7 +497,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                //print(findController.text);
                 setState(() {
                   if( findController.text == "" ){
                   Navigator.of(context).pop();

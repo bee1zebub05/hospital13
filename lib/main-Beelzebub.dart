@@ -8,6 +8,24 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(HospitalApp());
 }
+void showCompleteFlushBar(BuildContext context, String title){
+  Flushbar(
+    backgroundColor: lightGreenBackground,
+    duration: Duration(seconds: 2),
+    title: 'Thông báo:',
+    titleSize: 24,
+    titleColor: textBlackColor,
+    messageSize: 24,
+    message: title,
+    messageColor: textBlackColor,
+    icon: const Icon(
+      Icons.assignment_turned_in,
+      size: 28,
+      color: textBlackColor,
+    ),
+    flushbarPosition: FlushbarPosition.BOTTOM,
+  ).show(context);
+}
 
 void showErorrFlushBar(BuildContext context, String title){
   Flushbar(
@@ -15,9 +33,10 @@ void showErorrFlushBar(BuildContext context, String title){
     duration: Duration(seconds: 3),
     title: 'Lỗi',
     titleSize: 24,
+    titleColor: textBlackColor,
     messageSize: 24,
     message: title,
-    messageColor: textWhiteColor,
+    messageColor: textBlackColor,
     icon: const Icon(
       Icons.warning_amber_rounded,
       size: 28,
@@ -44,7 +63,6 @@ class HospitalApp extends StatelessWidget {
          // Thêm localizations tùy chỉnh
       ],
       theme: ThemeData.light().copyWith(
-        
         snackBarTheme: const SnackBarThemeData(
           backgroundColor: selectedColor,
           contentTextStyle:TextStyle(

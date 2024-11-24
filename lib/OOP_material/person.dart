@@ -1,3 +1,13 @@
+import 'package:beginapp01/const_color.dart';
+class EmptyFieldException implements Exception {
+  final String message;
+
+  EmptyFieldException(this.message);
+
+  @override
+  String toString() => message; // Chỉ trả về thông báo lỗi
+}
+
 enum GenderEnum {male,female,other}
 class Person {
   String _firstName;
@@ -22,17 +32,49 @@ class Person {
   String get address => _address;
 
   //setter
-  set firstName(String value) => _firstName = value;
-  set lastName(String value) => _lastName = value;
+  set firstName(String value){
+    if(value.isEmpty){
+      throw EmptyFieldException('Tên không thể để trống');
+    } 
+    else {
+      _firstName = value;
+    }
+  }
+  set lastName(String value){
+    if(value.isEmpty){
+      throw EmptyFieldException('Họ không thể để trống');
+    } 
+    else {
+      _lastName = value;
+    }
+  }
   set age(int value) {
     if (value >= 0) {
       _age = value;
     } else {
-      throw ArgumentError('Age must be non-negative');
+      throw EmptyFieldException('Tuổi phải nhận giá trị dương');
     }
   }
   set gender(GenderEnum value) => _gender = value;
-  set phone(String value) => _phone = value;
-  set address(String value) => _address = value;
+  set phone(String value){
+    RegExp regExp = new RegExp(mobilePattern);
+    if(value.isEmpty){
+      throw EmptyFieldException('SĐT không thể để trống');
+    }
+    else if( !regExp.hasMatch(value)){
+      throw EmptyFieldException('SĐT nhập vào không hợp lệ');
+    }
+    else{
+      _phone = value;
+    }
+  }
+  set address(String value){
+    if(value.isEmpty){
+      throw EmptyFieldException('Địa chỉ không thể để trống');
+    } 
+    else {
+      _address = value;
+    }
+  }
 
 }

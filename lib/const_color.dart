@@ -19,5 +19,5 @@ const Color errorBorderColor = Color(0xFFE74C3C);
 
 const double defaultPadding = 20.0;
 
-const String mobilePattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+const String mobilePattern = r'^(0[0-9]{9,})$';
 const String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';

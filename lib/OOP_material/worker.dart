@@ -21,7 +21,7 @@ class Worker extends Person {
     if (value >= 0) {
       _salary = value;
     } else {
-      throw ArgumentError('Salary must be non-negative');
+      throw EmptyFieldException('Lương không thể nhận giá trị âm');
     }
   }
 }
