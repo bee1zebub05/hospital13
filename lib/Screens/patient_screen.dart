@@ -109,8 +109,6 @@ class _PatientScreenState extends State<PatientScreen> {
     final TextEditingController phone = TextEditingController();
     final TextEditingController address = TextEditingController();
     final TextEditingController IDWorker = TextEditingController();
-    final TextEditingController salary = TextEditingController();
-    final TextEditingController speciality = TextEditingController();
     showDialog(
       context: context,
       builder: (BuildContext context) {
