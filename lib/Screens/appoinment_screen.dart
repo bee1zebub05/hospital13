@@ -1,3 +1,6 @@
+import 'package:beginapp01/OOP_material/doctor.dart';
+import 'package:beginapp01/OOP_material/patient.dart';
+import 'package:beginapp01/main-Beelzebub.dart';
 import 'package:intl/intl.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
@@ -270,23 +273,31 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                 TextButton(
                   onPressed: () {
                     kAppointments[choosenTime] ??= [];
-                    kAppointments[choosenTime]?.add(
-                      Appoinment(appoinmentID: doctorID.text, 
-                      doctorID: doctorID.text, 
-                      patientID: patientID.text, 
-                      dateTime: choosenTime,
-                      )
-                    );
-                    
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) => AppoinmentScreen(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          return child;
-                        },
-                      ),
-                    );
+                    if( !allDoctors.containsKey(doctorID.text) ){
+                      showErorrFlushBar(context, 'Không có bác sĩ mang ID này');
+                    }
+                    else if( !allPatient.containsKey(patientID.text)){
+                      showErorrFlushBar(context, 'Không có bệnh nhân mang ID này');
+                    }
+                    else{
+                      kAppointments[choosenTime]?.add(
+                        Appoinment(appoinmentID: doctorID.text, 
+                        doctorID: doctorID.text, 
+                        patientID: patientID.text, 
+                        dateTime: choosenTime,
+                        )
+                      );
+                      
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => AppoinmentScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return child;
+                          },
+                        ),
+                      );
+                    }
                   },
                   child: const Text(
                     'Lưu',
