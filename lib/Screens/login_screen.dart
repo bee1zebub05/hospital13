@@ -2,7 +2,10 @@ import 'package:beginapp01/Screens/main_screen.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
 
-late bool _passwordVisible;
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+bool _passwordVisible = false;
+final TextEditingController emailController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
 
 class LoginScreen extends StatefulWidget {
   static String routeName ='LoginScreen';
@@ -13,12 +16,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
-  void initState(){
-    super.initState();
-    _passwordVisible = false;
-  }
-  @override
   Widget build(BuildContext context) {
+    
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -76,11 +75,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       Form(
+                        key: _formKey,
                         child: Column(
                           children: [
-                            buildEmailField(),
+                            buildEmailField(emailController),
                             const SizedBox(height: defaultPadding),
-                            buildPasswordField(),
+                            buildPasswordField(passwordController),
                             const SizedBox(height: defaultPadding),
                           ],
                         ),
@@ -127,7 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         Spacer(),
                         IconButton(
                           onPressed: (){
-                            Navigator.pushNamed(context, MainScreen.routeName);
+                            if( _formKey.currentState!.validate()){
+                              Navigator.pushNamed(context, MainScreen.routeName);
+                            }
                           }, 
                           icon: Icon(Icons.arrow_circle_right),
                           iconSize: 35,
@@ -145,59 +147,70 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  TextFormField buildPasswordField() {
+  TextFormField buildPasswordField(TextEditingController _controller) {
     return TextFormField(
-                          obscureText: !_passwordVisible,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.visiblePassword,
-                          style: const TextStyle(
-                            color: textBlackColor, fontSize: 28,
-                            fontWeight: FontWeight.w300,
-                          ) ,
-                          decoration: InputDecoration(
-                            labelText: 'Mật khẩu',
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            isDense: true,
-                            suffixIcon: IconButton(
-                              onPressed: (){
-                                setState(() {
-                                  _passwordVisible = !_passwordVisible;                                    
-                                });
-                              }, 
-                              icon: Icon(
-                                _passwordVisible ? Icons.visibility_off_outlined :
-                                Icons.visibility
-                              ),
-                              iconSize: defaultPadding,
-                            )
-                          ),
-                        );
+      controller: _controller,
+      obscureText: !_passwordVisible,
+      textAlign: TextAlign.start,
+      keyboardType: TextInputType.visiblePassword,
+      style: const TextStyle(
+        color: textBlackColor, fontSize: 28,
+        fontWeight: FontWeight.w300,
+      ) ,
+      decoration: InputDecoration(
+        labelText: 'Mật khẩu',
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        isDense: true,
+        suffixIcon: IconButton(
+          onPressed: (){
+            setState(() {
+              _passwordVisible = !_passwordVisible;                                    
+            });
+          }, 
+          icon: Icon(
+            _passwordVisible ? Icons.visibility_off_outlined :
+            Icons.visibility
+          ),
+          iconSize: defaultPadding,
+        )
+      ),
+      validator: (value){
+        if( !loginAccount.containsKey(emailController.text)  ){
+          return 'Tài khoản không tồn tại';
+        }
+        else if ( loginAccount[emailController.text] != passwordController.text ){
+          return 'Sai mật khẩu';
+        }
+        return null;
+      },
+    );
   }
 
-  TextFormField buildEmailField() {
+  TextFormField buildEmailField(TextEditingController _controller) {
     return TextFormField(
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.emailAddress,
-                          style: const TextStyle(
-                            color: textBlackColor, fontSize: 28,
-                            fontWeight: FontWeight.w300,
-                          ) ,
-                          decoration: const InputDecoration(
-                            labelText: 'Gmail hoặc số điện thoại',
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            isDense: true,
-                          ),
-                          //kiểm tra gmail đăng nhập hợp lệ
-                          validator: (value){
-                            RegExp regExp = new RegExp(emailPattern);
-                            if( value == null || value.isEmpty ){
-                              return 'Hãy nhập Gmail';
-                            }
-                            else if( !regExp.hasMatch(value) ){
-                              return 'Hãy nhập một Gmail hợp lệ';
-                            }
-                            return null;
-                          },
-                        );
+      controller: _controller,
+      textAlign: TextAlign.start,
+      keyboardType: TextInputType.emailAddress,
+      style: const TextStyle(
+        color: textBlackColor, fontSize: 28,
+        fontWeight: FontWeight.w300,
+      ) ,
+      decoration: const InputDecoration(
+        labelText: 'Gmail hoặc số điện thoại',
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        isDense: true,
+      ),
+      //kiểm tra gmail đăng nhập hợp lệ
+      validator: (value){
+        RegExp regExp = RegExp(emailPattern);
+        if( value == null || value.isEmpty ){
+          return 'Hãy nhập Gmail';
+        }
+        else if( !regExp.hasMatch(value) ){
+          return 'Hãy nhập một Gmail hợp lệ';
+        }
+        return null;
+      },
+    );
   }
 }

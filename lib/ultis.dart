@@ -11,22 +11,8 @@ import 'package:table_calendar/table_calendar.dart';
 final kAppointments = LinkedHashMap<DateTime, List<Appoinment>>(
   equals: isSameDay,
   hashCode: getHashCode,
-)..addAll(_kAppointmentSource);
-
-final _kAppointmentSource = Map.fromIterable(
-  List.generate(50, (index) => index),
-  key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
-  value: (item) => List.generate(
-    item % 10 + 1,
-    (index) => Appoinment(
-      appoinmentID: 'APP${item * 10 + index}',
-      doctorID: 'DOC${(item + index) % 5 + 1}', // Example doctor IDs
-      patientID: 'PAT${(item + index) % 10 + 1}', // Example patient IDs
-      dateTime: DateTime(2024,11,22),
-    ),
-  ),
 )..addAll({
-  kToday: [
+  DateTime(2024,11,22) : [
     Appoinment(
       appoinmentID: 'CH000000',
       doctorID: 'DT000000',
@@ -53,6 +39,7 @@ final _kAppointmentSource = Map.fromIterable(
     ),
   ],
 });
+
 
 /// Returns a list of [DateTime] objects from [first] to [last], inclusive.
 List<DateTime> daysInRange(DateTime first, DateTime last) {

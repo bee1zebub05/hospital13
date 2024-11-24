@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 
 Map<String, WidgetBuilder> routes = {
   SplashScreen.routeName : (context) => SplashScreen(),
-  LoginScreen.routeName : (context) => LoginScreen(),
   MainScreen.routeName : (context) => MainScreen(),
-  DoctorScreen.routeName : (context) => DoctorScreen(),
-  PatientScreen.routeName : (context) => PatientScreen(),
+  DoctorScreen.routeName : (context) => const DoctorScreen(),
+  PatientScreen.routeName : (context) => const PatientScreen(),
   AppoinmentScreen.routeName : (context) => AppoinmentScreen(),
   BillScreen.routeName : (context) => BillScreen(),
+  LoginScreen.routeName : (context) => LoginScreen(),
 };

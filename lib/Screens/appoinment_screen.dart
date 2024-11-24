@@ -1,9 +1,31 @@
+import 'package:intl/intl.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
 import 'package:beginapp01/ultis.dart';
+
+Container _fillblank(final TextEditingController _controller, String s, BuildContext context) {
+  return Container(
+    width: MediaQuery.of(context).size.width*0.2,
+    height: MediaQuery.of(context).size.height*0.125,
+    decoration: BoxDecoration(
+      color: lightGreenBackground,
+      borderRadius: BorderRadius.circular(defaultPadding*2)
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(defaultPadding),
+      child: TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          labelText: s,
+          border: const UnderlineInputBorder(),
+        ),
+      ),
+    ),
+  );
+}
 
 class AppoinmentScreen extends StatefulWidget {
   static String routeName = 'AppointmentScreen';
@@ -14,6 +36,59 @@ class AppoinmentScreen extends StatefulWidget {
 
 class _AppoinmentScreenState extends State<AppoinmentScreen> {
   //METHOD CỦA APPOINTMENT
+  DateTime choosenTime = DateTime.now();
+  
+
+  Future<void> _pickDateToAdd() async {
+    DateTime? pickedDate = await showDatePicker(
+      helpText: 'Ngày đã chọn',
+      context: context,
+      initialDate: choosenTime,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      cancelText: 'Hủy',
+      builder: (BuildContext context, Widget? child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          dialogTheme: DialogTheme(
+            backgroundColor: Colors.green.shade50, // Màu nền
+          ),
+        ),
+        child: child!,
+      );
+    },    );
+    if (pickedDate != null) {
+      setState(() {
+        choosenTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          choosenTime.hour,
+          choosenTime.minute,
+        );
+      });
+    }
+    print(choosenTime);
+  }
+  Future<void> _pickTimeToAdd() async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      cancelText: 'Hủy',
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(choosenTime),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        choosenTime = DateTime(
+          choosenTime.year,
+          choosenTime.month,
+          choosenTime.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+      });
+    }
+  }
   Future<void> _pickDate(Appoinment appoinment) async {
     DateTime? pickedDate = await showDatePicker(
       helpText: 'Ngày đã chọn',
@@ -139,6 +214,102 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  void addAnAppointment() {
+    final TextEditingController doctorID = TextEditingController();
+    final TextEditingController patientID = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setDialogState) {
+            return AlertDialog(
+              title: const Text('Thêm một cuộc hẹn mới'),
+              backgroundColor: whiteGreenBackground,
+              content: Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        _fillblank(doctorID, 'Mã số bác sĩ', context),
+                        _fillblank(patientID, 'Mã số bệnh nhân', context),
+                      ],
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.resolveWith<Color>((states) {
+                            if (states.contains(WidgetState.pressed)) {
+                              return lightGreenBackground; // Khi nhấn
+                            } else if (states.contains(WidgetState.disabled)) {
+                              return Colors.grey; // Khi tắt
+                            }
+                            return lightGreenBackground; // Mặc định
+                          }),
+                        ),
+                        onPressed: () async {
+                          await _pickDateToAdd(); // Cập nhật ngày
+                          await _pickTimeToAdd(); // Cập nhật giờ
+                          // Gọi setDialogState để cập nhật UI trong AlertDialog
+                          setDialogState(() {});
+                        },
+                        child: Text(
+                         'Ngày và giờ:  ' +
+                          DateFormat('HH:mm dd/MM/yyyy').format(choosenTime),
+                          style: const TextStyle(color: textBlackColor),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    kAppointments[choosenTime] ??= [];
+                    kAppointments[choosenTime]?.add(
+                      Appoinment(appoinmentID: doctorID.text, 
+                      doctorID: doctorID.text, 
+                      patientID: patientID.text, 
+                      dateTime: choosenTime,
+                      )
+                    );
+                    
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) => AppoinmentScreen(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          return child;
+                        },
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Lưu',
+                    style: TextStyle(color: textBlackColor, fontSize: 18),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Đóng dialog
+                  },
+                  child: const Text(
+                    'Hủy',
+                    style: TextStyle(color: textBlackColor, fontSize: 18),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
 
   @override
   void initState() {
@@ -215,6 +386,9 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
               if (index == 0) {
                 Navigator.pushNamed(context, MainScreen.routeName);
               }
+              if(index == 1){
+                addAnAppointment();
+              }
             },
             backgroundColor: lightGreenBackground,
             destinations: const [
@@ -224,9 +398,9 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                 label: Text('Quay lại'),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.person),
-                selectedIcon: Icon(Icons.person),
-                label: Text('Hồ sơ'),
+                icon: Icon(Icons.add_circle),
+                selectedIcon: Icon(Icons.add_circle),
+                label: Text('Thêm'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.settings),

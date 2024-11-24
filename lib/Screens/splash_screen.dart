@@ -20,6 +20,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       duration: const Duration(seconds: 4),
       vsync: this
     );
+    //move to login screen after 5s 
+    Future.delayed(const Duration(seconds: 4), (){
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, LoginScreen.routeName);
+    });
   }
   @override
   void dispose() {
@@ -28,11 +33,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
   @override
   Widget build(BuildContext context) {
-    //move to login screen after 5s 
-    Future.delayed(const Duration(seconds: 4), (){
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false);
-    });
+    
 
 
     return Scaffold(

@@ -1,5 +1,9 @@
 import "package:flutter/material.dart";
 
+Map <String,String> loginAccount = {
+  'nguyenlekhanh13@gmail.com' : 'nguyendz123'
+};
+
 const Color selectedColor = Color(0xFFF26D3D);
 const Color weekendColor = Color(0xFFFFC8C4);
 const Color veryGreenBackground = Color(0xFF023336);

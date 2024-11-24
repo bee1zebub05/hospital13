@@ -1,9 +1,10 @@
 import 'package:beginapp01/Screens/appoinment_screen.dart';
 import 'package:beginapp01/Screens/doctor_screen.dart';
+import 'package:beginapp01/Screens/login_screen.dart';
 import 'package:beginapp01/Screens/patient_screen.dart';
+import 'package:beginapp01/Screens/splash_screen.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainScreen extends StatefulWidget {
   static String routeName ='MainScreen';  
@@ -69,6 +70,11 @@ class _MainScreenState extends State<MainScreen> {
               switch(index){
                 case 0:
                   Navigator.pushNamed(context, MainScreen.routeName);
+                  break;
+                case 1:
+                  Navigator.pushNamedAndRemoveUntil(context, SplashScreen.routeName, (route) => false);
+                  break;
+                default: return;
               }
             },
             backgroundColor: lightGreenBackground, 
@@ -79,8 +85,8 @@ class _MainScreenState extends State<MainScreen> {
                 label: Text('Home'),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.person),
-                selectedIcon: Icon(Icons.person), 
+                icon: Icon(Icons.logout),
+                selectedIcon: Icon(Icons.logout), 
                 label: Text('Profile'),
               ),
               NavigationRailDestination(
