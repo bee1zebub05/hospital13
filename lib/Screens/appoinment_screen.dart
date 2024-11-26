@@ -1,6 +1,6 @@
 import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/patient.dart';
-import 'package:beginapp01/main-Beelzebub.dart';
+import 'package:beginapp01/main.dart';
 import 'package:intl/intl.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'package:beginapp01/Screens/main_screen.dart';

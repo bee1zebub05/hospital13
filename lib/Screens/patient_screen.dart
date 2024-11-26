@@ -2,7 +2,7 @@ import 'package:beginapp01/OOP_material/patient.dart';
 import 'package:beginapp01/OOP_material/person.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
 import 'package:beginapp01/const_color.dart';
-import 'package:beginapp01/main-Beelzebub.dart';
+import 'package:beginapp01/main.dart';
 import 'package:flutter/material.dart';
 
 Container _fillblank(final TextEditingController _controller, String s) {
