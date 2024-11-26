@@ -27,7 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(125, 50);
   Win32Window::Size size(1280, 720);
-  if (!window.Create(L"beginapp01", origin, size)) {
+  if (!window.Create(L"BEELZEBUB'S HOSPITAL", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

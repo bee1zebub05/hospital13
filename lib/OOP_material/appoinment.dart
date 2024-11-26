@@ -1,3 +1,4 @@
+import 'package:beginapp01/OOP_material/bill.dart';
 import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/patient.dart';
 
@@ -6,6 +7,7 @@ class Appoinment {
   String _doctorID;
   String _patientID;
   DateTime dateTime;
+  Bill? payedBill;
   // Constructor
   Appoinment({
     required String appoinmentID,

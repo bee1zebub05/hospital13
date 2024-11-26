@@ -1,6 +1,9 @@
+import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'person.dart';
 
 class Patient extends Person {
+  //Mỗi một bệnh nhân có thể đã hoặc chưa có 1 hồ sơ bệnh án
+  List <Appoinment>? medicalRecord;
   String _patientID;
   Patient({
     super.firstName,

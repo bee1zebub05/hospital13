@@ -4,10 +4,14 @@ import 'package:beginapp01/Screens/splash_screen.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:beginapp01/routes.dart';
 import 'package:flutter/material.dart';
-
 void main() {
   runApp(HospitalApp());
 }
+
+bool compare(DateTime a, DateTime b){
+  return ( a.year >= b.year && a.month >= b.month && a.day >= b.day );
+}
+
 void showCompleteFlushBar(BuildContext context, String title){
   Flushbar(
     backgroundColor: lightGreenBackground,

@@ -1,3 +1,5 @@
+import 'package:beginapp01/OOP_material/doctor.dart';
+import 'package:beginapp01/OOP_material/patient.dart';
 import 'package:beginapp01/const_color.dart';
 class EmptyFieldException implements Exception {
   final String message;
@@ -9,6 +11,16 @@ class EmptyFieldException implements Exception {
 }
 
 enum GenderEnum {male,female,other}
+
+bool checkPhone(String phone){
+  for(var doctor in allDoctors.values){
+    if (doctor.phone == phone) return false;
+  }
+  for(var patient in allPatient.values){
+    if(patient.phone == phone) return false;
+  }
+  return true;
+}
 class Person {
   String _firstName;
   String _lastName;
@@ -63,6 +75,9 @@ class Person {
     }
     else if( !regExp.hasMatch(value)){
       throw EmptyFieldException('SĐT nhập vào không hợp lệ');
+    }
+    else if(!checkPhone(value)){
+      throw EmptyFieldException('Đã tồn tại bác sĩ hoặc bệnh nhân mang SDT này');
     }
     else{
       _phone = value;

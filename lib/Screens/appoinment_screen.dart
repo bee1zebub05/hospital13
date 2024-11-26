@@ -38,6 +38,13 @@ class AppoinmentScreen extends StatefulWidget {
 }
 
 class _AppoinmentScreenState extends State<AppoinmentScreen> {
+  late final ValueNotifier<List<Appoinment>> _selectedEvents;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
   //METHOD CỦA APPOINTMENT
   DateTime choosenTime = DateTime.now();
   
@@ -210,13 +217,19 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
       }
     );
   }
-  late final ValueNotifier<List<Appoinment>> _selectedEvents;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
+  
+
+  void showAnAppoinment(Appoinment appoinment){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          
+        );
+      },
+    );
+  }
+
   void addAnAppointment() {
     final TextEditingController doctorID = TextEditingController();
     final TextEditingController patientID = TextEditingController();
@@ -260,8 +273,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                           setDialogState(() {});
                         },
                         child: Text(
-                         'Ngày và giờ:  ' +
-                          DateFormat('HH:mm dd/MM/yyyy').format(choosenTime),
+                         'Ngày và giờ:  ${DateFormat('HH:mm dd/MM/yyyy').format(choosenTime)}',
                           style: const TextStyle(color: textBlackColor),
                         ),
                       ),
@@ -281,7 +293,8 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                     }
                     else{
                       kAppointments[choosenTime]?.add(
-                        Appoinment(appoinmentID: doctorID.text, 
+                        Appoinment(
+                        appoinmentID: doctorID.text, 
                         doctorID: doctorID.text, 
                         patientID: patientID.text, 
                         dateTime: choosenTime,
@@ -523,19 +536,26 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                                     title: Text('${value[index]}'),
                                   ),
                                 ),
-                                //const Spacer(),
                                 Expanded(
-                                  child: ListTile( 
-                                    title: Text('${value[index].dateTime.hour}'.padLeft(2,'0') + ' : ' +
-                                    '${value[index].dateTime.minute}'.padLeft(2,'0')),
-                                   )
+                                  child: ListTile(
+                                    title: Text(
+                                      '${value[index].dateTime.hour.toString().padLeft(2, '0')} : '
+                                      '${value[index].dateTime.minute.toString().padLeft(2, '0')}',
+                                    ),
+                                  ),
                                 ),
-                                //const Spacer(),
-                                IconButton(
-                                  onPressed: () => changeAnAppoinment(value[index]), 
-                                  icon: const Icon(Icons.edit_calendar)
-                                )
-                              ],
+                                if (value[index].dateTime.isAfter(DateTime.now()))
+                                  IconButton(
+                                    onPressed: () => changeAnAppoinment(value[index]),
+                                    icon: const Icon(Icons.edit_calendar),
+                                  )
+                                else
+                                  IconButton(
+                                    onPressed: () => showAnAppoinment(value[index]), 
+                                    icon: const Icon(Icons.visibility),
+                                  ),
+                              ]
+
                             )
                           );
                         },
