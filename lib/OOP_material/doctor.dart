@@ -1,47 +1,54 @@
 import 'package:beginapp01/OOP_material/person.dart';
+import 'package:beginapp01/const_color.dart';
 
 import 'worker.dart';
 
+bool _checkPhone(String phone,String id){
+  for( var doctor in allDoctors.values ){
+    if( doctor.phone == phone && doctor.IDWorker != id ){
+      return false;
+    }
+  }
+  return true;
+}
+
 class Doctor extends Worker {
   String _speciality;
+  String _phone;
   Doctor({
     super.firstName,
     super.lastName,
     super.age,
     super.gender,
-    super.phone,
     super.address,
     super.IDWorker,
     super.salary,
+    String phone = "",
     String speciality = "",
-  }) : _speciality = speciality;
+  }) : _speciality = speciality, _phone =phone;
   String get speciality => _speciality;
   set speciality(String value) => _speciality = value;
+  String get phone => _phone;
+  set phone(String value){
+    RegExp regExp = RegExp(mobilePattern);
+    if(value.isEmpty){
+      throw EmptyFieldException('SĐT không thể để trống');
+    }
+    else if( !regExp.hasMatch(value)){
+      throw EmptyFieldException('SĐT nhập vào không hợp lệ');
+    }
+    else if(!_checkPhone(value, IDWorker )){
+      throw EmptyFieldException('Đã tồn tại bác sĩ mang SDT này');
+    }
+    else{
+      _phone = value;
+    }
+  }
 }
 
+int doctorLastestID =10;
+
 Map<String,Doctor> allDoctors ={
-'HSCC0001' : Doctor(
-    firstName: 'Nguyên',
-    lastName: 'Lê',
-    age: 18,
-    gender: GenderEnum.male,
-    phone: '0935927732',
-    address: 'Đà Nẵng',
-    IDWorker: 'HSCC0001',
-    salary: 100.0,
-    speciality: 'Hồi sức cấp cứu',
-  ),
-  'DT000000' : Doctor(
-    firstName: 'Quân',
-    lastName: 'Bùi Xuân',
-    age: 25,
-    gender: GenderEnum.female,
-    phone: '0836327583',
-    address: 'Buôn Ma Thuột',
-    IDWorker: 'DT000000',
-    salary: 31,
-    speciality: 'Tiêu hóa',
-),
   'DT000001' : Doctor(
     firstName: 'Thúy Vân',
     lastName: 'Võ',
@@ -140,5 +147,16 @@ Map<String,Doctor> allDoctors ={
     IDWorker: 'DT000009',
     salary: 12,
     speciality: 'Huyết học',
+),
+'DT000010' : Doctor(
+    firstName: 'Quân',
+    lastName: 'Bùi Xuân',
+    age: 25,
+    gender: GenderEnum.female,
+    phone: '0836327583',
+    address: 'Buôn Ma Thuột',
+    IDWorker: 'DT000010',
+    salary: 31,
+    speciality: 'Tiêu hóa',
 ),
 };

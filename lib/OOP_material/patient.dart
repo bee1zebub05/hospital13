@@ -1,33 +1,53 @@
 import 'package:beginapp01/OOP_material/appoinment.dart';
+import 'package:beginapp01/const_color.dart';
 import 'person.dart';
+
+bool _checkPhone(String phone, String id){
+  for( var patient in allPatient.values ){
+    if( patient.phone == phone && patient.patientID != id ){
+      return false;
+    }
+  }
+  return false;
+}
 
 class Patient extends Person {
   //Mỗi một bệnh nhân có thể đã hoặc chưa có 1 hồ sơ bệnh án
   List <Appoinment>? medicalRecord;
   String _patientID;
+  String _phone;
   Patient({
     super.firstName,
     super.lastName,
     super.age,
     super.gender,
-    super.phone,
     super.address,
+    String phone ="",
     String patientID = "",
-  }) : _patientID = patientID;
+  }) : _patientID = patientID, _phone =phone;
+  String get phone => _phone;
+  set phone(String value){
+    RegExp regExp = RegExp(mobilePattern);
+    if(value.isEmpty){
+      throw EmptyFieldException('SĐT không thể để trống');
+    }
+    else if( !regExp.hasMatch(value)){
+      throw EmptyFieldException('SĐT nhập vào không hợp lệ');
+    }
+    else if(!_checkPhone(value, patientID )){
+      throw EmptyFieldException('Đã tồn tại bệnh nhân mang SDT này');
+    }
+    else{
+      _phone = value;
+    }
+  }
   String get patientID => _patientID;
   set patientID(String value) => _patientID = value;
 }
 
+int patientLastestID = 10;
+
 Map<String,Patient> allPatient = {
-  'BN000000' : Patient(
-    firstName: 'Văn Thành',
-    lastName: 'Biện',
-    age: 20,
-    gender: GenderEnum.male,
-    phone: '0906629159',
-    address: 'Tây Ninh',
-    patientID: 'BN000000',
-),
   'BN000001' : Patient(
     firstName: 'Em',
     lastName: 'Đậu',

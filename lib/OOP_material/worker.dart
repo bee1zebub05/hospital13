@@ -8,7 +8,6 @@ class Worker extends Person {
     super.lastName,
     super.age,
     super.gender,
-    super.phone,
     super.address,
     String IDWorker ="",
     double salary = 0,

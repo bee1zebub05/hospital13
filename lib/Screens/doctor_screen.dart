@@ -2,91 +2,7 @@ import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/person.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
 import 'package:beginapp01/const_color.dart';
-import 'package:beginapp01/main.dart';
 import 'package:flutter/material.dart';
-
-Container _fillblank(final TextEditingController _controller, String s) {
-  return Container(
-    decoration: BoxDecoration(
-      color: lightGreenBackground,
-      borderRadius: BorderRadius.circular(defaultPadding*2)
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(defaultPadding),
-      child: TextField(
-        controller: _controller,
-        decoration: InputDecoration(
-          labelText: s,
-          border: const UnderlineInputBorder(),
-        ),
-      ),
-    ),
-  );
-}
-
-Container _adjustGenderDropdown(GenderEnum selectedGender) {
-  return Container(
-    decoration: BoxDecoration(
-      color: lightGreenBackground,
-      borderRadius: BorderRadius.circular(defaultPadding * 2),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(defaultPadding),
-      child: DropdownButton<GenderEnum>(
-        value: selectedGender,
-        isExpanded: true,
-        onChanged: (GenderEnum? value) {
-          
-        } ,
-        items: GenderEnum.values.map((GenderEnum gender) {
-          return DropdownMenuItem<GenderEnum>(
-            value: gender,
-            child: Text(
-              _genderToString(gender),
-              style: const TextStyle(fontSize: 16),
-            ),
-          );
-        }).toList(),
-        underline: const SizedBox(), // Loại bỏ gạch dưới
-      ),
-    ),
-  );
-}
-
-String _genderToString(GenderEnum gender) {
-  switch (gender) {
-    case GenderEnum.male:
-      return 'Nam';
-    case GenderEnum.female:
-      return 'Nữ';
-    case GenderEnum.other:
-      return 'Khác';
-  }
-}
-
-
-Container _adjustblank(final TextEditingController _controller, String label, String init) {
-  _controller.text = init;
-  return Container(
-    decoration: BoxDecoration(
-      color: lightGreenBackground,
-      borderRadius: BorderRadius.circular(defaultPadding*2)
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(defaultPadding),
-      child: TextField(
-        controller: _controller,
-        decoration: InputDecoration(
-          labelText: label,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          //hintText: init,
-          border: const UnderlineInputBorder(),
-        ),
-      ),
-    ),
-  );
-}
-
 
 class DoctorScreen extends StatefulWidget {
   const DoctorScreen({super.key});
@@ -108,7 +24,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
     final TextEditingController age = TextEditingController();
     final TextEditingController phone = TextEditingController();
     final TextEditingController address = TextEditingController();
-    final TextEditingController IDWorker = TextEditingController();
     final TextEditingController salary = TextEditingController();
     final TextEditingController speciality = TextEditingController();
     showDialog(
@@ -133,9 +48,9 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         width: MediaQuery.of(context).size.width / 7,
                         child: Column(
                           children: [
-                            _fillblank(lastName, 'Họ'),
+                            fillblank(lastName, 'Họ'),
                             const SizedBox(height: 10),
-                            _fillblank(age, 'Tuổi'),
+                            fillblank(age, 'Tuổi'),
                             const SizedBox(height: 10),
                             Container(
                                 padding: const EdgeInsets.all(defaultPadding),
@@ -155,7 +70,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                   items: GenderEnum.values.map((GenderEnum gender) {
                                     return DropdownMenuItem<GenderEnum>(
                                       value: gender,
-                                      child: Text(_genderToString(gender)),
+                                      child: Text(genderToString(gender)),
                                     );
                                   }).toList(),
                                   onChanged: (GenderEnum? newValue) {
@@ -174,11 +89,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         width: MediaQuery.of(context).size.width / 7,
                         child: Column(
                           children: [
-                            _fillblank(firstName, 'Tên'),
+                            fillblank(firstName, 'Tên'),
                             const SizedBox(height: 10),
-                            _fillblank(phone, 'Số điện thoại'),
+                            fillblank(phone, 'Số điện thoại'),
                             const SizedBox(height: 10),
-                            _fillblank(address, 'Quê quán'),
+                            fillblank(address, 'Quê quán'),
                           ],
                         ),
                       ),
@@ -188,11 +103,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         width: MediaQuery.of(context).size.width / 7,
                         child: Column(
                           children: [
-                            _fillblank(IDWorker, 'Mã nhân viên'),
+                            showAddingID('Mã số bác sĩ', 1),
                             const SizedBox(height: 10),
-                            _fillblank(salary, 'Lương'),
+                            fillblank(salary, 'Lương'),
                             const SizedBox(height: 10),
-                            _fillblank(speciality, 'Chuyên ngành'),
+                            fillblank(speciality, 'Chuyên ngành'),
                           ],
                         ),
                       ),
@@ -204,20 +119,19 @@ class _DoctorScreenState extends State<DoctorScreen> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    if( allDoctors.containsKey(IDWorker.text) ){
-                      showErorrFlushBar(context, 'Đã tồn tại bác sĩ mang ID này');
-                    }
-                    else{
-                      allDoctors[IDWorker.text] = Doctor(
+                        allDoctors[newestID] = Doctor(
                         firstName: firstName.text,
                         lastName: lastName.text,
                         age: int.parse(age.text),
                         gender: _selectedGender,
                         phone: phone.text,
                         address: address.text,
-                        IDWorker: IDWorker.text,
+                        IDWorker: newestID,
                         salary: double.parse(salary.text),
                         speciality: speciality.text,);
+                      if( newestID == 'DT${'${doctorLastestID+1}'.padLeft(6,'0')}' ){
+                        doctorLastestID++;
+                      }
                       showCompleteFlushBar(context, 'Thêm thành công');
                       Future.delayed(const Duration(seconds: 3), () {
                       Navigator.push(
@@ -230,7 +144,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         ),
                       );
                     });
-                    }
                   },
                   child: const Text(
                     'Lưu',
@@ -263,7 +176,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
   final TextEditingController age = TextEditingController(text: doctor.age.toString());
   final TextEditingController phone = TextEditingController(text: doctor.phone);
   final TextEditingController address = TextEditingController(text: doctor.address);
-  final TextEditingController IDWorker = TextEditingController(text: doctor.IDWorker);
   final TextEditingController salary = TextEditingController(text: doctor.salary.toString());
   final TextEditingController speciality = TextEditingController(text: doctor.speciality);
 
@@ -289,9 +201,9 @@ class _DoctorScreenState extends State<DoctorScreen> {
                       width: MediaQuery.of(context).size.width / 7,
                       child: Column(
                         children: [
-                          _adjustblank(lastName, 'Họ', doctor.lastName),
+                          adjustblank(lastName, 'Họ', doctor.lastName),
                           const SizedBox(height: 10),
-                          _adjustblank(age, 'Tuổi', doctor.age.toString()),
+                          adjustblank(age, 'Tuổi', doctor.age.toString()),
                           const SizedBox(height: 10),
                           Container(
                             padding: const EdgeInsets.all(defaultPadding),
@@ -311,7 +223,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                               items: GenderEnum.values.map((GenderEnum gender) {
                                 return DropdownMenuItem<GenderEnum>(
                                   value: gender,
-                                  child: Text(_genderToString(gender)),
+                                  child: Text(genderToString(gender)),
                                 );
                               }).toList(),
                               onChanged: (GenderEnum? newValue) {
@@ -330,11 +242,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                       width: MediaQuery.of(context).size.width / 7,
                       child: Column(
                         children: [
-                          _adjustblank(firstName, 'Tên', doctor.firstName),
+                          adjustblank(firstName, 'Tên', doctor.firstName),
                           const SizedBox(height: 10),
-                          _adjustblank(phone, 'Số điện thoại', doctor.phone),
+                          adjustblank(phone, 'Số điện thoại', doctor.phone),
                           const SizedBox(height: 10),
-                          _adjustblank(address, 'Quê quán', doctor.address),
+                          adjustblank(address, 'Quê quán', doctor.address),
                         ],
                       ),
                     ),
@@ -344,11 +256,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
                       width: MediaQuery.of(context).size.width / 7,
                       child: Column(
                         children: [
-                          _adjustblank(IDWorker, 'Mã nhân viên', doctor.IDWorker),
+                          showID('ID của bác sĩ này',doctor.IDWorker),
                           const SizedBox(height: 10),
-                          _adjustblank(salary, 'Lương', doctor.salary.toString()),
+                          adjustblank(salary, 'Lương', doctor.salary.toString()),
                           const SizedBox(height: 10),
-                          _adjustblank(speciality, 'Chuyên ngành', doctor.speciality),
+                          adjustblank(speciality, 'Chuyên ngành', doctor.speciality),
                         ],
                       ),
                     ),
@@ -360,40 +272,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
             actions: [
               TextButton(
                 onPressed: () {
-                  if (IDWorker.text != latestID && allDoctors.containsKey(IDWorker.text)) {
-                    showErorrFlushBar(context, 'Đã có bác sĩ mang ID này');
-                  } else if (IDWorker.text != latestID && !allDoctors.containsKey(IDWorker.text)) {
-                    try {
-                        allDoctors.remove(latestID);
-                        allDoctors[IDWorker.text] = Doctor(
-                        firstName: firstName.text,
-                        lastName: lastName.text,
-                        age: int.parse(age.text),
-                        gender: _selectedGender,
-                        phone: phone.text,
-                        address: address.text,
-                        IDWorker: IDWorker.text,
-                        salary: double.parse(salary.text),
-                        speciality: speciality.text,
-                      );
-                      showCompleteFlushBar(context, 'Lưu thành công');
-                      Future.delayed(const Duration(seconds: 3), () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => DoctorScreen(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return child;
-                            },
-                          ),
-                        );
-                      });
-
-                      
-                    } catch (e) {
-                      showErorrFlushBar(context, '$e');
-                    }
-                  } else {
                     try {
                         allDoctors[latestID]?.firstName = firstName.text;
                         allDoctors[latestID]?.lastName = lastName.text;
@@ -401,7 +279,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         allDoctors[latestID]?.gender = _selectedGender;
                         allDoctors[latestID]?.phone = phone.text;
                         allDoctors[latestID]?.address = address.text;
-                        allDoctors[latestID]?.IDWorker = IDWorker.text;
                         allDoctors[latestID]?.salary = double.parse(salary.text);
                         allDoctors[latestID]?.speciality = speciality.text;
                         showCompleteFlushBar(context, 'Lưu thành công');
@@ -420,7 +297,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
                     } catch (e) {
                       showErorrFlushBar(context, '$e');
                     }
-                  }
                 },
                 child: const Text(
                   'Lưu',

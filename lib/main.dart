@@ -1,5 +1,4 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:beginapp01/Screens/splash_screen.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:beginapp01/routes.dart';
@@ -8,43 +7,6 @@ void main() {
   runApp(HospitalApp());
 }
 
-void showCompleteFlushBar(BuildContext context, String title){
-  Flushbar(
-    backgroundColor: lightGreenBackground,
-    duration: Duration(seconds: 2),
-    title: 'Thông báo:',
-    titleSize: 24,
-    titleColor: textBlackColor,
-    messageSize: 24,
-    message: title,
-    messageColor: textBlackColor,
-    icon: const Icon(
-      Icons.assignment_turned_in,
-      size: 28,
-      color: textBlackColor,
-    ),
-    flushbarPosition: FlushbarPosition.BOTTOM,
-  ).show(context);
-}
-
-void showErorrFlushBar(BuildContext context, String title){
-  Flushbar(
-    backgroundColor: selectedColor,
-    duration: Duration(seconds: 3),
-    title: 'Lỗi',
-    titleSize: 24,
-    titleColor: textBlackColor,
-    messageSize: 24,
-    message: title,
-    messageColor: textBlackColor,
-    icon: const Icon(
-      Icons.warning_amber_rounded,
-      size: 28,
-      color: Colors.yellow,
-    ),
-    flushbarPosition: FlushbarPosition.BOTTOM,
-  ).show(context);
-}
 
 class HospitalApp extends StatelessWidget {
   @override

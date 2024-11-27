@@ -78,7 +78,6 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
         );
       });
     }
-    print(choosenTime);
   }
   Future<void> _pickTimeToAdd() async {
     TimeOfDay? pickedTime = await showTimePicker(
@@ -518,25 +517,25 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                         itemCount: value.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 12.0,
-                              vertical: 4.0,
-                            ),
+                            height: MediaQuery.of(context).size.height*0.1,
+                            width: MediaQuery.of(context).size.width*0.1,
                             decoration: BoxDecoration(
                               color: lightGreenBackground,
                               border: Border.all(),
-                              borderRadius: BorderRadius.circular(12.0),
+                              borderRadius: BorderRadius.circular(defaultPadding),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
+                                  flex: 2,
                                   child: ListTile(
-                                    onTap: () => print('${value[index]}'),
-                                    title: Text('${value[index]}'),
+                                    onTap: () => null,
+                                    title: showAppoinmentInfo(value[index].appoinmentID, '${value[index]}'),
                                   ),
                                 ),
                                 Expanded(
+                                  flex: 1,
                                   child: ListTile(
                                     title: Text(
                                       '${value[index].dateTime.hour.toString().padLeft(2, '0')} : '
