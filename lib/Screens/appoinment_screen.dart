@@ -133,15 +133,6 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
         kAppointments[DateTime( appoinment.dateTime.year, appoinment.dateTime.month, appoinment.dateTime.day )]?.add(appoinment);
       });
     }
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => AppoinmentScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return child;
-        },
-      ),
-    );
   }
 
   Future<void> _pickTime(Appoinment appoinment) async {
@@ -163,59 +154,66 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
       });
     }
   }
-  void changeAnAppoinment(Appoinment appoinment){
+  void changeAnAppoinment(Appoinment appoinment) {
+    final TextEditingController doctorID = TextEditingController(text: appoinment.doctorID);
+    final TextEditingController patientID = TextEditingController(text: appoinment.patientID);
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: whiteGreenBackground,
-          content: Container(
-            width: MediaQuery.of(context).size.width*0.125,
-            height: MediaQuery.of(context).size.height*0.125,
-            child: StatefulBuilder(
-              builder: (context,setState){
-                return Column(
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: whiteGreenBackground,
+              content: Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(child: 
-                      Text(
-                        '${appoinment.dateTime.hour}'.padLeft(2,'0') +' : ' +'${appoinment.dateTime.minute}'.padLeft(2,'0'),
-                        style: TextStyle( fontSize: 25 ),
-                      )
-                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-                                if (states.contains(WidgetState.pressed)) {
-                                  return lightGreenBackground; // Khi nhấn
-                                } else if (states.contains(WidgetState.disabled)) {
-                                  return Colors.grey; // Khi tắt
-                                }
-                                return lightGreenBackground; // Mặc định
-                              }),
-                            ),
-                            onPressed: (){
-                              //Navigator.pushNamed(context, AppoinmentScreen.routeName);
-                              _pickDate(appoinment);
-                              _pickTime(appoinment);
-                            } ,
-                            child: const Text("Chỉnh sửa thời gian", style: TextStyle(color: textBlackColor),),
+                        Expanded(child: adjustblank(doctorID, 'Mã số bác sĩ phụ trách', appoinment.doctorID)),
+                        SizedBox(width: defaultPadding,),
+                        Expanded(child: adjustblank(patientID, 'Mã số bệnh nhân', appoinment.patientID))
+                      ],
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                            (states) {
+                              if (states.contains(WidgetState.pressed)) {
+                                return lightGreenBackground; // Khi nhấn
+                              } else if (states.contains(WidgetState.disabled)) {
+                                return Colors.grey; // Khi tắt
+                              }
+                              return lightGreenBackground; // Mặc định
+                            },
                           ),
                         ),
-                      ],
-                    )
+                        onPressed: () {
+                          _pickDate(appoinment);
+                          _pickTime(appoinment);                          
+                        },
+                        child:  Text(
+                        '${appoinment.dateTime.hour.toString().padLeft(2, '0')} : '
+                        '${appoinment.dateTime.minute.toString().padLeft(2, '0')} '
+                        '${appoinment.dateTime.day.toString()}/${appoinment.dateTime.month.toString()}/${appoinment.dateTime.year.toString()}',
+                          style: const TextStyle(color: textBlackColor),
+                        ),
+                      ),
+                    ),
                   ],
-                );
-              }
-            ),
-          )
+                ),
+              ),
+            );
+          },
         );
-      }
+      },
     );
   }
+
   
 
   void showAnAppoinment(Appoinment appoinment){
@@ -223,7 +221,12 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          
+          title: const  Text('Thông tin về cuộc hẹn này'),
+          content: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width / 2,
+            ),
+          ),
         );
       },
     );
@@ -252,6 +255,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                         _fillblank(patientID, 'Mã số bệnh nhân', context),
                       ],
                     ),
+                    const SizedBox(height: defaultPadding,),
                     Expanded(
                       child: ElevatedButton(
                         style: ButtonStyle(
@@ -300,15 +304,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                         )
                       );
                       
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => AppoinmentScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return child;
-                          },
-                        ),
-                      );
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text(
@@ -445,7 +441,6 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                     dowTextFormatter: (date, locale) {
-                      const daysInVietnamese = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
                       return daysInVietnamese[date.weekday - 1];
                     },
                   ),
@@ -460,20 +455,6 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                       fontSize: 20,
                     ),
                     titleTextFormatter: (date, locale) {
-                      const monthsInVietnamese = [
-                        'Tháng Một',
-                        'Tháng Hai',
-                        'Tháng Ba',
-                        'Tháng Tư',
-                        'Tháng Năm',
-                        'Tháng Sáu',
-                        'Tháng Bảy',
-                        'Tháng Tám',
-                        'Tháng Chín',
-                        'Tháng Mười',
-                        'Tháng Mười Một',
-                        'Tháng Mười Hai',
-                      ];
                       return monthsInVietnamese[date.month - 1];
                     },
                     formatButtonVisible: false,
@@ -527,12 +508,10 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                const SizedBox(width: defaultPadding,),
                                 Expanded(
                                   flex: 2,
-                                  child: ListTile(
-                                    onTap: () => null,
-                                    title: showAppoinmentInfo(value[index].appoinmentID, '${value[index]}'),
-                                  ),
+                                  child: showAppoinmentInfo(value[index].appoinmentID, '${value[index]}'),
                                 ),
                                 Expanded(
                                   flex: 1,
@@ -545,11 +524,13 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                                 ),
                                 if (value[index].dateTime.isAfter(DateTime.now()))
                                   IconButton(
+                                    //THAY ĐỔI THÔNG TIN
                                     onPressed: () => changeAnAppoinment(value[index]),
                                     icon: const Icon(Icons.edit_calendar),
                                   )
                                 else
                                   IconButton(
+                                    // CHỈ XEM ĐƯỢC THÔNG TIN
                                     onPressed: () => showAnAppoinment(value[index]), 
                                     icon: const Icon(Icons.visibility),
                                   ),

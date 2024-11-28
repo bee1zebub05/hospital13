@@ -18,7 +18,8 @@ class Appoinment {
 
   // Getter for appoinmentID
   String get appoinmentID => _appoinmentID;
-
+  String get doctorID => _doctorID;
+  String get patientID => _patientID;
   // Setter for appoinmentID
   set appoinmentID(String value) {
     _appoinmentID = value;
@@ -34,11 +35,3 @@ class Appoinment {
   }
 }
 
-Map<String,Appoinment> allAppoinment = {
-  'CH000000' : Appoinment(
-    appoinmentID: 'CH000000',
-    doctorID: 'DT000000',
-    patientID: 'BN000000',
-    dateTime: DateTime(2024,11,22),
-  ),
-  };

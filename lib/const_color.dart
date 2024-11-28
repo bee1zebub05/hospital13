@@ -3,7 +3,10 @@ import "package:beginapp01/OOP_material/doctor.dart";
 import "package:beginapp01/OOP_material/patient.dart";
 import "package:beginapp01/OOP_material/person.dart";
 import "package:flutter/material.dart";
-import "dart:math";
+
+const daysInVietnamese = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+const monthsInVietnamese = ['Tháng Một','Tháng Hai','Tháng Ba','Tháng Tư','Tháng Năm','Tháng Sáu','Tháng Bảy','Tháng Tám','Tháng Chín','Tháng Mười','Tháng Mười Một','Tháng Mười Hai',];
+
 Map <String,String> loginAccount = {
   'nguyenlekhanh13@gmail.com' : 'nguyendz123',
   '1@2.com' : '1',
