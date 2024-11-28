@@ -7,6 +7,8 @@ class SplashScreen extends StatefulWidget {
   
   static String routeName ='SplashScreen';
 
+  const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }

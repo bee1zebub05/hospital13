@@ -12,7 +12,7 @@ Map<String, WidgetBuilder> routes = {
   MainScreen.routeName : (context) => MainScreen(),
   DoctorScreen.routeName : (context) => const DoctorScreen(),
   PatientScreen.routeName : (context) => const PatientScreen(),
-  AppoinmentScreen.routeName : (context) => AppoinmentScreen(),
+  AppoinmentScreen.routeName : (context) => const AppoinmentScreen(),
   BillScreen.routeName : (context) => BillScreen(),
   LoginScreen.routeName : (context) => LoginScreen(),
 };

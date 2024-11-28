@@ -4,11 +4,13 @@ import 'package:beginapp01/const_color.dart';
 import 'package:beginapp01/routes.dart';
 import 'package:flutter/material.dart';
 void main() {
-  runApp(HospitalApp());
+  runApp(const HospitalApp());
 }
 
 
 class HospitalApp extends StatelessWidget {
+  const HospitalApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

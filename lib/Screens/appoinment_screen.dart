@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar_route.dart';
 import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/patient.dart';
 import 'package:intl/intl.dart';
@@ -6,11 +7,12 @@ import 'package:beginapp01/Screens/main_screen.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
-import 'package:beginapp01/ultis.dart';
 
 
 class AppoinmentScreen extends StatefulWidget {
   static String routeName = 'AppointmentScreen';
+
+  const AppoinmentScreen({super.key});
 
   @override
   State<AppoinmentScreen> createState() => _AppoinmentScreenState();
@@ -18,7 +20,7 @@ class AppoinmentScreen extends StatefulWidget {
 
 class _AppoinmentScreenState extends State<AppoinmentScreen> {
   late final ValueNotifier<List<Appoinment>> _selectedEvents;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -26,6 +28,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
   DateTime? _rangeEnd;
   //METHOD CỦA APPOINTMENT
   DateTime choosenTime = DateTime.now();
+  DateTime adjustTime = DateTime.now();
   
 
   Future<void> _pickDateToAdd() async {
@@ -60,7 +63,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
   }
   Future<void> _pickTimeToAdd() async {
     TimeOfDay? pickedTime = await showTimePicker(
-      cancelText: 'Hủy',
+      cancelText: 'Hủy',  
       context: context,
       initialTime: TimeOfDay.fromDateTime(choosenTime),
     );
@@ -77,68 +80,21 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
       });
     }
   }
-  Future<void> _pickDate(DateTime dateTime) async {
-    DateTime? pickedDate = await showDatePicker(
-      helpText: 'Ngày đã chọn',
-      context: context,
-      initialDate: dateTime,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-      cancelText: 'Hủy',
-      builder: (BuildContext context, Widget? child) {
-      return Theme(
-        data: Theme.of(context).copyWith(
-          dialogTheme: DialogTheme(
-            backgroundColor: Colors.green.shade50, // Màu nền
-          ),
-        ),
-        child: child!,
-      );
-    },    );
-
-    if (pickedDate != null) {
-      dateTime = DateTime(
-        pickedDate.year,
-        pickedDate.month,
-        pickedDate.day,
-        dateTime.hour,
-        dateTime.minute,
-      );
-    }
-  }
-
-  Future<void> _pickTime(DateTime dateTime) async {
-    TimeOfDay? pickedTime = await showTimePicker(
-      cancelText: 'Hủy',
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(dateTime),
-    );
-
-    if (pickedTime != null) {
-      dateTime = DateTime(
-        dateTime.year,
-        dateTime.month,
-        dateTime.day,
-        pickedTime.hour,
-        pickedTime.minute,
-      );
-    }
-  }
-  void adjustAppoinment(Appoinment appoinment) {
-    DateTime tempDateTime = appoinment.dateTime;
+  void adjustAppoinment(Appoinment appoinment){
     final TextEditingController doctorID = TextEditingController(text: appoinment.doctorID);
     final TextEditingController patientID = TextEditingController(text: appoinment.patientID);
+    choosenTime = appoinment.dateTime;
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              backgroundColor: whiteGreenBackground,
-              content: Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.height * 0.25,
-                child: Column(
+        return AlertDialog(
+          backgroundColor: whiteGreenBackground,
+          content: Container(
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.height * 0.25,
+            child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setDialogState){
+                return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
@@ -149,60 +105,99 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                         Expanded(child: adjustblank(patientID, 'Mã số bệnh nhân', appoinment.patientID))
                       ],
                     ),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                            (states) {
-                              if (states.contains(WidgetState.pressed)) {
-                                return lightGreenBackground; // Khi nhấn
-                              } else if (states.contains(WidgetState.disabled)) {
-                                return Colors.grey; // Khi tắt
-                              }
-                              return lightGreenBackground; // Mặc định
+                    Expanded(child: 
+                      Text(
+                        DateFormat('HH:mm dd/MM/yyyy').format(choosenTime),
+                        style: const TextStyle( fontSize: 25 ),
+                      )
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+                                if (states.contains(WidgetState.pressed)) {
+                                  return lightGreenBackground; // Khi nhấn
+                                } else if (states.contains(WidgetState.disabled)) {
+                                  return Colors.grey; // Khi tắt
+                                }
+                                return lightGreenBackground; // Mặc định
+                              }),
+                            ),
+                            onPressed: () async {
+                              await _pickDateToAdd(); // Cập nhật ngày
+                              await _pickTimeToAdd(); // Cập nhật giờ
+                              // Gọi setDialogState để cập nhật UI trong AlertDialog
+                              setDialogState(() {});
                             },
+                            child: const Text("Chỉnh sửa thời gian", style: TextStyle(color: textBlackColor),),
                           ),
                         ),
-                        onPressed: () {
-                          _pickDate(tempDateTime);
-                          _pickTime(tempDateTime);                          
-                        },
-                        child:  Text(
-                        '${tempDateTime.hour.toString().padLeft(2, '0')} : '
-                        '${tempDateTime.minute.toString().padLeft(2, '0')} '
-                        '${tempDateTime.day.toString()}/${tempDateTime.month.toString()}/${tempDateTime.year.toString()}',
-                          style: const TextStyle(color: textBlackColor),
-                        ),
-                      ),
-                    ),
+                      ],
+                    )
                   ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  
-
-  void showAppoinment(Appoinment appoinment){
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const  Text('Thông tin về cuộc hẹn này'),
-          content: SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width / 2,
+                );
+              }
             ),
           ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  try{
+                    setState(() {
+                      kAppointments[choosenTime] = [];
+                      kAppointments[choosenTime]?.add(
+                        Appoinment(
+                          appoinmentID: appoinment.appoinmentID, 
+                          doctorID: doctorID.text, 
+                          patientID: patientID.text, 
+                          dateTime: choosenTime,
+                          hasPass: false,
+                        )
+                      );
+                      kAppointments[appoinment.dateTime]?.removeWhere((value) => value.appoinmentID == appoinment.appoinmentID);
+                      Navigator.of(context).pop();
+                      showCompleteFlushBar(context, 'Lưu thành công');
+                    });
+                  }
+                  catch(e){
+                    showErorrFlushBar(context, '$e');
+                  }
+                },
+                child: const Text(
+                  'Lưu',
+                  style: TextStyle(color: textBlackColor, fontSize: 18),
+                ),
+            ),
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    kAppointments[appoinment.dateTime]?.removeWhere((value) => value.appoinmentID == appoinment.appoinmentID);
+                  });
+                  Navigator.of(context).pop();
+                  showCompleteFlushBar(context, 'Xóa thành công');
+                },
+                child: const Text(
+                  'Xóa',
+                  style: TextStyle(color: textBlackColor, fontSize: 18),
+                ),
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Đóng dialog
+                },
+                child: const Text(
+                  'Hủy',
+                  style: TextStyle(color: textBlackColor, fontSize: 18),
+                ),
+            ),
+          ],
         );
-      },
+      }
     );
   }
-
+  
   void addAnAppointment() {
     final TextEditingController doctorID = TextEditingController();
     final TextEditingController patientID = TextEditingController();
@@ -217,16 +212,16 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
               backgroundColor: whiteGreenBackground,
               content: Container(
                 width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.2,
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        fillblank(doctorID, 'Mã số bác sĩ'),
-                        fillblank(patientID, 'Mã số bệnh nhân'),
+                        Expanded(child: fillblank(doctorID, 'Mã số bác sĩ' )),
+                        Expanded(child: fillblank(patientID, 'Mã số bệnh nhân', )),
+                        Expanded(child: showAddingID('Mã số cuộc họp ', 2)),
                       ],
                     ),
-                    const SizedBox(height: defaultPadding,),
                     Expanded(
                       child: ElevatedButton(
                         style: ButtonStyle(
@@ -266,16 +261,27 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                       showErorrFlushBar(context, 'Không có bệnh nhân mang ID này');
                     }
                     else{
-                      kAppointments[choosenTime]?.add(
-                        Appoinment(
-                        appoinmentID: doctorID.text, 
-                        doctorID: doctorID.text, 
-                        patientID: patientID.text, 
-                        dateTime: choosenTime,
-                        )
-                      );
-                      
-                      Navigator.pop(context);
+                      try{
+                        setState(() {
+                          kAppointments[choosenTime]?.add(
+                            Appoinment(
+                              appoinmentID: newestID, 
+                              doctorID: doctorID.text, 
+                              patientID: patientID.text, 
+                              dateTime: choosenTime,
+                              hasPass: false,
+                            )
+                          );
+                          if( newestID == 'CH${'${appoinmentLastestID+1}'.padLeft(6,'0')}' ){
+                            appoinmentLastestID++;
+                          }
+                          Navigator.pop(context); 
+                          showCompleteFlushBar(context, 'Thêm cuộc hẹn thành công');
+                        });
+                      }
+                      catch(e){
+                        showErorrFlushBar(context, '$e');
+                      }
                     }
                   },
                   child: const Text(
@@ -318,16 +324,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
   List<Appoinment> _getEventsForDay(DateTime day) {
     return kAppointments[day] ?? [];
   }
-
-  /// Lấy danh sách các cuộc hẹn trong một khoảng ngày
-  List<Appoinment> _getEventsForRange(DateTime start, DateTime end) {
-    final days = daysInRange(start, end);
-    return [
-      for (final d in days) ..._getEventsForDay(d),
-    ];
-  }
-
-  /// Xử lý khi một ngày được chọn
+  /// Xử lý khi một ngày được chọn 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
@@ -338,25 +335,6 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
       _selectedEvents.value = _getEventsForDay(selectedDay);
-    }
-  }
-
-  /// Xử lý khi một khoảng ngày được chọn
-  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
-    setState(() {
-      _selectedDay = null;
-      _focusedDay = focusedDay;
-      _rangeStart = start;
-      _rangeEnd = end;
-      _rangeSelectionMode = RangeSelectionMode.toggledOn;
-    });
-
-    if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end);
-    } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start);
-    } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end);
     }
   }
 
@@ -456,7 +434,6 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                   eventLoader: _getEventsForDay,
                   startingDayOfWeek: StartingDayOfWeek.monday,
                   onDaySelected: _onDaySelected,
-                  onRangeSelected: _onRangeSelected,
                   onPageChanged: (focusedDay) {
                     _focusedDay = focusedDay;
                   },
@@ -469,44 +446,37 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                         itemCount: value.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            height: MediaQuery.of(context).size.height*0.1,
-                            width: MediaQuery.of(context).size.width*0.1,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 4.0,
+                            ),
                             decoration: BoxDecoration(
                               color: lightGreenBackground,
                               border: Border.all(),
-                              borderRadius: BorderRadius.circular(defaultPadding),
+                              borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const SizedBox(width: defaultPadding,),
                                 Expanded(
-                                  flex: 2,
-                                  child: showAppoinmentInfo(value[index].appoinmentID, '${value[index]}'),
-                                ),
-                                Expanded(
-                                  flex: 1,
                                   child: ListTile(
-                                    title: Text(
-                                      '${value[index].dateTime.hour.toString().padLeft(2, '0')} : '
-                                      '${value[index].dateTime.minute.toString().padLeft(2, '0')}',
-                                    ),
+                                    onTap: () => print('${value[index]}'),
+                                    title: Text('${value[index]}'),
                                   ),
                                 ),
-                                if (value[index].dateTime.isAfter(DateTime.now()))
-                                  IconButton(
-                                    //THAY ĐỔI THÔNG TIN
-                                    onPressed: () => adjustAppoinment(value[index]),
-                                    icon: const Icon(Icons.edit_calendar),
-                                  )
-                                else
-                                  IconButton(
-                                    // CHỈ XEM ĐƯỢC THÔNG TIN
-                                    onPressed: () => showAppoinment(value[index]), 
-                                    icon: const Icon(Icons.visibility),
-                                  ),
-                              ]
-
+                                //const Spacer(),
+                                Expanded(
+                                  child: ListTile( 
+                                    title: Text('${value[index].dateTime.hour}'.padLeft(2,'0') + ' : ' +
+                                    '${value[index].dateTime.minute}'.padLeft(2,'0')),
+                                   )
+                                ),
+                                //const Spacer(),
+                                IconButton(
+                                  onPressed: () => adjustAppoinment(value[index]), 
+                                  icon: const Icon(Icons.edit_calendar)
+                                )
+                              ],
                             )
                           );
                         },

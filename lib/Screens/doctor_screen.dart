@@ -137,7 +137,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                       Navigator.push(
                         context,
                         PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => DoctorScreen(),
+                          pageBuilder: (context, animation, secondaryAnimation) => const DoctorScreen(),
                           transitionsBuilder: (context, animation, secondaryAnimation, child) {
                             return child;
                           },
@@ -168,7 +168,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
   }
 
   void adjustDoctor(Doctor doctor) {
-  GenderEnum _selectedGender = doctor.gender; // Giới tính hiện tại
+  GenderEnum selectedGender = doctor.gender; // Giới tính hiện tại
   String latestID = doctor.IDWorker;
 
   final TextEditingController firstName = TextEditingController(text: doctor.firstName);
@@ -217,7 +217,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                               underline: Container(
                                 color: textBlackColor,
                               ),
-                              value: _selectedGender,
+                              value: selectedGender,
                               hint: const Text('Chọn giới tính'),
                               isExpanded: true,
                               items: GenderEnum.values.map((GenderEnum gender) {
@@ -228,7 +228,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                               }).toList(),
                               onChanged: (GenderEnum? newValue) {
                                 setState(() {
-                                  _selectedGender = newValue!; // Cập nhật giới tính
+                                  selectedGender = newValue!; // Cập nhật giới tính
                                 });
                               },
                             ),
@@ -276,7 +276,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         allDoctors[latestID]?.firstName = firstName.text;
                         allDoctors[latestID]?.lastName = lastName.text;
                         allDoctors[latestID]?.age = int.parse(age.text);
-                        allDoctors[latestID]?.gender = _selectedGender;
+                        allDoctors[latestID]?.gender = selectedGender;
                         allDoctors[latestID]?.phone = phone.text;
                         allDoctors[latestID]?.address = address.text;
                         allDoctors[latestID]?.salary = double.parse(salary.text);

@@ -1,12 +1,21 @@
 import "package:another_flushbar/flushbar.dart";
+import 'package:beginapp01/OOP_material/appoinment.dart';
 import "package:beginapp01/OOP_material/doctor.dart";
 import "package:beginapp01/OOP_material/patient.dart";
 import "package:beginapp01/OOP_material/person.dart";
 import "package:flutter/material.dart";
 
+//DÙNG ĐỂ CHỈNH SỬA MỘT CUỘC HỌP SẮP DIỄN RA
+DateTime tempDateTime = DateTime.now();
+
+//NGÀY THÁNG TRONG TIẾNG VIỆT
 const daysInVietnamese = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 const monthsInVietnamese = ['Tháng Một','Tháng Hai','Tháng Ba','Tháng Tư','Tháng Năm','Tháng Sáu','Tháng Bảy','Tháng Tám','Tháng Chín','Tháng Mười','Tháng Mười Một','Tháng Mười Hai',];
 
+//DÙNG TRONG CÁC METHOD ADD
+String newestID = "";
+
+//MẬT KHẨU TÀI KHOẢN ĐĂNG NHẬP
 Map <String,String> loginAccount = {
   'nguyenlekhanh13@gmail.com' : 'nguyendz123',
   '1@2.com' : '1',
@@ -16,44 +25,63 @@ class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false; // Luôn luôn không cho phép focus
 }
-String newestID = "";
 Container showAddingID(String label, int type){
-  //TẠO ID MỚI CHO 1 PATIENT
-  if( type == 0){
-    List<bool> check=List.filled(patientLastestID+1, false);
-    for( var patient in allPatient.values ){
-      check[int.parse(patient.patientID.substring(2))] = true;
-    }
-    int latestID = patientLastestID;
-    for(int i = 1 ; i < check.length ; i++){
-      if( !check[i] ){
-        latestID = i;
-        break;
+  switch (type){
+    case 0: //TẠO ID MỚI CHO 1 PATIENT
+      List<bool> check=List.filled(patientLastestID+1, false);
+      for( var patient in allPatient.values ){
+        check[int.parse(patient.patientID.substring(2))] = true;
       }
-    } 
-    newestID = 'BN${'$latestID'.padLeft(6,'0')}';
-    if( newestID == 'BN${'$patientLastestID'.padLeft(6,'0')}' ){
-      newestID = 'BN${'${patientLastestID+1}'.padLeft(6,'0')}';
-    }
-  }
-  //TẠO 1 ID MỚI CHO DOCTOR
-  else{
-    List<bool> check=List.filled(doctorLastestID+1, false);
-    for( var doctor in allDoctors.values ){
-      check[int.parse(doctor.IDWorker.substring(2))] = true;
-    }
-    int latestID = doctorLastestID;
-    for(int i = 1 ; i < check.length ; i++){
-      if( !check[i] ){
-        latestID = i;
-        break;
+      int latestID = patientLastestID;
+      for(int i = 1 ; i < check.length ; i++){
+        if( !check[i] ){
+          latestID = i;
+          break;
+        }
+      } 
+      newestID = 'BN${'$latestID'.padLeft(6,'0')}';
+      if( newestID == 'BN${'$patientLastestID'.padLeft(6,'0')}' ){
+        newestID = 'BN${'${patientLastestID+1}'.padLeft(6,'0')}';
       }
-    } 
-    newestID = 'DT${'$latestID'.padLeft(6,'0')}';
-    if( newestID == 'DT${'$doctorLastestID'.padLeft(6,'0')}' ){
-      newestID = 'DT${'${doctorLastestID+1}'.padLeft(6,'0')}';
-    }
+      break;
+    case 1: //TẠO ID MỚI CHO 1 DOCTOR
+      List<bool> check=List.filled(doctorLastestID+1, false);
+      for( var doctor in allDoctors.values ){
+        check[int.parse(doctor.IDWorker.substring(2))] = true;
+      }
+      int latestID = doctorLastestID;
+      for(int i = 1 ; i < check.length ; i++){
+        if( !check[i] ){
+          latestID = i;
+          break;
+        }
+      } 
+      newestID = 'DT${'$latestID'.padLeft(6,'0')}';
+      if( newestID == 'DT${'$doctorLastestID'.padLeft(6,'0')}' ){
+        newestID = 'DT${'${doctorLastestID+1}'.padLeft(6,'0')}';
+      }
+      break;
+    case 2: //TẠO ID MỚI CHO 1 APPOINMENT
+      List<bool> check=List.filled(appoinmentLastestID+1, false);
+      for ( var list in kAppointments.values ){
+        for(var appoinment in list){
+           check[int.parse(appoinment.appoinmentID.substring(2))] = true;
+        }
+      }
+      int latestID = appoinmentLastestID;
+      for(int i = 1 ; i < check.length ; i++){
+        if( !check[i] ){
+          latestID = i;
+          break;
+        }
+      } 
+      newestID = 'CH${'$latestID'.padLeft(6,'0')}';
+      if( newestID == 'CH${'$appoinmentLastestID'.padLeft(6,'0')}' ){
+        newestID = 'CH${'${appoinmentLastestID+1}'.padLeft(6,'0')}';
+      }
+      break;
   }
+
   return Container(
     decoration: BoxDecoration(
       color: lightGreenBackground,
@@ -75,6 +103,7 @@ Container showAddingID(String label, int type){
   );
 }
 
+//SHOW 1 ĐOẠN VĂN BẢN KHÔNG THỂ CHỈNH SỬA, CÓ CHỮ NỔI PHÍA TRÊN
 TextField showNoChangeInfo(String label, String s){
   return TextField(
         focusNode: AlwaysDisabledFocusNode(),
@@ -110,7 +139,8 @@ Container showID(String label,String id){
     );
 }
 
-Container fillblank(final TextEditingController _controller, String s) {
+//SHOW 1 ĐOẠN VĂN BẢN DÙNG ĐỂ ĐIỀN TRONG METHOD ADD
+Container fillblank(final TextEditingController controller, String s) {
   return Container(
     decoration: BoxDecoration(
       color: lightGreenBackground,
@@ -119,7 +149,7 @@ Container fillblank(final TextEditingController _controller, String s) {
     child: Padding(
       padding: const EdgeInsets.all(defaultPadding),
       child: TextField(
-        controller: _controller,
+        controller: controller,
         decoration: InputDecoration(
           labelText: s,
           border: const UnderlineInputBorder(),
@@ -168,9 +198,9 @@ String genderToString(GenderEnum gender) {
       return 'Khác';
   }
 }
-
-Container adjustblank(final TextEditingController _controller, String label, String init) {
-  _controller.text = init;
+//SHOW 1 ĐOẠN VĂN BẢN DÙNG CHỈNH SỬA TRONG METHOD ADJUST
+Container adjustblank(final TextEditingController controller, String label, String init) {
+  controller.text = init;
   return Container(
     decoration: BoxDecoration(
       color: lightGreenBackground,
@@ -179,7 +209,7 @@ Container adjustblank(final TextEditingController _controller, String label, Str
     child: Padding(
       padding: const EdgeInsets.all(defaultPadding),
       child: TextField(
-        controller: _controller,
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -191,11 +221,11 @@ Container adjustblank(final TextEditingController _controller, String label, Str
   );
 }
 
-
+//SHOW FLUSH BAR THÀNH CÔNG
 void showCompleteFlushBar(BuildContext context, String title){
   Flushbar(
     backgroundColor: lightGreenBackground,
-    duration: Duration(seconds: 2),
+    duration: const Duration(seconds: 2),
     title: 'Thông báo:',
     titleSize: 24,
     titleColor: textBlackColor,
@@ -210,11 +240,11 @@ void showCompleteFlushBar(BuildContext context, String title){
     flushbarPosition: FlushbarPosition.BOTTOM,
   ).show(context);
 }
-
+//SHOW FLUSH BAR LỖI
 void showErorrFlushBar(BuildContext context, String title){
   Flushbar(
     backgroundColor: selectedColor,
-    duration: Duration(seconds: 3),
+    duration: const  Duration(seconds: 3),
     title: 'Lỗi',
     titleSize: 24,
     titleColor: textBlackColor,
@@ -230,20 +260,17 @@ void showErorrFlushBar(BuildContext context, String title){
   ).show(context);
 }
 
-
+//CÁC LOẠI MÀU CỐ ĐỊNH
 const Color selectedColor = Color(0xFFF26D3D);
 const Color weekendColor = Color(0xFFFFC8C4);
 const Color veryGreenBackground = Color(0xFF023336);
 const Color mediumGreenBackground = Color(0xFF4DA674);
 const Color lightGreenBackground = Color(0xFFC1E6BA);
 const Color whiteGreenBackground = Color(0xFFEAF8E7);
-
 const Color textBlackColor = Color(0xFF313131);
 const Color textWhiteColor = Color(0xFFFFFFFF);
-
 const Color errorBorderColor = Color(0xFFE74C3C);
-
 const double defaultPadding = 20.0;
-
+//1 ĐOẠN VĂN BẢN HỢP LỆ THEO CÚ PHÁP
 const String mobilePattern = r'^(0[0-9]{9,})$';
 const String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
