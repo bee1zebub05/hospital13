@@ -2,6 +2,8 @@ import 'package:beginapp01/OOP_material/patient.dart';
 import 'package:beginapp01/OOP_material/person.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
 import 'package:beginapp01/Screens/bill_screen.dart';
+
+import 'package:beginapp01/Screens/appointment_popup.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +19,7 @@ class _PatientScreenState extends State<PatientScreen> {
   late int listType = 0;
   late bool listTypeReverse = false;
   final TextEditingController findController = TextEditingController();
+  
   //METHOD LÀM VIỆC VỚI MAP LƯU CÁC Patient
   void addAPatient() {
     GenderEnum _selectedGender = GenderEnum.male;
@@ -466,17 +469,19 @@ class _PatientScreenState extends State<PatientScreen> {
                                   const SizedBox(width: defaultPadding,),IconButton(
                 onPressed: () => adjustPatient(patient),
                 icon: const Icon(Icons.edit)),
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  BillScreen.routeName, // Tên route của màn hình hóa đơn
-                  arguments:
-                      patient.patientID, // Truyền ID thay vì toàn bộ đối tượng
-                );
-              },
-              icon: const Icon(Icons.description),
-            ),
+           IconButton(
+  onPressed: () {
+    // Mở popup hiển thị danh sách cuộc hẹn và nút Hóa đơn
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AppointmentPopup(patientID: patient.patientID);
+      },
+    );
+  },
+  icon: Icon(Icons.calendar_today),
+)
+,
             const SizedBox(
               width: defaultPadding,
             ),

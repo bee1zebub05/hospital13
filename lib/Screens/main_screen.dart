@@ -1,6 +1,7 @@
 import 'package:beginapp01/Screens/appoinment_screen.dart';
 import 'package:beginapp01/Screens/doctor_screen.dart';
 import 'package:beginapp01/Screens/patient_screen.dart';
+import 'package:beginapp01/Screens/pharmacy_screen.dart';
 import 'package:beginapp01/Screens/splash_screen.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late int _selectedIndex = 0; // Lưu chỉ mục được chọn
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +43,13 @@ class _MainScreenState extends State<MainScreen> {
                 case 4:
                   Navigator.pushNamedAndRemoveUntil(context, AppoinmentScreen.routeName, (route) => false);
                   break;
+                case 5:
+                  Navigator.pushNamedAndRemoveUntil(context, PharmacyScreen.routeName, (route) => false); // Chuyển đến PharmacyScreen
+                  break;
                 default: return;
               }
             },
-            backgroundColor: lightGreenBackground, 
+            backgroundColor: const Color(0xFFC1E6BA), 
             destinations: const  [
               NavigationRailDestination(
                 icon: Icon(Icons.home),
@@ -71,16 +76,19 @@ class _MainScreenState extends State<MainScreen> {
                 selectedIcon: ImageIcon(AssetImage('assets/images/appoinment.png')),
                 label: Text('Appoinment'),
               ),
+              NavigationRailDestination(
+                icon: ImageIcon(AssetImage('assets/images/pharmacy.png'), size: 35,), // Thêm icon Pharmacy
+                selectedIcon: ImageIcon(AssetImage('assets/images/pharmacy.png')),
+                label: Text('Pharmacy'),
+              ),
             ],
           ),
           const Spacer(),
           Container(
             width: MediaQuery.of(context).size.width*0.93,
             height: MediaQuery.of(context).size.height*0.9,
-            
           ),
           const Spacer(),
-          
         ],
       ),
     );
