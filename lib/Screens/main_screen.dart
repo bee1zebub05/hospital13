@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
                   Navigator.pushNamedAndRemoveUntil(context, AppoinmentScreen.routeName, (route) => false);
                   break;
                 case 5:
-                  Navigator.pushNamedAndRemoveUntil(context, PharmacyScreen.routeName, (route) => false); // Chuyển đến PharmacyScreen
+                  Navigator.pushNamedAndRemoveUntil(context, PharmacyScreen.routeName, (route) => false); 
                   break;
                 default: return;
               }

@@ -1,63 +1,29 @@
-import 'medicine.dart';
+// hospital_inventory.dart
 
-class MedicineNotFoundException implements Exception {}
+import 'package:beginapp01/OOP_material/medicine.dart';
 
-class InsufficientMedicineQuantityException implements Exception {}
+Map<String, Medicine> allMedicines = {}; // Tạo map toàn cục lưu trữ thuốc
 
-class HospitalInventory {
-  final List<Medicine> medicines;
+// Tạo ID thuốc mới
+String generateMedicineID() {
+  int idNumber = 1;
+  String newID = 'ME${idNumber.toString().padLeft(6, '0')}';
 
-  HospitalInventory({required this.medicines});
-
-  Medicine findMedicine(String medicineID) {
-    return medicines.firstWhere(
-      (medicine) => medicine.medicineID == medicineID,
-      orElse: () => throw MedicineNotFoundException(),
-    );
+  // Kiểm tra ID thuốc trong map, nếu có thì tăng ID lên
+  while (allMedicines.containsKey(newID)) {
+    idNumber++;
+    newID = 'ME${idNumber.toString().padLeft(6, '0')}';
   }
 
-  void reduceMedicineQuantity(String medicineID, int quantity) {
-    Medicine medicine = findMedicine(medicineID);
-    if (medicine.quantity < quantity) {
-      throw InsufficientMedicineQuantityException();
-    }
-    medicine.quantity -= quantity;
-  }
-
-  void increaseMedicineQuantity(String medicineID, int quantity) {
-    Medicine medicine = findMedicine(medicineID);
-    medicine.quantity += quantity;
-  }
+  return newID;
 }
 
-HospitalInventory hospitalInventory = HospitalInventory(
-  medicines: [
-    Medicine(
-      medicineID: 'T001',
-      medicineName: 'Paracetamol',
-      unit: 1,
-      status: true,
-      quantity: 100,
-      price: 20000,
-      description: 'Thuốc giảm đau',
-    ),
-    Medicine(
-      medicineID: 'T002',
-      medicineName: 'Aspirin',
-      unit: 1,
-      status: true,
-      quantity: 50,
-      price: 30000,
-      description: 'Thuốc giảm đau và kháng viêm',
-    ),
-    Medicine(
-      medicineID: 'T003',
-      medicineName: 'Vitamin C',
-      unit: 1,
-      status: true,
-      quantity: 200,
-      price: 15000,
-      description: 'Vitamin bổ sung sức đề kháng',
-    ),
-  ],
-);
+// Hàm thêm thuốc vào map
+void addMedicine(Medicine medicine) {
+  allMedicines[medicine.medicineID] = medicine;
+}
+
+// Hàm xóa thuốc khỏi map
+void deleteMedicine(String medicineID) {
+  allMedicines.remove(medicineID);
+}

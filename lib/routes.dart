@@ -1,5 +1,5 @@
 import 'package:beginapp01/Screens/appoinment_screen.dart';
-import 'package:beginapp01/Screens/bill_screen.dart';
+//import 'package:beginapp01/Screens/bill_screen.dart';
 import 'package:beginapp01/Screens/doctor_screen.dart';
 import 'package:beginapp01/Screens/login_screen.dart';
 import 'package:beginapp01/Screens/pharmacy_screen.dart';

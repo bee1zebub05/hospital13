@@ -1,7 +1,7 @@
 import 'package:beginapp01/OOP_material/patient.dart';
 import 'package:beginapp01/OOP_material/person.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
-import 'package:beginapp01/Screens/bill_screen.dart';
+//import 'package:beginapp01/Screens/bill_screen.dart';
 
 import 'package:beginapp01/Screens/appointment_popup.dart';
 import 'package:beginapp01/const_color.dart';
