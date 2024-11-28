@@ -1,6 +1,7 @@
 import 'package:beginapp01/OOP_material/patient.dart';
 import 'package:beginapp01/OOP_material/person.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
+import 'package:beginapp01/Screens/bill_screen.dart';
 import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
 
@@ -462,12 +463,23 @@ class _PatientScreenState extends State<PatientScreen> {
                                   tableText(patient.phone),
                                   const SizedBox(width: defaultPadding,),
                                   tableText(patient.address),
-                                  const SizedBox(width: defaultPadding,),
-                                  IconButton(
-                                    onPressed: () => adjustPatient(patient), 
-                                    icon: const Icon(Icons.edit)
-                                  ),
-                                  const SizedBox(width: defaultPadding,),
+                                  const SizedBox(width: defaultPadding,),IconButton(
+                onPressed: () => adjustPatient(patient),
+                icon: const Icon(Icons.edit)),
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  BillScreen.routeName, // Tên route của màn hình hóa đơn
+                  arguments:
+                      patient.patientID, // Truyền ID thay vì toàn bộ đối tượng
+                );
+              },
+              icon: const Icon(Icons.description),
+            ),
+            const SizedBox(
+              width: defaultPadding,
+            ),
                           ],
                       ),
                     );
