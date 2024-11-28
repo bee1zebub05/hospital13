@@ -2,13 +2,13 @@ import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'package:beginapp01/const_color.dart';
 import 'person.dart';
 
-bool _checkPhone(String phone, String id){
+bool _checkPhonePatient(String phone, String id){
   for( var patient in allPatient.values ){
-    if( patient.phone == phone && patient.patientID != id ){
+    if( patient.phone == phone && patient.patientID!= id ){
       return false;
     }
   }
-  return false;
+  return true;
 }
 
 class Patient extends Person {
@@ -34,7 +34,7 @@ class Patient extends Person {
     else if( !regExp.hasMatch(value)){
       throw EmptyFieldException('SĐT nhập vào không hợp lệ');
     }
-    else if(!_checkPhone(value, patientID )){
+    else if(!_checkPhonePatient(value, patientID )){
       throw EmptyFieldException('Đã tồn tại bệnh nhân mang SDT này');
     }
     else{

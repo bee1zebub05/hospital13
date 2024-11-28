@@ -576,7 +576,6 @@ class _PatientScreenState extends State<PatientScreen> {
       // 3 sort theo tên
       // 4 sort theo SDT
       // 5 sort theo quê quán
-      // 6 sort theo chuyên ngành
       // 7 sort theo controller searchController
       case 1: setState(() {
         entries = allPatient.entries.toList();
