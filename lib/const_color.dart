@@ -75,7 +75,7 @@ Container showAddingID(String label, int type){
   );
 }
 
-TextField showAppoinmentInfo(String label, String s){
+TextField showNoChangeInfo(String label, String s){
   return TextField(
         focusNode: AlwaysDisabledFocusNode(),
         readOnly: true,

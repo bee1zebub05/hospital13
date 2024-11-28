@@ -1,6 +1,5 @@
 import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/patient.dart';
-import 'package:beginapp01/main.dart';
 import 'package:intl/intl.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
@@ -9,26 +8,6 @@ import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
 import 'package:beginapp01/ultis.dart';
 
-Container _fillblank(final TextEditingController _controller, String s, BuildContext context) {
-  return Container(
-    width: MediaQuery.of(context).size.width*0.2,
-    height: MediaQuery.of(context).size.height*0.125,
-    decoration: BoxDecoration(
-      color: lightGreenBackground,
-      borderRadius: BorderRadius.circular(defaultPadding*2)
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(defaultPadding),
-      child: TextField(
-        controller: _controller,
-        decoration: InputDecoration(
-          labelText: s,
-          border: const UnderlineInputBorder(),
-        ),
-      ),
-    ),
-  );
-}
 
 class AppoinmentScreen extends StatefulWidget {
   static String routeName = 'AppointmentScreen';
@@ -98,11 +77,11 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
       });
     }
   }
-  Future<void> _pickDate(Appoinment appoinment) async {
+  Future<void> _pickDate(DateTime dateTime) async {
     DateTime? pickedDate = await showDatePicker(
       helpText: 'Ngày đã chọn',
       context: context,
-      initialDate: appoinment.dateTime,
+      initialDate: dateTime,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
       cancelText: 'Hủy',
@@ -118,43 +97,35 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
     },    );
 
     if (pickedDate != null) {
-      setState(() {
-        kAppointments[appoinment.dateTime]?.removeWhere( (element) => element.appoinmentID == appoinment.appoinmentID);
-        appoinment.dateTime = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          appoinment.dateTime.hour,
-          appoinment.dateTime.minute,
-        );
-        if( kAppointments[DateTime( appoinment.dateTime.year, appoinment.dateTime.month, appoinment.dateTime.day )] == null ){
-          kAppointments[DateTime( appoinment.dateTime.year, appoinment.dateTime.month, appoinment.dateTime.day )] = [];
-        }
-        kAppointments[DateTime( appoinment.dateTime.year, appoinment.dateTime.month, appoinment.dateTime.day )]?.add(appoinment);
-      });
+      dateTime = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        dateTime.hour,
+        dateTime.minute,
+      );
     }
   }
 
-  Future<void> _pickTime(Appoinment appoinment) async {
+  Future<void> _pickTime(DateTime dateTime) async {
     TimeOfDay? pickedTime = await showTimePicker(
       cancelText: 'Hủy',
       context: context,
-      initialTime: TimeOfDay.fromDateTime(appoinment.dateTime),
+      initialTime: TimeOfDay.fromDateTime(dateTime),
     );
 
     if (pickedTime != null) {
-      setState(() {
-        appoinment.dateTime = DateTime(
-          appoinment.dateTime.year,
-          appoinment.dateTime.month,
-          appoinment.dateTime.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-      });
+      dateTime = DateTime(
+        dateTime.year,
+        dateTime.month,
+        dateTime.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
     }
   }
-  void changeAnAppoinment(Appoinment appoinment) {
+  void adjustAppoinment(Appoinment appoinment) {
+    DateTime tempDateTime = appoinment.dateTime;
     final TextEditingController doctorID = TextEditingController(text: appoinment.doctorID);
     final TextEditingController patientID = TextEditingController(text: appoinment.patientID);
     showDialog(
@@ -174,7 +145,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: adjustblank(doctorID, 'Mã số bác sĩ phụ trách', appoinment.doctorID)),
-                        SizedBox(width: defaultPadding,),
+                        const SizedBox(width: defaultPadding,),
                         Expanded(child: adjustblank(patientID, 'Mã số bệnh nhân', appoinment.patientID))
                       ],
                     ),
@@ -193,13 +164,13 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                           ),
                         ),
                         onPressed: () {
-                          _pickDate(appoinment);
-                          _pickTime(appoinment);                          
+                          _pickDate(tempDateTime);
+                          _pickTime(tempDateTime);                          
                         },
                         child:  Text(
-                        '${appoinment.dateTime.hour.toString().padLeft(2, '0')} : '
-                        '${appoinment.dateTime.minute.toString().padLeft(2, '0')} '
-                        '${appoinment.dateTime.day.toString()}/${appoinment.dateTime.month.toString()}/${appoinment.dateTime.year.toString()}',
+                        '${tempDateTime.hour.toString().padLeft(2, '0')} : '
+                        '${tempDateTime.minute.toString().padLeft(2, '0')} '
+                        '${tempDateTime.day.toString()}/${tempDateTime.month.toString()}/${tempDateTime.year.toString()}',
                           style: const TextStyle(color: textBlackColor),
                         ),
                       ),
@@ -216,7 +187,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
 
   
 
-  void showAnAppoinment(Appoinment appoinment){
+  void showAppoinment(Appoinment appoinment){
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -251,8 +222,8 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                   children: [
                     Row(
                       children: [
-                        _fillblank(doctorID, 'Mã số bác sĩ', context),
-                        _fillblank(patientID, 'Mã số bệnh nhân', context),
+                        fillblank(doctorID, 'Mã số bác sĩ'),
+                        fillblank(patientID, 'Mã số bệnh nhân'),
                       ],
                     ),
                     const SizedBox(height: defaultPadding,),
@@ -525,13 +496,13 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                                 if (value[index].dateTime.isAfter(DateTime.now()))
                                   IconButton(
                                     //THAY ĐỔI THÔNG TIN
-                                    onPressed: () => changeAnAppoinment(value[index]),
+                                    onPressed: () => adjustAppoinment(value[index]),
                                     icon: const Icon(Icons.edit_calendar),
                                   )
                                 else
                                   IconButton(
                                     // CHỈ XEM ĐƯỢC THÔNG TIN
-                                    onPressed: () => showAnAppoinment(value[index]), 
+                                    onPressed: () => showAppoinment(value[index]), 
                                     icon: const Icon(Icons.visibility),
                                   ),
                               ]

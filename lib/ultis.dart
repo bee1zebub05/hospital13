@@ -38,9 +38,9 @@ final kAppointments = LinkedHashMap<DateTime, List<Appoinment>>(
   ],
   DateTime(2024,11,29) : [
     Appoinment(
-      appoinmentID: 'CH000000',
-      doctorID: 'DT000000',
-      patientID: 'BN000000',
+      appoinmentID: 'CH000006',
+      doctorID: 'DT000006',
+      patientID: 'BN000006',
       dateTime: DateTime(2024,11,29),
     ),
   ],
