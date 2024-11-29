@@ -2,6 +2,7 @@ import 'package:beginapp01/OOP_material/bill.dart';
 import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/patient.dart';
 import 'package:beginapp01/OOP_material/person.dart';
+import 'package:beginapp01/OOP_material/hospital_inventory.dart';
 import 'dart:collection';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -64,45 +65,71 @@ final kAppointments = LinkedHashMap<DateTime, List<Appoinment>>(
   equals: isSameDay,
   hashCode: getHashCode,
 )..addAll({
-  DateTime(2024,11,26) : [
+  DateTime(2024, 11, 26): [
     Appoinment(
       appoinmentID: 'CH000001',
       doctorID: 'DT000001',
       patientID: 'BN000001',
-      dateTime: DateTime(2024,11,26),
+      dateTime: DateTime(2024, 11, 26),
       hasPass: true,
-    ),
+    )..payedBill = Bill(
+        medicinePairs: [
+          MapEntry(allMedicines['ME000001']!, 2), // 2 viên Paracetamol
+          MapEntry(allMedicines['ME000002']!, 3), // 3 viên Ibuprofen
+        ],
+        doctorID: 'DT000001',
+        patientID: 'BN000001',
+      ),
   ],
-  DateTime(2024,11,27) : [
+  DateTime(2024, 11, 27): [
     Appoinment(
       appoinmentID: 'CH000002',
       doctorID: 'DT000002',
       patientID: 'BN000002',
-      dateTime: DateTime(2024,11,27),
+      dateTime: DateTime(2024, 11, 27),
       hasPass: true,
-    ),
+    )..payedBill = Bill(
+        medicinePairs: [
+          MapEntry(allMedicines['ME000003']!, 1), // 1 viên Aspirin
+          MapEntry(allMedicines['ME000004']!, 4), // 4 viên Amoxicillin
+        ],
+        doctorID: 'DT000002',
+        patientID: 'BN000002',
+      ),
   ],
-  DateTime(2024,11,28) : [
+  DateTime(2024, 11, 28): [
     Appoinment(
       appoinmentID: 'CH000003',
       doctorID: 'DT000003',
       patientID: 'BN000003',
-      dateTime: DateTime(2024,11,28),
+      dateTime: DateTime(2024, 11, 28),
       hasPass: true,
-    ),
+    )..payedBill = Bill(
+        medicinePairs: [
+          MapEntry(allMedicines['ME000005']!, 2), // 2 viên Cetirizine
+          MapEntry(allMedicines['ME000006']!, 3), // 3 viên Naproxen
+        ],
+        doctorID: 'DT000003',
+        patientID: 'BN000003',
+      ),
   ],
-  DateTime(2024,11,29) : [
+  DateTime(2024, 11, 29): [
     Appoinment(
       appoinmentID: 'CH000004',
       doctorID: 'DT000004',
       patientID: 'BN000004',
-      dateTime: DateTime(2024,11,29),
+      dateTime: DateTime(2024, 11, 29),
       hasPass: true,
-    ),
+    )..payedBill = Bill(
+        medicinePairs: [
+          MapEntry(allMedicines['ME000007']!, 1), // 1 lọ Salbutamol
+          MapEntry(allMedicines['ME000008']!, 5), // 5 viên Diphenhydramine
+        ],
+        doctorID: 'DT000004',
+        patientID: 'BN000004',
+      ),
   ],
 });
-
-
 /// Returns a list of [DateTime] objects from [first] to [last], inclusive.
 List<DateTime> daysInRange(DateTime first, DateTime last) {
   final dayCount = last.difference(first).inDays + 1;

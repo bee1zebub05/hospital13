@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:beginapp01/OOP_material/medicine.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
 import 'package:beginapp01/const_color.dart';
-import 'package:beginapp01/OOP_material/hospital_inventory.dart'; // Thêm import để truy cập Map allMedicines
+import 'package:beginapp01/OOP_material/hospital_inventory.dart';
 
 class PharmacyScreen extends StatefulWidget {
   static String routeName = 'PharmacyScreen';
@@ -44,7 +44,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
         String medicineID = generateMedicineID(); // Tạo ID thuốc mới
 
         return AlertDialog(
-          title: Text('Thêm thuốc mới', style: TextStyle(fontSize: 40)),
+          title: Text('Thêm thuốc mới', style: TextStyle(fontSize: 38)),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -52,7 +52,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
               // Hiển thị ID thuốc
               Text(
                 'ID thuốc: $medicineID',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
               ),
               TextField(
                 controller: medicineNameController,
@@ -165,7 +165,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                       allMedicines.remove(idToDelete); // Xóa thuốc khỏi map
                     });
                     Navigator.pop(context);
-                    showCompleteFlushBar(context, 'Xóa thuốc thành công');;
+                    showCompleteFlushBar(context, 'Xóa thuốc thành công');
                   } else {
                     showErorrFlushBar(context, 'Thuốc không tồn tại');
                   }
@@ -241,43 +241,57 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Danh sách thuốc', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, fontFamily: 'RobotoMono')), // Phóng to tiêu đề và thay kiểu chữ
+                      Text('Danh sách thuốc', style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold, fontFamily: 'RobotoMono')), // Phóng to tiêu đề và thay kiểu chữ
                     ],
                   ),
                 ),
+                Divider(color: Colors.black, thickness: 2), // Dấu gạch ngang
                 // Danh sách thuốc
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      columnSpacing: 10.0, // Khoảng cách giữa các cột
-                      columns: [
-                        DataColumn(label: Text('ID Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, fontFamily: 'RobotoMono'))), // Cỡ chữ 40
-                        DataColumn(label: Text('Tên Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, fontFamily: 'RobotoMono'))),
-                        DataColumn(label: Text('Số Lượng', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42, fontFamily: 'RobotoMono'))),
-                        DataColumn(label: Text('Giá', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, fontFamily: 'RobotoMono'))),
-                        DataColumn(label: Text('Đơn Vị', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, fontFamily: 'RobotoMono'))),
-                        DataColumn(label: Text('Hành Động', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, fontFamily: 'RobotoMono'))),
-                      ],
-                      rows: allMedicines.entries.map((entry) {
-                        return DataRow(
-                          cells: [
-                            DataCell(Text(entry.value.medicineID, style: TextStyle(fontSize: 40))),
-                            DataCell(Text(entry.value.medicineName, style: TextStyle(fontSize: 40))),
-                            DataCell(Text(entry.value.quantity.toString(), style: TextStyle(fontSize: 40))),
-                            DataCell(Text(entry.value.price.toString(), style: TextStyle(fontSize: 40))),
-                            DataCell(Text(entry.value.unit == 0 ? 'Lỏng' : 'Rắn', style: TextStyle(fontSize: 40))),
-                            DataCell(
-                              IconButton(
-                                onPressed: () {
-                                  deletemedicine();
-                                },
-                                icon: Icon(Icons.delete,color: Colors.red, size: 40),
+                  child: SingleChildScrollView( // Cuộn dọc
+                    scrollDirection: Axis.vertical, 
+                    child: SingleChildScrollView( // Cuộn ngang
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columnSpacing: 10.0, // Khoảng cách giữa các cột
+                        columns: [
+                          DataColumn(label: Text('ID Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))), 
+                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                          DataColumn(label: Text('Tên Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
+                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                          DataColumn(label: Text('Số Lượng', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42, fontFamily: 'RobotoMono'))),
+                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                          DataColumn(label: Text('Giá', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
+                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                          DataColumn(label: Text('Đơn Vị', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
+                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                          DataColumn(label: Text('Hành Động', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
+                        ],
+                        rows: allMedicines.entries.map((entry) {
+                          return DataRow(
+                            cells: [
+                              DataCell(Text(entry.value.medicineID, style: TextStyle(fontSize: 38))),
+                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                              DataCell(Text(entry.value.medicineName, style: TextStyle(fontSize: 38))),
+                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                              DataCell(Text(entry.value.quantity.toString(), style: TextStyle(fontSize: 38))),
+                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                              DataCell(Text(entry.value.price.toString(), style: TextStyle(fontSize: 38))),
+                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                              DataCell(Text(entry.value.unit == 0 ? 'Lỏng' : 'Rắn', style: TextStyle(fontSize: 38))),
+                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
+                              DataCell(
+                                IconButton(
+                                  onPressed: () {
+                                    deletemedicine();
+                                  },
+                                  icon: Icon(Icons.delete, color: Colors.red, size: 38),
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
+                            ],
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
