@@ -104,17 +104,32 @@ Container showAddingID(String label, int type){
 }
 
 //SHOW 1 ĐOẠN VĂN BẢN KHÔNG THỂ CHỈNH SỬA, CÓ CHỮ NỔI PHÍA TRÊN
-TextField showNoChangeInfo(String label, String s){
+TextField showNoChangeInfo(String label, String title){
   return TextField(
         focusNode: AlwaysDisabledFocusNode(),
         readOnly: true,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: s,
+          hintText: title,
           labelText: label,
           floatingLabelBehavior: FloatingLabelBehavior.always,
         ),
       );
+}
+
+//SHO 1 CONTAINER CHỨA VĂN BẢN KHÔNG THỂ CHỈNH SỬA, CÓ CHỮ NỔI PHÍA TRÊN
+Container showNoChangeInfoContainer(String label,String title){
+  return Container(
+    decoration: BoxDecoration(
+      color: lightGreenBackground,
+      borderRadius: BorderRadius.circular(defaultPadding*2)
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(defaultPadding),
+      child: showNoChangeInfo(label, title) 
+      
+      ),
+    );
 }
 
 Container showID(String label,String id){

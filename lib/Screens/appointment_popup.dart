@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:beginapp01/OOP_material/bill.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
-import 'package:beginapp01/OOP_material/medicine.dart';
+import 'package:beginapp01/OOP_material/doctor.dart';
 
 class AppointmentPopup extends StatelessWidget {
   final String patientID;
@@ -14,6 +13,22 @@ class AppointmentPopup extends StatelessWidget {
         .where((entry) => entry.value.any((app) => app.patientID == patientID))
         .expand((entry) => entry.value)
         .toList();
+
+    if (appointments.isEmpty) {
+      // Nếu bệnh nhân chưa có cuộc hẹn nào, hiển thị thông báo
+      return AlertDialog(
+        title: Text('Danh sách cuộc hẹn của bệnh nhân $patientID'),
+        content: Text('Bệnh nhân này chưa có cuộc hẹn nào.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Đóng popup
+            },
+            child: Text('Đóng'),
+          ),
+        ],
+      );
+    }
 
     return AlertDialog(
       title: Text('Danh sách cuộc hẹn của bệnh nhân $patientID'),
@@ -65,16 +80,142 @@ class AppointmentPopup extends StatelessWidget {
                   // Nút tính tiền bên phải
                   ElevatedButton(
                     onPressed: () {
-                      // Nếu có hóa đơn, tính tổng tiền cho từng cuộc hẹn
+                      // Nếu có hóa đơn, hiển thị thông tin chi tiết thuốc và tổng tiền cho từng cuộc hẹn
                       if (app.payedBill != null) {
                         double totalAmount = app.payedBill!.getTotalPrice();
-                        // Hiển thị thông báo tổng tiền cho từng cuộc hẹn
+                        // Hiển thị thông báo tổng tiền và các thuốc cho từng cuộc hẹn
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('Tổng tiền hóa đơn cho cuộc hẹn ${app.appoinmentID}'),
-                              content: Text('Tổng số tiền cần thanh toán: \$${totalAmount.toStringAsFixed(2)}'),
+                              title: RichText(
+                                text: TextSpan(
+                                  text:
+                                      'Chi tiết hóa đơn cho cuộc hẹn ${app.appoinmentID}\n',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          'Bác sĩ phụ trách ${allDoctors[app.doctorID]?.firstName ?? 'Không tìm thấy bác sĩ'}\n',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Table hiển thị thông tin thuốc
+                                  Table(
+                                    border: TableBorder.all(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                    children: [
+                                      // Header row
+                                      TableRow(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                        ),
+                                        children: [
+                                          TableCell(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Tên thuốc',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'ID thuốc',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Số lượng',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Đơn giá (VND)',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      // Dữ liệu thuốc
+                                      ...app.payedBill!.medicinePairs
+                                          .map((pair) {
+                                        return TableRow(
+                                          children: [
+                                            TableCell(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  pair.key.medicineName,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                            TableCell(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  pair.key.medicineID,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                            TableCell(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  pair.value.toString(),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                            TableCell(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  pair.key.price.toString(),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  // Hiển thị tổng tiền
+                                  Text(
+                                    'Tổng tiền cần thanh toán: ${totalAmount.toStringAsFixed(2)} VND',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -92,7 +233,8 @@ class AppointmentPopup extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('Chưa có hóa đơn cho cuộc hẹn ${app.appoinmentID}'),
+                              title: Text(
+                                  'Chưa có hóa đơn cho cuộc hẹn ${app.appoinmentID}'),
                               content: Text('Vui lòng đợi đến khi có hóa đơn.'),
                               actions: [
                                 TextButton(
@@ -107,7 +249,7 @@ class AppointmentPopup extends StatelessWidget {
                         );
                       }
                     },
-                    child: Text('Tính Hóa Đơn'),
+                    child: Text('Chi tiết hóa đơn'),
                   ),
                 ],
               ),

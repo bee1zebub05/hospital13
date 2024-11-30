@@ -305,6 +305,52 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
     );
   }
 
+  void viewAppoinment(Appoinment appoinment){
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: const Text('Thông tin về cuộc hẹn này'),
+          backgroundColor: whiteGreenBackground,
+          content: Container(
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.height * 0.25,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: showNoChangeInfoContainer('Mã số bác sĩ', appoinment.doctorID)),
+                      const SizedBox(width: defaultPadding,),
+                      Expanded(child: showNoChangeInfoContainer('Mã số bệnh nhân', appoinment.patientID))
+                    ],
+                  ),
+                  Expanded(child: 
+                    Text(
+                      DateFormat('HH:mm dd/MM/yyyy').format(appoinment.dateTime),
+                      style: const TextStyle( fontSize: 25 ),
+                    )
+                  )
+                ]
+              )
+                  ,
+          ),
+          actions: [
+            TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Đóng dialog
+                  },
+                  child: const Text(
+                    'Thoát',
+                    style: TextStyle(color: textBlackColor, fontSize: 18),
+                  ),
+                ),
+          ],
+        );
+      }
+    );
+  }
 
   @override
   void initState() {
@@ -466,14 +512,19 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                                 //const Spacer(),
                                 Expanded(
                                   child: ListTile( 
-                                    title: Text('${value[index].dateTime.hour}'.padLeft(2,'0') + ' : ' +
-                                    '${value[index].dateTime.minute}'.padLeft(2,'0')),
+                                    title: Text('${'${value[index].dateTime.hour}'.padLeft(2,'0')} : ${'${value[index].dateTime.minute}'.padLeft(2,'0')}'),
                                    )
                                 ),
                                 //const Spacer(),
+                                if( value[index].dateTime.isAfter(DateTime.now()) ) 
                                 IconButton(
                                   onPressed: () => adjustAppoinment(value[index]), 
                                   icon: const Icon(Icons.edit_calendar)
+                                )
+                                else 
+                                IconButton(
+                                  onPressed: () => viewAppoinment(value[index]), 
+                                  icon: const Icon(Icons.visibility)
                                 )
                               ],
                             )
