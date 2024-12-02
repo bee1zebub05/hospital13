@@ -15,156 +15,158 @@ class PatientScreen extends StatefulWidget {
   State<PatientScreen> createState() => _PatientScreenState();
 }
 
+void addAPatient(BuildContext context) {
+  GenderEnum _selectedGender = GenderEnum.male;
+  final TextEditingController firstName = TextEditingController();
+  final TextEditingController lastName = TextEditingController();
+  final TextEditingController age = TextEditingController();
+  final TextEditingController phone = TextEditingController();
+  final TextEditingController address = TextEditingController();
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, void Function(void Function()) setState) {
+          return AlertDialog(
+            title: const Text(
+              'Thêm một bệnh nhân mới',
+              style: TextStyle(color: textBlackColor),
+            ),
+            content: SingleChildScrollView(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    // Cột thứ nhất
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 7,
+                      child: Column(
+                        children: [
+                          fillblank(lastName, 'Họ'),
+                          const SizedBox(height: 10),
+                          fillblank(age, 'Tuổi'),
+                          const SizedBox(height: 10),
+                          Container(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              decoration: BoxDecoration(
+                                color: Colors.green.shade100,
+                                borderRadius: BorderRadius.circular(defaultPadding*2),
+                              ),
+                              child: DropdownButton<GenderEnum>(
+                                dropdownColor: lightGreenBackground,
+                                borderRadius: BorderRadius.circular(defaultPadding*2),
+                                underline: Container(
+                                  color: textBlackColor,
+                                ),
+                                value: _selectedGender,
+                                hint: const Text('Chọn giới tính'),
+                                isExpanded: true,
+                                items: GenderEnum.values.map((GenderEnum gender) {
+                                  return DropdownMenuItem<GenderEnum>(
+                                    value: gender,
+                                    child: Text(genderToString(gender)),
+                                  );
+                                }).toList(),
+                                onChanged: (GenderEnum? newValue) {
+                                  setState(() {
+                                    _selectedGender = newValue!; // Cập nhật giới tính
+                                  });
+                                },
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // Cột thứ hai
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 7,
+                      child: Column(
+                        children: [
+                          fillblank(firstName, 'Tên'),
+                          const SizedBox(height: 10),
+                          fillblank(phone, 'Số điện thoại'),
+                          const SizedBox(height: 10),
+                          fillblank(address, 'Quê quán'),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // Cột thứ ba
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 7,
+                      child: Column(
+                        children: [
+                          showAddingID('ID bệnh nhân', 0)
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  
+                    allPatient[newestID] = Patient(
+                      firstName: firstName.text,
+                      lastName: lastName.text,
+                      age: int.parse(age.text),
+                      gender: _selectedGender,
+                      phone: phone.text,
+                      address: address.text,
+                      patientID: newestID,);
+                    if( newestID == 'BN${'${patientLastestID+1}'.padLeft(6,'0')}' ){
+                      patientLastestID++;
+                    }
+                    showCompleteFlushBar(context, 'Thêm thành công');
+                    Future.delayed(const Duration(seconds: 3), () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) => PatientScreen(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          return child;
+                        },
+                      ),
+                    );
+                  });
+                  
+                },
+                child: const Text(
+                  'Lưu',
+                  style: TextStyle(color: textBlackColor, fontSize: 18),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Đóng dialog
+                },
+                child: const Text(
+                  'Hủy',
+                  style: TextStyle(color: textBlackColor, fontSize: 18),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
+
 class _PatientScreenState extends State<PatientScreen> {
   late int listType = 0;
   late bool listTypeReverse = false;
   final TextEditingController findController = TextEditingController();
   
   //METHOD LÀM VIỆC VỚI MAP LƯU CÁC Patient
-  void addAPatient() {
-    GenderEnum _selectedGender = GenderEnum.male;
-    final TextEditingController firstName = TextEditingController();
-    final TextEditingController lastName = TextEditingController();
-    final TextEditingController age = TextEditingController();
-    final TextEditingController phone = TextEditingController();
-    final TextEditingController address = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, void Function(void Function()) setState) {
-            return AlertDialog(
-              title: const Text(
-                'Thêm một bệnh nhân mới',
-                style: TextStyle(color: textBlackColor),
-              ),
-              content: SingleChildScrollView(
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(),
-                      // Cột thứ nhất
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 7,
-                        child: Column(
-                          children: [
-                            fillblank(lastName, 'Họ'),
-                            const SizedBox(height: 10),
-                            fillblank(age, 'Tuổi'),
-                            const SizedBox(height: 10),
-                            Container(
-                                padding: const EdgeInsets.all(defaultPadding),
-                                decoration: BoxDecoration(
-                                  color: Colors.green.shade100,
-                                  borderRadius: BorderRadius.circular(defaultPadding*2),
-                                ),
-                                child: DropdownButton<GenderEnum>(
-                                  dropdownColor: lightGreenBackground,
-                                  borderRadius: BorderRadius.circular(defaultPadding*2),
-                                  underline: Container(
-                                    color: textBlackColor,
-                                  ),
-                                  value: _selectedGender,
-                                  hint: const Text('Chọn giới tính'),
-                                  isExpanded: true,
-                                  items: GenderEnum.values.map((GenderEnum gender) {
-                                    return DropdownMenuItem<GenderEnum>(
-                                      value: gender,
-                                      child: Text(genderToString(gender)),
-                                    );
-                                  }).toList(),
-                                  onChanged: (GenderEnum? newValue) {
-                                    setState(() {
-                                      _selectedGender = newValue!; // Cập nhật giới tính
-                                    });
-                                  },
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      // Cột thứ hai
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 7,
-                        child: Column(
-                          children: [
-                            fillblank(firstName, 'Tên'),
-                            const SizedBox(height: 10),
-                            fillblank(phone, 'Số điện thoại'),
-                            const SizedBox(height: 10),
-                            fillblank(address, 'Quê quán'),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      // Cột thứ ba
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 7,
-                        child: Column(
-                          children: [
-                            showAddingID('ID bệnh nhân', 0)
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                    ],
-                  ),
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    
-                      allPatient[newestID] = Patient(
-                        firstName: firstName.text,
-                        lastName: lastName.text,
-                        age: int.parse(age.text),
-                        gender: _selectedGender,
-                        phone: phone.text,
-                        address: address.text,
-                        patientID: newestID,);
-                      if( newestID == 'BN${'${patientLastestID+1}'.padLeft(6,'0')}' ){
-                        patientLastestID++;
-                      }
-                      showCompleteFlushBar(context, 'Thêm thành công');
-                      Future.delayed(const Duration(seconds: 3), () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => PatientScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return child;
-                          },
-                        ),
-                      );
-                    });
-                    
-                  },
-                  child: const Text(
-                    'Lưu',
-                    style: TextStyle(color: textBlackColor, fontSize: 18),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Đóng dialog
-                  },
-                  child: const Text(
-                    'Hủy',
-                    style: TextStyle(color: textBlackColor, fontSize: 18),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
+  
   void adjustPatient(Patient patient) {
   GenderEnum _selectedGender = patient.gender; // Giới tính hiện tại
   String latestID = patient.patientID;
@@ -506,7 +508,7 @@ class _PatientScreenState extends State<PatientScreen> {
                 case 1:
                   searchPatient();
                 case 2:
-                  addAPatient();
+                  addAPatient(context);
               }
             },
             backgroundColor: lightGreenBackground, 

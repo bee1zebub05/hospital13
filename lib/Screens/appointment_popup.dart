@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
-import 'package:beginapp01/OOP_material/medicine.dart';
 import 'package:beginapp01/OOP_material/doctor.dart';
 
 class AppointmentPopup extends StatelessWidget {
@@ -39,6 +38,7 @@ class AppointmentPopup extends StatelessWidget {
           // Hiển thị danh sách cuộc hẹn
           ...appointments.map((app) {
             return Container(
+              
               padding: EdgeInsets.all(15),
               margin: EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(

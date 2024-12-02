@@ -12,12 +12,7 @@ class DoctorScreen extends StatefulWidget {
   State<DoctorScreen> createState() => _DoctorScreenState();
 }
 
-class _DoctorScreenState extends State<DoctorScreen> {
-  late int listType = 0;
-  late bool listTypeReverse = false;
-  final TextEditingController findController = TextEditingController();
-  //METHOD LÀM VIỆC VỚI MAP LƯU CÁC DOCTOR
-  void addADoctor() {
+void addADoctor(BuildContext context) {
     GenderEnum _selectedGender = GenderEnum.male;
     final TextEditingController firstName = TextEditingController();
     final TextEditingController lastName = TextEditingController();
@@ -37,7 +32,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 style: TextStyle(color: textBlackColor),
               ),
               content: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +78,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                           ],
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       // Cột thứ hai
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 7,
@@ -166,6 +161,13 @@ class _DoctorScreenState extends State<DoctorScreen> {
       },
     );
   }
+
+class _DoctorScreenState extends State<DoctorScreen> {
+  late int listType = 0;
+  late bool listTypeReverse = false;
+  final TextEditingController findController = TextEditingController();
+  //METHOD LÀM VIỆC VỚI MAP LƯU CÁC DOCTOR
+  
 
   void adjustDoctor(Doctor doctor) {
   GenderEnum selectedGender = doctor.gender; // Giới tính hiện tại
@@ -503,7 +505,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 case 1:
                   searchDoctor();
                 case 2:
-                  addADoctor();
+                  addADoctor(context);
               }
             },
             backgroundColor: lightGreenBackground, 
@@ -563,7 +565,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         const SizedBox(width: defaultPadding,),
                         headTableText('QUÊ QUÁN' ,5),
                         const SizedBox(width: defaultPadding,),
-                        headTableText('CHUYÊN NGÀNH' ,6),
+                        headTableText('KHOA' ,6),
                         const Icon(Icons.visibility),
                         const SizedBox(width: defaultPadding,),
                 ],
