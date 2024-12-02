@@ -45,7 +45,7 @@ class Patient extends Person {
   set patientID(String value) => _patientID = value;
 }
 
-int patientLastestID = 10;
+int patientLastestID = allPatient.length+1;
 
 Map<String,Patient> allPatient = {
   'BN000001': Patient(

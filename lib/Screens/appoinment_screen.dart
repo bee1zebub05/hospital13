@@ -1,5 +1,6 @@
 import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/patient.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
@@ -197,9 +198,80 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
     );
   }
   
+  void showFitDoctorsList(TextEditingController doctorID,BuildContext context, List<String> fitDoctor) {
+    if (fitDoctor.isEmpty) {
+      // Nếu không có bác sĩ phù hợp, chỉ cần hiển thị thông báo
+      showErorrFlushBar(context, 'Không có bác sĩ phù hợp');
+      return;
+    }
+
+    // Hiển thị danh sách bác sĩ bằng BottomSheet
+    showModalBottomSheet(
+      backgroundColor: whiteGreenBackground,
+      context: context,
+      builder: (BuildContext context) {
+        return ListView.builder(
+          itemCount: fitDoctor.length, // Số lượng item trong danh sách
+          itemBuilder: (context, index) {
+            return Card(
+              color: lightGreenBackground,
+              margin: const EdgeInsets.symmetric(vertical: defaultPadding/2, horizontal: defaultPadding),
+              child: ListTile(
+                title: Text('${allDoctors[fitDoctor[index]]?.lastName} ${allDoctors[fitDoctor[index]]?.firstName}'),
+                subtitle: Text('${fitDoctor[index]} ${allDoctors[fitDoctor[index]]?.speciality} '),
+                onTap: () {
+                  setState(() {
+                    doctorID.text = fitDoctor[index];
+                    Navigator.of(context).pop();
+                  });
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> findFitDoctor(TextEditingController doctorID, String description, DateTime choosenTime) async {
+    List<String> keywords = description.split(',').map((e) => e.trim()).toList();
+    List<String> fitDoctor = [];
+
+    // Kiểm tra bác sĩ phù hợp
+    for (var doctor in allDoctors.values) {
+      bool tempCheck = false;
+
+      // Kiểm tra ngành bác sĩ có phù hợp với bệnh không
+      if (specialityKeyWord.containsKey(doctor.speciality)) {
+        for (var keyword in keywords) {
+          if (specialityKeyWord[doctor.speciality]!.any((word) => word == keyword)) {
+            tempCheck = true;
+            break;
+          }
+        }
+      }
+
+      if (!tempCheck) continue;
+
+      // Kiểm tra bác sĩ có bận không (Lịch hẹn trùng với thời gian chọn)
+      if (kAppointments.containsKey(choosenTime) &&
+          kAppointments[choosenTime]!.any((appoinment) => appoinment.doctorID == doctor.IDWorker)) {
+        continue;
+      }
+
+      // Thêm bác sĩ vào danh sách phù hợp
+      fitDoctor.add(doctor.IDWorker);
+    }
+
+    // Nếu có bác sĩ phù hợp, hiển thị danh sách bác sĩ
+    showFitDoctorsList(doctorID,context, fitDoctor);
+  }
+
+
   void addAnAppointment() {
     final TextEditingController doctorID = TextEditingController();
     final TextEditingController patientID = TextEditingController();
+    final TextEditingController description = TextEditingController();
 
     showDialog(
       context: context,
@@ -209,18 +281,21 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
             return AlertDialog(
               title: const Text('Thêm một cuộc hẹn mới'),
               backgroundColor: whiteGreenBackground,
-              content: Container(
+              content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.height * 0.2,
+                height: MediaQuery.of(context).size.height * 0.5,
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(child: fillblank(doctorID, 'Mã số bác sĩ' )),
-                        Expanded(child: fillblank(patientID, 'Mã số bệnh nhân', )),
-                        Expanded(child: showAddingID('Mã số cuộc họp ', 2)),
-                      ],
-                    ),
+                    Expanded(
+                      child: 
+                          Row(
+                            children: [
+                              Expanded(child: showAddingID('Mã số cuộc họp ', 2)),
+                              Expanded(child: fillblank(patientID, 'Mã số bệnh nhân', )),
+                            ],
+                          ),
+                        
+                      ),
                     Expanded(
                       child: ElevatedButton(
                         style: ButtonStyle(
@@ -245,11 +320,29 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                           style: const TextStyle(color: textBlackColor),
                         ),
                       ),
-                    ),
+                    ),   
+                    Expanded(child: fillblank(description, 'Mô tả thông tin bệnh hoặc vấn đề', )),   
+                    Expanded(child: fillblank(doctorID, 'Mã số bác sĩ', )),
                   ],
                 ),
               ),
               actions: [
+                TextButton(
+                  onPressed: () {
+                    print(description.text);
+                    print(choosenTime);
+                    try{
+                      findFitDoctor(doctorID,description.text,choosenTime);
+                    } // Đóng dialog
+                    catch(e){
+                      showErorrFlushBar(context, '$e');
+                    }
+                  },
+                  child: const Text(
+                    'Tìm bác sĩ phù hợp',
+                    style: TextStyle(color: textBlackColor, fontSize: 18),
+                  ),
+                ),
                 TextButton(
                   onPressed: () {
                     kAppointments[choosenTime] ??= [];

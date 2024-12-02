@@ -7,28 +7,8 @@ import "package:flutter/material.dart";
 
 //MAP LƯU CÁC TỪ KHÓA TƯƠNG ỨNG VỚI CÁC KHOA
 Map<String, List<String>> specialityKeyWord = {
-  'Tai mũi họng' : ["Viêm họng", "Đau cổ", "Viêm amidan", "Viêm tai giữa", "Nghẹt mũi", "Xoang", 
- "Viêm mũi dị ứng", "Chảy máu cam", "Điếc đột ngột", "Ù tai", "Rối loạn giọng nói", 
- "Khó thở", "Sỏi amidan", "Nhiễm trùng tai ngoài", "Viêm thanh quản", "Viêm mũi", 
- "Cảm lạnh", "Dị ứng", "Nhiễm trùng tai trong", "Khối u mũi", "Rối loạn thính giác", 
- "Nhiễm trùng xoang", "Viêm tai ngoài", "Tắc nghẽn mũi", "Chảy nước mũi", "Họng khô", 
- "Khó nuốt", "Cơn ho", "Chảy mủ tai", "Mất thính giác", "Chóng mặt", "Vẹo vách ngăn mũi", 
- "Viêm mũi mạn tính", "Khối u cổ", "Hôi miệng", "Viêm thanh quản mãn tính", "Viêm họng mạn tính", 
- "Cổ họng sưng tấy", "Cảm cúm", "Hội chứng ngừng thở khi ngủ", "Viêm dây thanh âm", "Nổi hạch cổ", 
- "Vỡ mạch máu tai", "Khó thở khi ngủ", "Rối loạn nuốt", "Mắt đỏ", "Hóc xương", "Viêm tắc tuyến lệ", 
- "Chứng nghẹt mũi mùa xuân", "Nhiễm trùng miệng", "Tắc ống tai", "Viêm mũi vách ngăn", 
- "Viêm cổ họng hạt", "Chứng dị ứng môi", "Chứng ngứa tai", "Viêm tai trong", "Thường xuyên đau đầu", 
- "Tổn thương dây thanh âm", "Khó thở khi nói", "Sưng cổ họng", "Chảy nước mắt", "Hỏng giọng", 
- "Viêm mũi teo", "Khó thở khi vận động", "Viêm họng cấp tính", "Dịch tai", "Phồng tai", "Tai bị chảy máu", 
- "Thở khò khè", "Nổi u cổ", "Khó ngủ", "Cảm giác ngứa trong cổ họng", "Bệnh lý tai trong", 
- "Viêm amidan hốc mủ", "Viêm họng đỏ", "Viêm họng do virus", "Bệnh viêm tai mũi họng", "Nhiễm khuẩn mũi", 
- "Đau tai", "Chảy mủ mũi", "Viêm tai trong do virus", "Khó nói", "Môi khô", "Chứng ngủ ngáy", 
- "Sưng tai", "Bệnh lý mũi", "Viêm nướu miệng", "Lệch vách ngăn mũi", "Viêm hạch cổ", "Chứng ù tai", 
- "Giảm thính lực", "Viêm tuyến nước bọt", "Chứng nghẹt mũi vĩnh viễn", "Tổn thương tai do tiếng ồn", 
- "Viêm vòm họng", "Chảy nước miếng", "Cổ họng khó chịu", "Đau vùng tai", "Viêm tai mũi họng cấp tính", 
- "Giảm khả năng nuốt", "Khó thở khi ăn", "Viêm loét vòm họng", "Lở miệng", "Viêm mũi do vi khuẩn", 
- "Chảy mủ tai mũi", "Ngứa cổ họng", "Dị ứng với thức ăn", "Viêm nướu răng", "Mất vị giác", 
- "Chứng đau đầu liên quan tai mũi họng", "Cổ họng tấy đỏ", "Mụn nhọt tai", "Hơi thở nặng", "Mụn trong tai"],
+  'Tai mũi họng' : ["viêm họng", "đau cổ", "viêm amidan", "viêm tai giữa", "nghẹt mũi", "xoang", "viêm mũi dị ứng", "chảy máu cam", "điếc đột ngột", "ù tai", "rối loạn giọng nói", "khó thở", "sỏi amidan", "nhiễm trùng tai ngoài", "viêm thanh quản", "viêm mũi", "cảm lạnh", "dị ứng", "nhiễm trùng tai trong", "khối u mũi", "rối loạn thính giác", "nhiễm trùng xoang", "viêm tai ngoài", "tắc nghẽn mũi", "chảy nước mũi", "họng khô", "khó nuốt", "cơn ho", "chảy mủ tai", "mất thính giác", "chóng mặt", "vẹo vách ngăn mũi", "viêm mũi mạn tính", "khối u cổ", "hôi miệng", "viêm thanh quản mãn tính", "viêm họng mạn tính", "cổ họng sưng tấy", "cảm cúm", "hội chứng ngừng thở khi ngủ", "viêm dây thanh âm", "nổi hạch cổ", "vỡ mạch máu tai", "khó thở khi ngủ", "rối loạn nuốt", "mắt đỏ", "hóc xương", "viêm tắc tuyến lệ", "chứng nghẹt mũi mùa xuân", "nhiễm trùng miệng", "tắc ống tai", "viêm mũi vách ngăn", "viêm cổ họng hạt", "chứng dị ứng môi", "chứng ngứa tai", "viêm tai trong", "thường xuyên đau đầu", "tổn thương dây thanh âm", "khó thở khi nói", "sưng cổ họng", "chảy nước mắt", "hỏng giọng", "viêm mũi teo", "khó thở khi vận động", "viêm họng cấp tính", "dịch tai", "phồng tai", "tai bị chảy máu", "thở khò khè", "nổi u cổ", "khó ngủ", "cảm giác ngứa trong cổ họng", "bệnh lý tai trong", "viêm amidan hốc mủ", "viêm họng đỏ", "viêm họng do virus", "bệnh viêm tai mũi họng", "nhiễm khuẩn mũi", "đau tai", "chảy mủ mũi", "viêm tai trong do virus", "khó nói", "môi khô", "chứng ngủ ngáy", "sưng tai", "bệnh lý mũi", "viêm nướu miệng", "lệch vách ngăn mũi", "viêm hạch cổ", "chứng ù tai", "giảm thính lực", "viêm tuyến nước bọt", "chứng nghẹt mũi vĩnh viễn", "tổn thương tai do tiếng ồn", "viêm vòm họng", "chảy nước miếng", "cổ họng khó chịu", "đau vùng tai", "viêm tai mũi họng cấp tính", "giảm khả năng nuốt", "khó thở khi ăn", "viêm loét vòm họng", "lở miệng", "viêm mũi do vi khuẩn", "chảy mủ tai mũi", "ngứa cổ họng", "dị ứng với thức ăn", "viêm nướu răng", "mất vị giác", "chứng đau đầu liên quan tai mũi họng", "cổ họng tấy đỏ", "mụn nhọt tai", "hơi thở nặng", "mụn trong tai"],
+
 
   'Răng hàm mặt': ["sâu răng", "viêm nướu", "viêm lợi", "hôi miệng", "viêm nha chu", "viêm tủy răng", "viêm miệng", "sâu răng cửa", 
  "viêm răng miệng", "tẩy trắng răng", "răng mọc lệch", "viêm tủy cấp tính", "bệnh lý răng miệng", "răng khôn", 
@@ -434,6 +414,7 @@ Container fillblank(final TextEditingController controller, String s) {
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: s,
           border: const UnderlineInputBorder(),
         ),

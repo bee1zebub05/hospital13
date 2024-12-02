@@ -46,7 +46,7 @@ class Doctor extends Worker {
   }
 }
 
-int doctorLastestID =10;
+int doctorLastestID =allDoctors.length+1;
 
 Map<String,Doctor> allDoctors ={
   'DT000001': Doctor(

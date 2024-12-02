@@ -13,7 +13,7 @@ class DoctorScreen extends StatefulWidget {
 }
 
 void addADoctor(BuildContext context) {
-    GenderEnum _selectedGender = GenderEnum.male;
+    GenderEnum selectedGender = GenderEnum.male;
     final TextEditingController firstName = TextEditingController();
     final TextEditingController lastName = TextEditingController();
     final TextEditingController age = TextEditingController();
@@ -59,7 +59,7 @@ void addADoctor(BuildContext context) {
                                   underline: Container(
                                     color: textBlackColor,
                                   ),
-                                  value: _selectedGender,
+                                  value: selectedGender,
                                   hint: const Text('Chọn giới tính'),
                                   isExpanded: true,
                                   items: GenderEnum.values.map((GenderEnum gender) {
@@ -70,7 +70,7 @@ void addADoctor(BuildContext context) {
                                   }).toList(),
                                   onChanged: (GenderEnum? newValue) {
                                     setState(() {
-                                      _selectedGender = newValue!; // Cập nhật giới tính
+                                      selectedGender = newValue!; // Cập nhật giới tính
                                     });
                                   },
                                 ),
@@ -118,7 +118,7 @@ void addADoctor(BuildContext context) {
                         firstName: firstName.text,
                         lastName: lastName.text,
                         age: int.parse(age.text),
-                        gender: _selectedGender,
+                        gender: selectedGender,
                         phone: phone.text,
                         address: address.text,
                         IDWorker: newestID,
@@ -454,7 +454,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
     }
 
    //show 1 hàng doctor
-    Container _showAdoctors(int index , int listType, List<MapEntry<String,Doctor>> entries, String key, Doctor doctor) {
+    Container showAdoctors(int index , int listType, List<MapEntry<String,Doctor>> entries, String key, Doctor doctor) {
     return Container(
                       decoration: BoxDecoration(
                         color: lightGreenBackground,
@@ -573,7 +573,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                   ),
                 ),
                 Expanded( // Giới hạn ListView.builder trong phần không gian còn lại
-                  child: listViewType(_showAdoctors),
+                  child: listViewType(showAdoctors),
                 ),
               ],
             )
