@@ -254,12 +254,12 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
 
       // Kiểm tra bác sĩ có bận không (Lịch hẹn trùng với thời gian chọn)
       if (kAppointments.containsKey(choosenTime) &&
-          kAppointments[choosenTime]!.any((appoinment) => appoinment.doctorID == doctor.IDWorker)) {
+          kAppointments[choosenTime]!.any((appoinment) => appoinment.doctorID == doctor.idWorker)) {
         continue;
       }
 
       // Thêm bác sĩ vào danh sách phù hợp
-      fitDoctor.add(doctor.IDWorker);
+      fitDoctor.add(doctor.idWorker);
     }
 
     // Nếu có bác sĩ phù hợp, hiển thị danh sách bác sĩ

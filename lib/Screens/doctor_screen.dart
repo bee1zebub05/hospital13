@@ -121,7 +121,7 @@ void addADoctor(BuildContext context) {
                         gender: selectedGender,
                         phone: phone.text,
                         address: address.text,
-                        IDWorker: newestID,
+                        idWorker: newestID,
                         salary: double.parse(salary.text),
                         speciality: speciality.text,);
                       if( newestID == 'DT${'${doctorLastestID+1}'.padLeft(6,'0')}' ){
@@ -172,7 +172,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
 
   void adjustDoctor(Doctor doctor) {
   GenderEnum selectedGender = doctor.gender; // Giới tính hiện tại
-  String latestID = doctor.IDWorker;
+  String latestID = doctor.idWorker;
 
   final TextEditingController firstName = TextEditingController(text: doctor.firstName);
   final TextEditingController lastName = TextEditingController(text: doctor.lastName);
@@ -259,7 +259,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                       width: MediaQuery.of(context).size.width / 7,
                       child: Column(
                         children: [
-                          showID('ID của bác sĩ này',doctor.IDWorker),
+                          showID('ID của bác sĩ này',doctor.idWorker),
                           const SizedBox(height: 10),
                           adjustblank(salary, 'Lương', doctor.salary.toString()),
                           const SizedBox(height: 10),
@@ -473,7 +473,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                     width: MediaQuery.of(context).size.width*0.1,
                                     height: MediaQuery.of(context).size.height * 0.1,
                                   ),
-                                  tableText(doctor.IDWorker ),
+                                  tableText(doctor.idWorker ),
                                   const SizedBox(width: defaultPadding,),
                                   tableText(doctor.lastName ),
                                   const SizedBox(width: defaultPadding,),
@@ -603,7 +603,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
       case 1: setState(() {
         entries = allDoctors.entries.toList();
         entries.sort((a,b){
-          int result = a.value.IDWorker.compareTo(b.value.IDWorker);
+          int result = a.value.idWorker.compareTo(b.value.idWorker);
           return listTypeReverse ? result : -result;
         });
       });
@@ -647,7 +647,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
         List<MapEntry<String,Doctor>> findEntries =[] ;
         for (var entry in entries) {
           Doctor tmp = entry.value;
-          String needToFind = tmp.IDWorker + tmp.lastName + tmp.firstName 
+          String needToFind = tmp.idWorker + tmp.lastName + tmp.firstName 
           + tmp.phone + tmp.address + tmp.speciality;
           if( needToFind.contains(findController.text) ){
             findEntries.add(entry);

@@ -1,6 +1,6 @@
 import "person.dart";
 class Worker extends Person {
-  String _IDWorker;
+  String _idWorker;
   double _salary;
 
   Worker({
@@ -9,12 +9,12 @@ class Worker extends Person {
     super.age,
     super.gender,
     super.address,
-    String IDWorker ="",
+    String idWorker ="",
     double salary = 0,
-  })  : _IDWorker = IDWorker,
+  })  : _idWorker = idWorker,
         _salary = salary;
-  String get IDWorker => _IDWorker;
-  set IDWorker(String value) => _IDWorker = value;
+  String get idWorker => _idWorker;
+  set idWorker(String value) => _idWorker = value;
   double get salary => _salary;
   set salary(double value) {
     if (value >= 0) {

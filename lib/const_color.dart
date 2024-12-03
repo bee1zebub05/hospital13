@@ -5,11 +5,108 @@ import "package:beginapp01/OOP_material/patient.dart";
 import "package:beginapp01/OOP_material/person.dart";
 import "package:flutter/material.dart";
 
+//MÀU CHO BIỂU ĐỒ TRÒN
+const List<Color> pieColor = [
+  Color(0xffe1bbff), // Pastel Purple
+  Color(0xffc5ffdf), // Pastel Green
+  Color(0xffffc4b2), // Pastel Peach
+  Color(0xffc7e8ff), // Pastel Blue
+  Color(0xffffe5b2), // Pastel Yellow
+  Color(0xffffbce1), // Pastel Pink
+  Color(0xffd6ffd3), // Light Green
+  Color(0xffffd8bb), // Light Orange
+  Color(0xffbde0ff), // Light Sky Blue
+  Color(0xfffee4d4), // Light Coral
+  Color(0xffe4ffcc), // Light Lime
+  Color(0xffffd9f2), // Soft Pink
+  Color(0xffcde7ff), // Soft Blue
+  Color(0xffffe7cf), // Soft Peach
+  Color(0xffd7ffea)  // Mint Green
+];
+
+const List<Widget> widgets = [
+  Indicator(
+    size: 30,
+    color: Color(0xffe1bbff),
+    text: 'Tai mũi họng',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffc5ffdf),
+    text: 'Cơ xương khớp',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffffc4b2),
+    text: 'Mắt',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffc7e8ff),
+    text: 'Da liễu',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffffe5b2),
+    text: 'Thần kinh',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffffbce1),
+    text: 'Tim mạch',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffd6ffd3),
+    text: 'Ung bứu',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffffd8bb),
+    text: 'Cấp cứu',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffbde0ff),
+    text: 'Sản',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xfffee4d4),
+    text: 'Ngoại',
+    isSquare: true,
+  ),
+  SizedBox(height: defaultPadding/2),
+  Indicator(
+    size: 30,
+    color: Color(0xffe4ffcc),
+    text: 'Nội',
+    isSquare: true,
+  ),
+];
+
+
 //MAP LƯU CÁC TỪ KHÓA TƯƠNG ỨNG VỚI CÁC KHOA
 Map<String, List<String>> specialityKeyWord = {
   'Tai mũi họng' : ["viêm họng", "đau cổ", "viêm amidan", "viêm tai giữa", "nghẹt mũi", "xoang", "viêm mũi dị ứng", "chảy máu cam", "điếc đột ngột", "ù tai", "rối loạn giọng nói", "khó thở", "sỏi amidan", "nhiễm trùng tai ngoài", "viêm thanh quản", "viêm mũi", "cảm lạnh", "dị ứng", "nhiễm trùng tai trong", "khối u mũi", "rối loạn thính giác", "nhiễm trùng xoang", "viêm tai ngoài", "tắc nghẽn mũi", "chảy nước mũi", "họng khô", "khó nuốt", "cơn ho", "chảy mủ tai", "mất thính giác", "chóng mặt", "vẹo vách ngăn mũi", "viêm mũi mạn tính", "khối u cổ", "hôi miệng", "viêm thanh quản mãn tính", "viêm họng mạn tính", "cổ họng sưng tấy", "cảm cúm", "hội chứng ngừng thở khi ngủ", "viêm dây thanh âm", "nổi hạch cổ", "vỡ mạch máu tai", "khó thở khi ngủ", "rối loạn nuốt", "mắt đỏ", "hóc xương", "viêm tắc tuyến lệ", "chứng nghẹt mũi mùa xuân", "nhiễm trùng miệng", "tắc ống tai", "viêm mũi vách ngăn", "viêm cổ họng hạt", "chứng dị ứng môi", "chứng ngứa tai", "viêm tai trong", "thường xuyên đau đầu", "tổn thương dây thanh âm", "khó thở khi nói", "sưng cổ họng", "chảy nước mắt", "hỏng giọng", "viêm mũi teo", "khó thở khi vận động", "viêm họng cấp tính", "dịch tai", "phồng tai", "tai bị chảy máu", "thở khò khè", "nổi u cổ", "khó ngủ", "cảm giác ngứa trong cổ họng", "bệnh lý tai trong", "viêm amidan hốc mủ", "viêm họng đỏ", "viêm họng do virus", "bệnh viêm tai mũi họng", "nhiễm khuẩn mũi", "đau tai", "chảy mủ mũi", "viêm tai trong do virus", "khó nói", "môi khô", "chứng ngủ ngáy", "sưng tai", "bệnh lý mũi", "viêm nướu miệng", "lệch vách ngăn mũi", "viêm hạch cổ", "chứng ù tai", "giảm thính lực", "viêm tuyến nước bọt", "chứng nghẹt mũi vĩnh viễn", "tổn thương tai do tiếng ồn", "viêm vòm họng", "chảy nước miếng", "cổ họng khó chịu", "đau vùng tai", "viêm tai mũi họng cấp tính", "giảm khả năng nuốt", "khó thở khi ăn", "viêm loét vòm họng", "lở miệng", "viêm mũi do vi khuẩn", "chảy mủ tai mũi", "ngứa cổ họng", "dị ứng với thức ăn", "viêm nướu răng", "mất vị giác", "chứng đau đầu liên quan tai mũi họng", "cổ họng tấy đỏ", "mụn nhọt tai", "hơi thở nặng", "mụn trong tai"],
-
-
   'Răng hàm mặt': ["sâu răng", "viêm nướu", "viêm lợi", "hôi miệng", "viêm nha chu", "viêm tủy răng", "viêm miệng", "sâu răng cửa", 
  "viêm răng miệng", "tẩy trắng răng", "răng mọc lệch", "viêm tủy cấp tính", "bệnh lý răng miệng", "răng khôn", 
  "viêm chân răng", "chấn thương răng", "viêm lợi cấp tính", "tình trạng hôi miệng", "bệnh viêm miệng", "sâu răng hàm", 
@@ -295,7 +392,7 @@ Container showAddingID(String label, int type){
     case 1: //TẠO ID MỚI CHO 1 DOCTOR
       List<bool> check=List.filled(doctorLastestID+1, false);
       for( var doctor in allDoctors.values ){
-        check[int.parse(doctor.IDWorker.substring(2))] = true;
+        check[int.parse(doctor.idWorker.substring(2))] = true;
       }
       int latestID = doctorLastestID;
       for(int i = 1 ; i < check.length ; i++){
@@ -536,3 +633,46 @@ const double defaultPadding = 20.0;
 //1 ĐOẠN VĂN BẢN HỢP LỆ THEO CÚ PHÁP
 const String mobilePattern = r'^(0[0-9]{9,})$';
 const String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+
+class Indicator extends StatelessWidget {
+  const Indicator({
+    super.key,
+    required this.color,
+    required this.text,
+    required this.isSquare,
+    this.size = 16,
+    this.textColor,
+  });
+  final Color color;
+  final String text;
+  final bool isSquare;
+  final double size;
+  final Color? textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+            color: color,
+          ),
+        ),
+        const SizedBox(
+          width: 4,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: textColor,
+          ),
+        )
+      ],
+    );
+  }
+}
