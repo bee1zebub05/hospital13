@@ -14,25 +14,26 @@ class PharmacyScreen extends StatefulWidget {
 }
 
 class _PharmacyScreenState extends State<PharmacyScreen> {
-  late int _selectedIndex = 0;
+  int listType = 0; // Loại sắp xếp
+  bool listTypeReverse = false; // Thứ tự sắp xếp
+  late int selectedIndex = 0; // Chỉ mục của NavigationRail
 
-  // Phương thức tạo ID thuốc mới (kiểm tra ID trống)
+  final TextEditingController searchController = TextEditingController();
+
+  // Generate a unique medicine ID
   String generateMedicineID() {
-    // Tìm ID đầu tiên còn trống
     int idNumber = 1;
     String newID = 'ME${idNumber.toString().padLeft(6, '0')}';
 
-    // Kiểm tra xem ID này có được sử dụng chưa
     while (allMedicines.containsKey(newID)) {
       idNumber++;
       newID = 'ME${idNumber.toString().padLeft(6, '0')}';
     }
-
     return newID;
   }
 
-  // Thêm thuốc mới
-  void addmedicine() {
+  // Add a new medicine
+  void addMedicine() {
     showDialog(
       context: context,
       builder: (context) {
@@ -43,19 +44,15 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
         bool status = false;
         int unit = 0;
 
-        String medicineID = generateMedicineID(); // Tạo ID thuốc mới
+        String medicineID = generateMedicineID();
 
         return AlertDialog(
-          title: const Text('Thêm thuốc mới', style: TextStyle(fontSize: 38)),
+          title: const Text('Thêm thuốc mới', style: TextStyle(fontSize: 24)),
           content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Hiển thị ID thuốc
-              Text(
-                'ID thuốc: $medicineID',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
-              ),
+              Text('ID thuốc: $medicineID',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               TextField(
                 controller: medicineNameController,
                 decoration: const InputDecoration(labelText: 'Tên thuốc'),
@@ -76,7 +73,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
               ),
               Row(
                 children: [
-                  const Text("Đơn vị: "),
+                  const Text('Đơn vị:'),
                   Radio(
                     value: 0,
                     groupValue: unit,
@@ -86,7 +83,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                       });
                     },
                   ),
-                  const Text("Lỏng"),
+                  const Text('Lỏng'),
                   Radio(
                     value: 1,
                     groupValue: unit,
@@ -96,16 +93,14 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                       });
                     },
                   ),
-                  const Text("Rắn"),
+                  const Text('Rắn'),
                 ],
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Text('Hủy'),
             ),
             TextButton(
@@ -118,7 +113,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                     price: double.parse(priceController.text),
                     description: descriptionController.text,
                     unit: unit,
-                    status: status, // Không cần sử dụng status
+                    status: status,
                   );
                 });
                 Navigator.pop(context);
@@ -131,175 +126,449 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
     );
   }
 
-  // Xóa thuốc theo ID nhập vào
-  void deletemedicine() {
-    TextEditingController idToDeleteController = TextEditingController(); // Controller nhập ID thuốc cần xóa
+  // Show edit medicine dialog
+  void showEditMedicineDialog(String key, Medicine medicine) {
+    TextEditingController medicineNameController =
+        TextEditingController(text: medicine.medicineName);
+    TextEditingController quantityController =
+        TextEditingController(text: medicine.quantity.toString());
+    TextEditingController priceController =
+        TextEditingController(text: medicine.price.toString());
+    TextEditingController descriptionController =
+        TextEditingController(text: medicine.description);
+    int unit = medicine.unit;
 
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Nhập ID thuốc cần xóa'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: idToDeleteController,
-                decoration: const InputDecoration(labelText: 'Nhập ID thuốc'),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, void Function(void Function()) setState) {
+            return AlertDialog(
+              title: const Text(
+                'Chỉnh sửa thông tin thuốc',
+                style: TextStyle(fontSize: 24),
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Hủy'),
-            ),
-            TextButton(
-              onPressed: () {
-                String idToDelete = idToDeleteController.text;
-
-                // Kiểm tra ID thuốc có tồn tại không
-                try {
-                  if (allMedicines.containsKey(idToDelete)) {
+              content: SingleChildScrollView(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Spacer(),
+                      // Cột thứ nhất
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 4,
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: medicineNameController,
+                              decoration:
+                                  const InputDecoration(labelText: 'Tên thuốc'),
+                            ),
+                            const SizedBox(height: 10),
+                            TextField(
+                              controller: quantityController,
+                              decoration:
+                                  const InputDecoration(labelText: 'Số lượng'),
+                              keyboardType: TextInputType.number,
+                            ),
+                            const SizedBox(height: 10),
+                            TextField(
+                              controller: priceController,
+                              decoration: const InputDecoration(labelText: 'Giá'),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      // Cột thứ hai
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 4,
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: descriptionController,
+                              decoration:
+                                  const InputDecoration(labelText: 'Mô tả'),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                const Text('Đơn vị:'),
+                                Radio(
+                                  value: 0,
+                                  groupValue: unit,
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      unit = value!;
+                                    });
+                                  },
+                                ),
+                                const Text('Lỏng'),
+                                Radio(
+                                  value: 1,
+                                  groupValue: unit,
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      unit = value!;
+                                    });
+                                  },
+                                ),
+                                const Text('Rắn'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                // Xóa thuốc
+                TextButton(
+                  onPressed: () {
                     setState(() {
-                      allMedicines.remove(idToDelete); // Xóa thuốc khỏi map
+                      allMedicines.remove(key); // Xóa thuốc khỏi danh sách
                     });
-                    Navigator.pop(context);
+                    Navigator.of(context).pop(); // Đóng hộp thoại
                     showCompleteFlushBar(context, 'Xóa thuốc thành công');
-                  } else {
-                    showErorrFlushBar(context, 'Thuốc không tồn tại');
-                  }
-                } catch (e) {
-                  // Hiển thị lỗi nếu ID không tồn tại
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Lỗi: $e')),
-                  );
-                  Navigator.pop(context);
-                }
-              },
-              child: const Text('Xóa'),
-            ),
-          ],
+                    Future.delayed(const Duration(seconds: 3), () {
+                      Navigator.push(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const PharmacyScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return child;
+                          },
+                        ),
+                      );
+                    });
+                  },
+                  child: const Text('Xóa', style: TextStyle(color: Colors.red)),
+                ),
+                // Lưu thay đổi
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      allMedicines[key]?.medicineName =
+                          medicineNameController.text;
+                      allMedicines[key]?.quantity =
+                          int.parse(quantityController.text);
+                      allMedicines[key]?.price =
+                          double.parse(priceController.text);
+                      allMedicines[key]?.description =
+                          descriptionController.text;
+                      allMedicines[key]?.unit = unit;
+                    });
+                    Navigator.of(context).pop(); // Đóng hộp thoại
+                    showCompleteFlushBar(context, 'Chỉnh sửa thành công');
+                    Future.delayed(const Duration(seconds: 3), () {
+                      Navigator.push(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const PharmacyScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return child;
+                          },
+                        ),
+                      );
+                    });
+                    Future.delayed(const Duration(seconds: 3), () {
+                      Navigator.push(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const PharmacyScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return child;
+                          },
+                        ),
+                      );
+                    });
+                  },
+                  child: const Text('Lưu'),
+                ),
+                // Hủy
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Đóng hộp thoại
+                  },
+                  child: const Text('Hủy'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
 
+  // Sort medicines
+  List<MapEntry<String, Medicine>> sortMedicines() {
+    List<MapEntry<String, Medicine>> entries = allMedicines.entries.toList();
+
+    switch (listType) {
+      case 1: // Sort by ID
+        entries.sort(
+            (a, b) => a.key.compareTo(b.key) * (listTypeReverse ? -1 : 1));
+        break;
+      case 2: // Sort by Name
+        entries.sort((a, b) =>
+            a.value.medicineName.compareTo(b.value.medicineName) *
+            (listTypeReverse ? -1 : 1));
+        break;
+      case 3: // Sort by Quantity
+        entries.sort((a, b) =>
+            a.value.quantity.compareTo(b.value.quantity) *
+            (listTypeReverse ? -1 : 1));
+        break;
+      case 4: // Sort by Price
+        entries.sort((a, b) =>
+            a.value.price.compareTo(b.value.price) *
+            (listTypeReverse ? -1 : 1));
+        break;
+      case 5: // Sort by Unit
+        entries.sort((a, b) =>
+            a.value.unit.compareTo(b.value.unit) * (listTypeReverse ? -1 : 1));
+        break;
+      default:
+        break;
+    }
+
+    return entries;
+  }
+
+  Widget headTableText(String label, int type) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          if (listType == type) {
+            listTypeReverse = !listTypeReverse;
+          } else {
+            listType = type;
+            listTypeReverse = false;
+          }
+        });
+      },
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+              fontFamily: 'Roboto',
+            ),
+          ),
+          Icon(
+            listType == type
+                ? (listTypeReverse ? Icons.arrow_downward : Icons.arrow_upward)
+                : Icons.swap_vert,
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<MapEntry<String, Medicine>> displayMedicines = sortMedicines();
+
     return Scaffold(
       body: Row(
         children: [
           NavigationRail(
-            selectedIndex: _selectedIndex,
+            selectedIndex: selectedIndex,
             onDestinationSelected: (int index) {
               setState(() {
-                _selectedIndex = index;
+                selectedIndex = index;
               });
               switch (index) {
                 case 0:
                   Navigator.pushNamed(context, MainScreen.routeName);
                   break;
-                case 1:
-                  addmedicine(); // Thêm thuốc
-                  break;
                 case 2:
-                  deletemedicine(); // Xóa thuốc theo ID
-                  break;
-                default:
+                  addMedicine();
                   break;
               }
             },
-            backgroundColor: const Color(0xFFC1E6BA),
+            backgroundColor: lightGreenBackground,
             destinations: const [
               NavigationRailDestination(
-                icon: Icon(Icons.arrow_back),
-                selectedIcon: Icon(Icons.arrow_back),
+                icon: Icon(Icons.arrow_circle_left_outlined),
+                selectedIcon: Icon(Icons.arrow_circle_left_outlined),
                 label: Text('Trở về'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.add_circle),
-                selectedIcon: Icon(Icons.add_circle),
-                label: Text('Thêm'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.delete),
                 selectedIcon: Icon(Icons.delete),
                 label: Text('Xóa'),
               ),
+              NavigationRailDestination(
+                icon: Icon(Icons.add_circle),
+                selectedIcon: Icon(Icons.add_circle),
+                label: Text('Thêm'),
+              ),
             ],
           ),
           const Spacer(),
-          SizedBox(
+          Container(
+            color: whiteGreenBackground,
             width: MediaQuery.of(context).size.width * 0.93,
             height: MediaQuery.of(context).size.height * 0.9,
             child: Column(
               children: [
-                // Tiêu đề
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Danh sách thuốc', style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold, fontFamily: 'RobotoMono')), // Phóng to tiêu đề và thay kiểu chữ
-                    ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    color: lightGreenBackground,
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              listType = 0;
+                            });
+                          },
+                          child: Image.asset(
+                            'assets/images/reset.png',
+                            width: MediaQuery.of(context).size.width * 0.1,
+                          ),
+                        ),
+                        headTableText('ID Thuốc', 1),
+                        const SizedBox(width: 170),
+                        headTableText('Tên Thuốc', 2),
+                        const SizedBox(width: 170),
+                        headTableText('Số Lượng', 3),
+                        const SizedBox(width: 220),
+                        headTableText('Giá', 4),
+                        const SizedBox(width: 160),
+                        headTableText('Lỏng/Rắn', 5),
+                        const SizedBox(width: 160),
+                        const Icon(Icons.visibility),
+                      ],
+                    ),
                   ),
                 ),
-                const Divider(color: Colors.black, thickness: 2), // Dấu gạch ngang
-                // Danh sách thuốc
                 Expanded(
-                  child: SingleChildScrollView( // Cuộn dọc
-                    scrollDirection: Axis.vertical, 
-                    child: SingleChildScrollView( // Cuộn ngang
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        columnSpacing: 10.0, // Khoảng cách giữa các cột
-                        columns: [
-                          const DataColumn(label: Text('ID Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))), 
-                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          const DataColumn(label: Text('Tên Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
-                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          const DataColumn(label: Text('Số Lượng', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42, fontFamily: 'RobotoMono'))),
-                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          const DataColumn(label: Text('Giá', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
-                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          const DataColumn(label: Text('Đơn Vị', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
-                          DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          const DataColumn(label: Text('Hành Động', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
-                        ],
-                        rows: allMedicines.entries.map((entry) {
-                          return DataRow(
-                            cells: [
-                              DataCell(Text(entry.value.medicineID, style: const TextStyle(fontSize: 38))),
-                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(Text(entry.value.medicineName, style: const TextStyle(fontSize: 38))),
-                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(Text(entry.value.quantity.toString(), style: const TextStyle(fontSize: 38))),
-                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(Text(entry.value.price.toString(), style: const TextStyle(fontSize: 38))),
-                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(Text(entry.value.unit == 0 ? 'Lỏng' : 'Rắn', style: const TextStyle(fontSize: 38))),
-                              DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(
-                                IconButton(
-                                  onPressed: () {
-                                    deletemedicine();
-                                  },
-                                  icon: const Icon(Icons.delete, color: Colors.red, size: 38),
+                  child: ListView.builder(
+                    itemCount: displayMedicines.length,
+                    itemBuilder: (context, index) {
+                      String key = displayMedicines[index].key;
+                      Medicine medicine = displayMedicines[index].value;
+
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 4.0), // Khoảng cách giữa các hàng
+                        padding: const EdgeInsets.all(
+                            8.0), // Padding bên trong từng hàng
+                        decoration: BoxDecoration(
+                          color: lightGreenBackground,
+                          borderRadius:
+                              BorderRadius.circular(100), // Bo góc cho Container
+                        ),
+                        child: Row(
+                          children: [
+                            // Icon thuốc
+                            Image.asset(
+                              'assets/images/drug.png',
+                              width: 100,
+                              height: 100,
+                            ),
+                            const SizedBox(
+                                width: 100), // Khoảng cách giữa icon và ID thuốc
+
+                            // ID Thuốc
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                medicine.medicineID,
+                                style: const TextStyle(
+                                  fontSize: 20, // Tăng cỡ chữ cho ID thuốc
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                            ),
+                            const SizedBox(
+                                width: 0), // Khoảng cách giữa các cột
+
+                            // Tên Thuốc
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                medicine.medicineName,
+                                style: const TextStyle(
+                                  fontSize: 20, // Tăng cỡ chữ cho Tên thuốc
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+
+                            // Số Lượng
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                medicine.quantity.toString(),
+                                style: const TextStyle(
+                                  fontSize: 20, // Tăng cỡ chữ cho Số lượng
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+
+                            // Giá
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                '${medicine.price} VND',
+                                style: const TextStyle(
+                                  fontSize: 20, // Tăng cỡ chữ cho Giá
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+
+                            // Lỏng/Rắn
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                medicine.unit == 0 ? 'Lỏng' : 'Rắn',
+                                style: const TextStyle(
+                                  fontSize: 20, // Tăng cỡ chữ cho Lỏng/Rắn
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+
+                            // Edit button
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                showEditMedicineDialog(key, medicine);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
             ),
           ),
+          const Spacer(),
         ],
       ),
     );

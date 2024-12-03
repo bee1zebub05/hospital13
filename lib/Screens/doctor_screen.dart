@@ -459,213 +459,213 @@ class _DoctorScreenState extends State<DoctorScreen> {
     }
 
    //show 1 hàng doctor
-    Container showAdoctors(int index , int listType, List<MapEntry<String,Doctor>> entries, String key, Doctor doctor) {
-    return Container(
-                      decoration: BoxDecoration(
-                        color: lightGreenBackground,
-                        borderRadius: BorderRadius.circular(defaultPadding*3),
-                      ),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                                  Image.asset(
-                                    'assets/images/doctor.png',
-                                    width: MediaQuery.of(context).size.width*0.1,
-                                    height: MediaQuery.of(context).size.height * 0.1,
-                                  ),
-                                  tableText(doctor.idWorker ),
-                                  const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.lastName ),
-                                  const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.firstName ),
-                                  const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.phone),
-                                  const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.address),
-                                  const SizedBox(width: defaultPadding,),
-                                  tableText(doctor.speciality),
-                                  IconButton(
-                                    onPressed: () => adjustDoctor(doctor), 
-                                    icon: const Icon(Icons.edit)
-                                  ),
-                                  const SizedBox(width: defaultPadding,),
-                          ],
-                      ),
-                    );
-  }
-
-    late int selectedIndex = 0;
-    return Scaffold(
-      body: Row(
-        children: [
-          NavigationRail(
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (int index) {
-              setState(() {
-                selectedIndex = index; // Cập nhật chỉ mục được chọn
-              });
-              switch(index){
-                case 0:
-                  Navigator.pushNamed(context, MainScreen.routeName);
-                case 1:
-                  searchDoctor();
-                case 2:
-                  addADoctor(context);
-              }
-            },
-            backgroundColor: lightGreenBackground, 
-            destinations: const  [
-              NavigationRailDestination(
-                icon: Icon(Icons.arrow_circle_left_outlined),
-                selectedIcon: Icon(Icons.arrow_circle_left_outlined),
-                label: Text('arrow_circle_left_outlined'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.search_sharp),
-                selectedIcon: Icon(Icons.search_sharp), 
-                label: Text('Profile'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.add_circle),
-                selectedIcon: Icon(Icons.add_circle),
-                label: Text('Add'),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Container(
-            color: whiteGreenBackground,
-            width: MediaQuery.of(context).size.width*0.93,
-            height: MediaQuery.of(context).size.height*0.9,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    color: lightGreenBackground,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              listType = 0;
-                            });
-                          },
-                          child: Image.asset(
-                            'assets/images/reset.png',
-                            width: MediaQuery.of(context).size.width*0.1,
-                            height: MediaQuery.of(context).size.height * 0.1,
-                          ),
+      Container showAdoctors(int index , int listType, List<MapEntry<String,Doctor>> entries, String key, Doctor doctor) {
+      return Container(
+                        decoration: BoxDecoration(
+                          color: lightGreenBackground,
+                          borderRadius: BorderRadius.circular(defaultPadding*3),
                         ),
-                        headTableText('MÃ SỐ BÁC SĨ' ,1),
-                        const SizedBox(width: defaultPadding,),
-                        headTableText('HỌ' ,2),
-                        const SizedBox(width: defaultPadding,),
-                        headTableText('TÊN' ,3),
-                        const SizedBox(width: defaultPadding,),
-                        headTableText('SDT' ,4),
-                        const SizedBox(width: defaultPadding,),
-                        headTableText('QUÊ QUÁN' ,5),
-                        const SizedBox(width: defaultPadding,),
-                        headTableText('KHOA' ,6),
-                        const Icon(Icons.visibility),
-                        const SizedBox(width: defaultPadding,),
-                ],
-                    ),
-                  ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                                    Image.asset(
+                                      'assets/images/doctor.png',
+                                      width: MediaQuery.of(context).size.width*0.1,
+                                      height: MediaQuery.of(context).size.height * 0.1,
+                                    ),
+                                    tableText(doctor.idWorker ),
+                                    const SizedBox(width: defaultPadding,),
+                                    tableText(doctor.lastName ),
+                                    const SizedBox(width: defaultPadding,),
+                                    tableText(doctor.firstName ),
+                                    const SizedBox(width: defaultPadding,),
+                                    tableText(doctor.phone),
+                                    const SizedBox(width: defaultPadding,),
+                                    tableText(doctor.address),
+                                    const SizedBox(width: defaultPadding,),
+                                    tableText(doctor.speciality),
+                                    IconButton(
+                                      onPressed: () => adjustDoctor(doctor), 
+                                      icon: const Icon(Icons.edit)
+                                    ),
+                                    const SizedBox(width: defaultPadding,),
+                            ],
+                        ),
+                      );
+    }
+
+      late int selectedIndex = 0;
+      return Scaffold(
+        body: Row(
+          children: [
+            NavigationRail(
+              selectedIndex: selectedIndex,
+              onDestinationSelected: (int index) {
+                setState(() {
+                  selectedIndex = index; // Cập nhật chỉ mục được chọn
+                });
+                switch(index){
+                  case 0:
+                    Navigator.pushNamed(context, MainScreen.routeName);
+                  case 1:
+                    searchDoctor();
+                  case 2:
+                    addADoctor(context);
+                }
+              },
+              backgroundColor: lightGreenBackground, 
+              destinations: const  [
+                NavigationRailDestination(
+                  icon: Icon(Icons.arrow_circle_left_outlined),
+                  selectedIcon: Icon(Icons.arrow_circle_left_outlined),
+                  label: Text('arrow_circle_left_outlined'),
                 ),
-                Expanded( // Giới hạn ListView.builder trong phần không gian còn lại
-                  child: listViewType(showAdoctors),
+                NavigationRailDestination(
+                  icon: Icon(Icons.search_sharp),
+                  selectedIcon: Icon(Icons.search_sharp), 
+                  label: Text('Profile'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.add_circle),
+                  selectedIcon: Icon(Icons.add_circle),
+                  label: Text('Add'),
                 ),
               ],
-            )
-          ),
-          const Spacer(),
-        ],
-      ),
-    );
-  }
-
-  ListView listViewType(Container Function(int index, int listType, List<MapEntry<String,Doctor>> entries, String key, Doctor doctor) showAdoctors) {
-    List<MapEntry<String,Doctor>> entries = allDoctors.entries.toList();
-    switch (listType){
-      // 0 mặc định
-      // 1 sort theo ID
-      // 2 sort theo Họ
-      // 3 sort theo tên
-      // 4 sort theo SDT
-      // 5 sort theo quê quán
-      // 6 sort theo chuyên ngành
-      // 7 sort theo controller searchController
-      case 1: setState(() {
-        entries = allDoctors.entries.toList();
-        entries.sort((a,b){
-          int result = a.value.idWorker.compareTo(b.value.idWorker);
-          return listTypeReverse ? result : -result;
-        });
-      });
-      case 2: setState(() {
-        entries = allDoctors.entries.toList();
-        entries.sort((a,b){
-          int result = a.value.lastName.compareTo(b.value.lastName);
-          return listTypeReverse ? result : -result;
-        });
-      });
-      case 3: setState(() {
-        entries = allDoctors.entries.toList();
-        entries.sort((a,b){
-          int result = a.value.firstName.compareTo(b.value.firstName);
-          return listTypeReverse ? result : -result;
-        });
-      });
-      case 4: setState(() {
-        entries = allDoctors.entries.toList();
-        entries.sort((a,b){
-          int result =a.value.phone.compareTo(b.value.phone);
-          return listTypeReverse ? result : -result;
-        });
-      });
-      case 5: setState(() {
-        entries = allDoctors.entries.toList();
-        entries.sort((a,b){
-          int result = a.value.address.compareTo(b.value.address);
-          return listTypeReverse ? result : -result;
-        });
-      });
-      case 6: setState(() {
-        entries = allDoctors.entries.toList();
-        entries.sort((a,b){
-          int result = a.value.speciality.compareTo(b.value.speciality);
-          return listTypeReverse ? result : -result;
-        });
-      });
-      case 7: setState(() {
-        entries = allDoctors.entries.toList();
-        List<MapEntry<String,Doctor>> findEntries =[] ;
-        for (var entry in entries) {
-          Doctor tmp = entry.value;
-          String needToFind = tmp.idWorker + tmp.lastName + tmp.firstName 
-          + tmp.phone + tmp.address + tmp.speciality;
-          if( needToFind.contains(findController.text) ){
-            findEntries.add(entry);
-          }
-        }
-        entries = findEntries;
-      });
-      default: entries = allDoctors.entries.toList();
+            ),
+            const Spacer(),
+            Container(
+              color: whiteGreenBackground,
+              width: MediaQuery.of(context).size.width*0.93,
+              height: MediaQuery.of(context).size.height*0.9,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      color: lightGreenBackground,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                listType = 0;
+                              });
+                            },
+                            child: Image.asset(
+                              'assets/images/reset.png',
+                              width: MediaQuery.of(context).size.width*0.1,
+                              height: MediaQuery.of(context).size.height * 0.1,
+                            ),
+                          ),
+                          headTableText('MÃ SỐ BÁC SĨ' ,1),
+                          const SizedBox(width: defaultPadding,),
+                          headTableText('HỌ' ,2),
+                          const SizedBox(width: defaultPadding,),
+                          headTableText('TÊN' ,3),
+                          const SizedBox(width: defaultPadding,),
+                          headTableText('SDT' ,4),
+                          const SizedBox(width: defaultPadding,),
+                          headTableText('QUÊ QUÁN' ,5),
+                          const SizedBox(width: defaultPadding,),
+                          headTableText('KHOA' ,6),
+                          const Icon(Icons.visibility),
+                          const SizedBox(width: defaultPadding,),
+                  ],
+                      ),
+                    ),
+                  ),
+                  Expanded( // Giới hạn ListView.builder trong phần không gian còn lại
+                    child: listViewType(showAdoctors),
+                  ),
+                ],
+              )
+            ),
+            const Spacer(),
+          ],
+        ),
+      );
     }
-    return ListView.separated(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  itemCount: entries.length, // Tổng số phần tử
-                  itemBuilder: (context, index) {
-                    String key = entries[index].key;
-                    Doctor doctor = allDoctors[key]!;
-                    return showAdoctors(index, listType,entries,key,doctor);
-                  },
-                  separatorBuilder: (context, index) => const SizedBox(height: 12.0)
-                );
+
+    ListView listViewType(Container Function(int index, int listType, List<MapEntry<String,Doctor>> entries, String key, Doctor doctor) showAdoctors) {
+      List<MapEntry<String,Doctor>> entries = allDoctors.entries.toList();
+      switch (listType){
+        // 0 mặc định
+        // 1 sort theo ID
+        // 2 sort theo Họ
+        // 3 sort theo tên
+        // 4 sort theo SDT
+        // 5 sort theo quê quán
+        // 6 sort theo chuyên ngành
+        // 7 sort theo controller searchController
+        case 1: setState(() {
+          entries = allDoctors.entries.toList();
+          entries.sort((a,b){
+            int result = a.value.idWorker.compareTo(b.value.idWorker);
+            return listTypeReverse ? result : -result;
+          });
+        });
+        case 2: setState(() {
+          entries = allDoctors.entries.toList();
+          entries.sort((a,b){
+            int result = a.value.lastName.compareTo(b.value.lastName);
+            return listTypeReverse ? result : -result;
+          });
+        });
+        case 3: setState(() {
+          entries = allDoctors.entries.toList();
+          entries.sort((a,b){
+            int result = a.value.firstName.compareTo(b.value.firstName);
+            return listTypeReverse ? result : -result;
+          });
+        });
+        case 4: setState(() {
+          entries = allDoctors.entries.toList();
+          entries.sort((a,b){
+            int result =a.value.phone.compareTo(b.value.phone);
+            return listTypeReverse ? result : -result;
+          });
+        });
+        case 5: setState(() {
+          entries = allDoctors.entries.toList();
+          entries.sort((a,b){
+            int result = a.value.address.compareTo(b.value.address);
+            return listTypeReverse ? result : -result;
+          });
+        });
+        case 6: setState(() {
+          entries = allDoctors.entries.toList();
+          entries.sort((a,b){
+            int result = a.value.speciality.compareTo(b.value.speciality);
+            return listTypeReverse ? result : -result;
+          });
+        });
+        case 7: setState(() {
+          entries = allDoctors.entries.toList();
+          List<MapEntry<String,Doctor>> findEntries =[] ;
+          for (var entry in entries) {
+            Doctor tmp = entry.value;
+            String needToFind = tmp.idWorker + tmp.lastName + tmp.firstName 
+            + tmp.phone + tmp.address + tmp.speciality;
+            if( needToFind.contains(findController.text) ){
+              findEntries.add(entry);
+            }
+          }
+          entries = findEntries;
+        });
+        default: entries = allDoctors.entries.toList();
+      }
+      return ListView.separated(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    itemCount: entries.length, // Tổng số phần tử
+                    itemBuilder: (context, index) {
+                      String key = entries[index].key;
+                      Doctor doctor = allDoctors[key]!;
+                      return showAdoctors(index, listType,entries,key,doctor);
+                    },
+                    separatorBuilder: (context, index) => const SizedBox(height: 12.0)
+                  );
+    }
   }
-}

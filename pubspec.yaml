@@ -58,6 +58,7 @@ flutter:
     - assets/images/report.png
     - assets/images/patient.png
     - assets/images/reset.png
+    - assets/images/drug.png
   fonts:
     - family: ComicsSan
       fonts:

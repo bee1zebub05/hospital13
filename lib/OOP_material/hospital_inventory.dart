@@ -8,7 +8,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Paracetamol',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 10000,
     price: 1500,
     description: 'Thuốc giảm đau, hạ sốt.',
   ),
@@ -17,7 +17,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Ibuprofen',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 20000,
     price: 2000,
     description: 'Thuốc giảm đau, chống viêm.',
   ),
@@ -26,7 +26,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Aspirin',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 123200,
     price: 1800,
     description: 'Thuốc giảm đau, chống viêm.',
   ),
@@ -35,7 +35,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Amoxicillin',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 300000,
     price: 2500,
     description: 'Kháng sinh điều trị nhiễm trùng.',
   ),
@@ -62,7 +62,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Salbutamol',
     unit: 0, // liquid
     status: true,
-    quantity: 100000,
+    quantity: 30000,
     price: 5000,
     description: 'Thuốc chữa bệnh hen suyễn.',
   ),
@@ -80,7 +80,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Loratadine',
     unit: 0, // liquid
     status: true,
-    quantity: 100000,
+    quantity: 932000,
     price: 1600,
     description: 'Thuốc trị dị ứng, hắt hơi, sổ mũi.',
   ),
@@ -89,7 +89,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Hydrocodone',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 1230000,
     price: 8000,
     description: 'Thuốc giảm đau mạnh.',
   ),
@@ -98,7 +98,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Codeine',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 120000,
     price: 4000,
     description: 'Thuốc giảm ho, giảm đau.',
   ),
@@ -116,7 +116,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Insulin',
     unit: 0, // liquid
     status: true,
-    quantity: 100000,
+    quantity: 912000,
     price: 5000,
     description: 'Thuốc điều trị tiểu đường type 1.',
   ),
@@ -125,7 +125,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Omeprazole',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 12000,
     price: 2500,
     description: 'Thuốc giảm axit dạ dày.',
   ),
@@ -134,7 +134,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Levothyroxine',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 1003000,
     price: 2200,
     description: 'Thuốc điều trị suy giáp.',
   ),
@@ -152,7 +152,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Ciprofloxacin',
     unit: 1, // solid
     status: true,
-    quantity: 100000,
+    quantity: 600000,
     price: 2700,
     description: 'Kháng sinh, điều trị nhiễm trùng.',
   ),
@@ -161,7 +161,7 @@ Map<String, Medicine> allMedicines = {
     medicineName: 'Furosemide',
     unit: 0, // liquid
     status: true,
-    quantity: 100000,
+    quantity: 290000,
     price: 3000,
     description: 'Thuốc lợi tiểu, trị huyết áp cao.',
   ),
