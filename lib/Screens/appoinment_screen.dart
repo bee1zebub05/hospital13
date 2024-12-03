@@ -1,6 +1,5 @@
 import 'package:beginapp01/OOP_material/doctor.dart';
 import 'package:beginapp01/OOP_material/patient.dart';
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'package:beginapp01/Screens/main_screen.dart';
@@ -89,7 +88,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: whiteGreenBackground,
-          content: Container(
+          content: SizedBox(
             width: MediaQuery.of(context).size.width * 0.4,
             height: MediaQuery.of(context).size.height * 0.25,
             child: StatefulBuilder(
@@ -329,8 +328,6 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    print(description.text);
-                    print(choosenTime);
                     try{
                       findFitDoctor(doctorID,description.text,choosenTime);
                     } // Đóng dialog
@@ -405,9 +402,9 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
         return AlertDialog(
           title: const Text('Thông tin về cuộc hẹn này'),
           backgroundColor: whiteGreenBackground,
-          content: Container(
-            width: MediaQuery.of(context).size.width * 0.4,
-            height: MediaQuery.of(context).size.height * 0.25,
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.6,
+            height: MediaQuery.of(context).size.height * 0.6,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -424,7 +421,105 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                       DateFormat('HH:mm dd/MM/yyyy').format(appoinment.dateTime),
                       style: const TextStyle( fontSize: 25 ),
                     )
-                  )
+                  ),
+                  Table(
+                      border: TableBorder.all(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                      children: [
+                        // Header row
+                        TableRow(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                          ),
+                          children: const [
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Tên thuốc',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'ID thuốc',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Số lượng',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Đơn giá (VND)',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Dữ liệu thuốc
+                        ...appoinment.payedBill!.medicinePairs
+                            .map((pair) {
+                          return TableRow(
+                            children: [
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    pair.key.medicineName,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    pair.key.medicineID,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    pair.value.toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              TableCell(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    pair.key.price.toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ],
+                    ),
+                    Text('Tổng đã thanh toán ${appoinment.payedBill!.getTotalPrice()}',
+                    style: const TextStyle(fontSize: 30),)
                 ]
               )
                   ,
@@ -598,7 +693,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
                               children: [
                                 Expanded(
                                   child: ListTile(
-                                    onTap: () => print('${value[index]}'),
+                                    subtitle: Text(value[index].appoinmentID),
                                     title: Text('${value[index]}'),
                                   ),
                                 ),

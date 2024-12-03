@@ -3,11 +3,12 @@ import 'package:beginapp01/Screens/doctor_screen.dart';
 import 'package:beginapp01/Screens/patient_screen.dart';
 import 'package:beginapp01/Screens/pharmacy_screen.dart';
 import 'package:beginapp01/Screens/splash_screen.dart';
-import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
-  static String routeName ='MainScreen';  
+  static String routeName ='MainScreen';
+
+  const MainScreen({super.key});  
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -84,7 +85,7 @@ class _MainScreenState extends State<MainScreen> {
             ],
           ),
           const Spacer(),
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width*0.93,
             height: MediaQuery.of(context).size.height*0.9,
           ),

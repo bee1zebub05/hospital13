@@ -1,10 +1,11 @@
+import 'package:beginapp01/const_color.dart';
 import 'package:flutter/material.dart';
 import 'package:beginapp01/OOP_material/appoinment.dart';
 import 'package:beginapp01/OOP_material/doctor.dart';
 
 class AppointmentPopup extends StatelessWidget {
   final String patientID;
-  AppointmentPopup({required this.patientID});
+  const AppointmentPopup({super.key, required this.patientID});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +19,13 @@ class AppointmentPopup extends StatelessWidget {
       // Nếu bệnh nhân chưa có cuộc hẹn nào, hiển thị thông báo
       return AlertDialog(
         title: Text('Danh sách cuộc hẹn của bệnh nhân $patientID'),
-        content: Text('Bệnh nhân này chưa có cuộc hẹn nào.'),
+        content: const Text('Bệnh nhân này chưa có cuộc hẹn nào.'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context); // Đóng popup
             },
-            child: Text('Đóng'),
+            child: const Text('Đóng'),
           ),
         ],
       );
@@ -39,10 +40,10 @@ class AppointmentPopup extends StatelessWidget {
           ...appointments.map((app) {
             return Container(
               
-              padding: EdgeInsets.all(15),
-              margin: EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
-                color: Color(0xFFC1E6BA), // Màu khung xanh
+                color: whiteGreenBackground, // Màu khung xanh
                 borderRadius: BorderRadius.circular(20), // Khung tròn hơn
               ),
               child: Row(
@@ -55,7 +56,7 @@ class AppointmentPopup extends StatelessWidget {
                       children: [
                         Text(
                           'Cuộc hẹn ID: ${app.appoinmentID}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
                           'Ngày: ${app.dateTime}',
@@ -67,11 +68,11 @@ class AppointmentPopup extends StatelessWidget {
                         if (app.payedBill != null)
                           Text(
                             'Tổng tiền: ${app.payedBill!.getTotalPrice()} VND',
-                            style: TextStyle(color: Colors.red),
+                            style: const TextStyle(color: Colors.red),
                           ),
                         // Nếu không có hóa đơn, hiển thị thông báo
                         if (app.payedBill == null)
-                          Text(
+                          const Text(
                             'Chưa có hóa đơn',
                             style: TextStyle(color: Colors.grey),
                           ),
@@ -93,14 +94,14 @@ class AppointmentPopup extends StatelessWidget {
                                 text: TextSpan(
                                   text:
                                       'Chi tiết hóa đơn cho cuộc hẹn ${app.appoinmentID}\n',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
                                       text:
                                           'Bác sĩ phụ trách ${allDoctors[app.doctorID]?.firstName ?? 'Không tìm thấy bác sĩ'}\n',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal),
                                     ),
@@ -123,7 +124,7 @@ class AppointmentPopup extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: Colors.grey[300],
                                         ),
-                                        children: [
+                                        children: const [
                                           TableCell(
                                             child: Padding(
                                               padding: EdgeInsets.all(8.0),
@@ -169,7 +170,7 @@ class AppointmentPopup extends StatelessWidget {
                                           children: [
                                             TableCell(
                                               child: Padding(
-                                                padding: EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   pair.key.medicineName,
                                                   textAlign: TextAlign.center,
@@ -178,7 +179,7 @@ class AppointmentPopup extends StatelessWidget {
                                             ),
                                             TableCell(
                                               child: Padding(
-                                                padding: EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   pair.key.medicineID,
                                                   textAlign: TextAlign.center,
@@ -187,7 +188,7 @@ class AppointmentPopup extends StatelessWidget {
                                             ),
                                             TableCell(
                                               child: Padding(
-                                                padding: EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   pair.value.toString(),
                                                   textAlign: TextAlign.center,
@@ -196,7 +197,7 @@ class AppointmentPopup extends StatelessWidget {
                                             ),
                                             TableCell(
                                               child: Padding(
-                                                padding: EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   pair.key.price.toString(),
                                                   textAlign: TextAlign.center,
@@ -205,15 +206,15 @@ class AppointmentPopup extends StatelessWidget {
                                             ),
                                           ],
                                         );
-                                      }).toList(),
+                                      }),
                                     ],
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   // Hiển thị tổng tiền
                                   Text(
                                     'Tổng tiền cần thanh toán: ${totalAmount.toStringAsFixed(2)} VND',
                                     style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                        const TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -222,7 +223,7 @@ class AppointmentPopup extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.pop(context); // Đóng popup
                                   },
-                                  child: Text('Đóng'),
+                                  child: const Text('Đóng'),
                                 ),
                               ],
                             );
@@ -236,13 +237,13 @@ class AppointmentPopup extends StatelessWidget {
                             return AlertDialog(
                               title: Text(
                                   'Chưa có hóa đơn cho cuộc hẹn ${app.appoinmentID}'),
-                              content: Text('Vui lòng đợi đến khi có hóa đơn.'),
+                              content: const Text('Vui lòng đợi đến khi có hóa đơn.'),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context); // Đóng popup
                                   },
-                                  child: Text('Đóng'),
+                                  child: const Text('Đóng'),
                                 ),
                               ],
                             );
@@ -250,12 +251,12 @@ class AppointmentPopup extends StatelessWidget {
                         );
                       }
                     },
-                    child: Text('Chi tiết hóa đơn'),
+                    child: const Text('Chi tiết hóa đơn'),
                   ),
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
       actions: [
@@ -263,7 +264,7 @@ class AppointmentPopup extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context); // Đóng popup
           },
-          child: Text('Đóng'),
+          child: const Text('Đóng'),
         ),
       ],
     );

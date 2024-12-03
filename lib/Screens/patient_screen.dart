@@ -16,7 +16,7 @@ class PatientScreen extends StatefulWidget {
 }
 
 void addAPatient(BuildContext context) {
-  GenderEnum _selectedGender = GenderEnum.male;
+  GenderEnum selectedGender = GenderEnum.male;
   final TextEditingController firstName = TextEditingController();
   final TextEditingController lastName = TextEditingController();
   final TextEditingController age = TextEditingController();
@@ -60,7 +60,7 @@ void addAPatient(BuildContext context) {
                                 underline: Container(
                                   color: textBlackColor,
                                 ),
-                                value: _selectedGender,
+                                value: selectedGender,
                                 hint: const Text('Chọn giới tính'),
                                 isExpanded: true,
                                 items: GenderEnum.values.map((GenderEnum gender) {
@@ -71,7 +71,7 @@ void addAPatient(BuildContext context) {
                                 }).toList(),
                                 onChanged: (GenderEnum? newValue) {
                                   setState(() {
-                                    _selectedGender = newValue!; // Cập nhật giới tính
+                                    selectedGender = newValue!; // Cập nhật giới tính
                                   });
                                 },
                               ),
@@ -116,7 +116,7 @@ void addAPatient(BuildContext context) {
                       firstName: firstName.text,
                       lastName: lastName.text,
                       age: int.parse(age.text),
-                      gender: _selectedGender,
+                      gender: selectedGender,
                       phone: phone.text,
                       address: address.text,
                       patientID: newestID,);
@@ -126,9 +126,10 @@ void addAPatient(BuildContext context) {
                     showCompleteFlushBar(context, 'Thêm thành công');
                     Future.delayed(const Duration(seconds: 3), () {
                     Navigator.push(
+                      // ignore: use_build_context_synchronously
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) => PatientScreen(),
+                        pageBuilder: (context, animation, secondaryAnimation) => const PatientScreen(),
                         transitionsBuilder: (context, animation, secondaryAnimation, child) {
                           return child;
                         },
@@ -168,7 +169,7 @@ class _PatientScreenState extends State<PatientScreen> {
   //METHOD LÀM VIỆC VỚI MAP LƯU CÁC Patient
   
   void adjustPatient(Patient patient) {
-  GenderEnum _selectedGender = patient.gender; // Giới tính hiện tại
+  GenderEnum selectedGender = patient.gender; // Giới tính hiện tại
   String latestID = patient.patientID;
 
   final TextEditingController firstName = TextEditingController(text: patient.firstName);
@@ -188,7 +189,7 @@ class _PatientScreenState extends State<PatientScreen> {
               style: TextStyle(color: textBlackColor),
             ),
             content: SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -215,7 +216,7 @@ class _PatientScreenState extends State<PatientScreen> {
                               underline: Container(
                                 color: textBlackColor,
                               ),
-                              value: _selectedGender,
+                              value: selectedGender,
                               hint: const Text('Chọn giới tính'),
                               isExpanded: true,
                               items: GenderEnum.values.map((GenderEnum gender) {
@@ -226,7 +227,7 @@ class _PatientScreenState extends State<PatientScreen> {
                               }).toList(),
                               onChanged: (GenderEnum? newValue) {
                                 setState(() {
-                                  _selectedGender = newValue!; // Cập nhật giới tính
+                                  selectedGender = newValue!; // Cập nhật giới tính
                                 });
                               },
                             ),
@@ -271,15 +272,16 @@ class _PatientScreenState extends State<PatientScreen> {
                         allPatient[latestID]?.firstName = firstName.text;
                         allPatient[latestID]?.lastName = lastName.text;
                         allPatient[latestID]?.age = int.parse(age.text);
-                        allPatient[latestID]?.gender = _selectedGender;
+                        allPatient[latestID]?.gender = selectedGender;
                         allPatient[latestID]?.phone = phone.text;
                         allPatient[latestID]?.address = address.text;
                         showCompleteFlushBar(context, 'Lưu thành công');
                         Future.delayed(const Duration(seconds: 3), () {
                         Navigator.push(
+                          // ignore: use_build_context_synchronously
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => PatientScreen(),
+                            pageBuilder: (context, animation, secondaryAnimation) => const PatientScreen(),
                             transitionsBuilder: (context, animation, secondaryAnimation, child) {
                               return child;
                             },
@@ -304,9 +306,10 @@ class _PatientScreenState extends State<PatientScreen> {
                   showCompleteFlushBar(context, 'Xóa thành công');
                   Future.delayed(const Duration(seconds: 3), () {
                   Navigator.push(
+                    // ignore: use_build_context_synchronously
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => PatientScreen(),
+                      pageBuilder: (context, animation, secondaryAnimation) => const PatientScreen(),
                       transitionsBuilder: (context, animation, secondaryAnimation, child) {
                         return child;
                       },
@@ -342,7 +345,7 @@ class _PatientScreenState extends State<PatientScreen> {
       context: context,
       builder: (BuildContext context){
         return AlertDialog(
-          content: Container(
+          content: SizedBox(
             height: MediaQuery.of(context).size.height*0.25,
             width: MediaQuery.of(context).size.width*0.25,
             child: Container(
@@ -399,12 +402,13 @@ class _PatientScreenState extends State<PatientScreen> {
   Widget build(BuildContext context) {
     //Định dạng các text trong một hàng
     Container headTableText(String s, int newType){
+      // ignore: sized_box_for_whitespace
       return Container(
         width: MediaQuery.of(context).size.width*0.11,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
+            SizedBox(
               //color: veryGreenBackground,
               width: MediaQuery.of(context).size.width*0.08,
               child: Text(
@@ -414,7 +418,7 @@ class _PatientScreenState extends State<PatientScreen> {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               //color: veryGreenBackground,
               width: MediaQuery.of(context).size.width*0.03,
               child: IconButton(
@@ -433,6 +437,7 @@ class _PatientScreenState extends State<PatientScreen> {
       );
     }
     Container tableText(String s){
+      // ignore: sized_box_for_whitespace
       return Container(
         width: MediaQuery.of(context).size.width*0.08,
         child: Text(
@@ -445,7 +450,7 @@ class _PatientScreenState extends State<PatientScreen> {
     }
 
    //show 1 hàng Patient
-    Container _showAPatients(int index , int listType, List<MapEntry<String,Patient>> entries, String key, Patient patient) {
+    Container showAPatients(int index , int listType, List<MapEntry<String,Patient>> entries, String key, Patient patient) {
     return Container(
                       decoration: BoxDecoration(
                         color: lightGreenBackground,
@@ -481,7 +486,7 @@ class _PatientScreenState extends State<PatientScreen> {
       },
     );
   },
-  icon: Icon(Icons.calendar_today),
+  icon: const Icon(Icons.calendar_today),
 )
 ,
             const SizedBox(
@@ -492,15 +497,15 @@ class _PatientScreenState extends State<PatientScreen> {
                     );
   }
 
-    late int _selectedIndex = 0;
+    late int selectedIndex = 0;
     return Scaffold(
       body: Row(
         children: [
           NavigationRail(
-            selectedIndex: _selectedIndex,
+            selectedIndex: selectedIndex,
             onDestinationSelected: (int index) {
               setState(() {
-                _selectedIndex = index; // Cập nhật chỉ mục được chọn
+                selectedIndex = index; // Cập nhật chỉ mục được chọn
               });
               switch(index){
                 case 0:
@@ -575,7 +580,7 @@ class _PatientScreenState extends State<PatientScreen> {
                   ),
                 ),
                 Expanded( // Giới hạn ListView.builder trong phần không gian còn lại
-                  child: listViewType(_showAPatients),
+                  child: listViewType(showAPatients),
                 ),
               ],
             )
@@ -586,7 +591,7 @@ class _PatientScreenState extends State<PatientScreen> {
     );
   }
 
-  ListView listViewType(Container _showAPatients(int index, int listType, List<MapEntry<String,Patient>> entries, String key, Patient patient)) {
+  ListView listViewType(Container Function(int index, int listType, List<MapEntry<String,Patient>> entries, String key, Patient patient) showAPatients) {
     List<MapEntry<String,Patient>> entries = allPatient.entries.toList();
     switch (listType){
       // 0 mặc định
@@ -599,7 +604,7 @@ class _PatientScreenState extends State<PatientScreen> {
       case 1: setState(() {
         entries = allPatient.entries.toList();
         entries.sort((a,b){
-          int result = a.value.patientID.compareTo(b.value.patientID);;
+          int result = a.value.patientID.compareTo(b.value.patientID);
           return listTypeReverse ? result : -result;
         });
       });
@@ -644,7 +649,7 @@ class _PatientScreenState extends State<PatientScreen> {
         }
         entries = findEntries;
       });
-      default: entries = allPatient.entries.toList();;
+      default: entries = allPatient.entries.toList();
     }
     return ListView.separated(
                   padding: const EdgeInsets.all(defaultPadding),
@@ -652,7 +657,7 @@ class _PatientScreenState extends State<PatientScreen> {
                   itemBuilder: (context, index) {
                     String key = entries[index].key;
                     Patient patient = allPatient[key]!;
-                    return _showAPatients(index, listType,entries,key,patient);
+                    return showAPatients(index, listType,entries,key,patient);
                   },
                   separatorBuilder: (context, index) => const SizedBox(height: 12.0)
                 );

@@ -9,12 +9,12 @@ import 'package:beginapp01/Screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 Map<String, WidgetBuilder> routes = {
-  SplashScreen.routeName : (context) => SplashScreen(),
-  MainScreen.routeName : (context) => MainScreen(),
+  SplashScreen.routeName : (context) => const SplashScreen(),
+  MainScreen.routeName : (context) => const MainScreen(),
   DoctorScreen.routeName : (context) => const DoctorScreen(),
   PatientScreen.routeName : (context) => const PatientScreen(),
   AppoinmentScreen.routeName : (context) => const AppoinmentScreen(),
   //BillScreen.routeName : (context) => BillScreen(),
-  PharmacyScreen.routeName : (context) => PharmacyScreen(),
-  LoginScreen.routeName : (context) => LoginScreen(),
+  PharmacyScreen.routeName : (context) => const PharmacyScreen(),
+  LoginScreen.routeName : (context) => const LoginScreen(),
 };

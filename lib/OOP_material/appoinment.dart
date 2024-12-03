@@ -8,8 +8,8 @@ import 'package:table_calendar/table_calendar.dart';
 
 class Appoinment {
   String _appoinmentID;
-  String _doctorID;
-  String _patientID;
+  final String _doctorID;
+  final String _patientID;
   DateTime dateTime;
   bool hasPass;
   Bill? payedBill;
@@ -53,7 +53,9 @@ class Appoinment {
 
 int getTotalAppoinment(){
   int sum = 0;
-  for( var list in kAppointments.values ) sum+=list.length;
+  for( var list in kAppointments.values ) {
+    sum+=list.length;
+  }
   return sum;
 }
 

@@ -10,6 +10,8 @@ final TextEditingController passwordController = TextEditingController();
 class LoginScreen extends StatefulWidget {
   static String routeName ='LoginScreen';
 
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -23,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         body: ListView(
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height/2,
               child: Column(
@@ -118,23 +120,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Row(
                       children: [
-                        Spacer(),
-                        Text('ĐĂNG NHẬP',
+                        const Spacer(),
+                        const Text('ĐĂNG NHẬP',
                         style: TextStyle(
                           fontSize: 24,
                         ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         IconButton(
                           onPressed: (){
                             if( _formKey.currentState!.validate()){
                               Navigator.pushNamed(context, MainScreen.routeName);
                             }
                           }, 
-                          icon: Icon(Icons.arrow_circle_right),
+                          icon: const Icon(Icons.arrow_circle_right),
                           iconSize: 35,
                         ),
-                        Spacer(),
+                        const Spacer(),
                       ],
                     ),
                   ),
@@ -147,9 +149,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  TextFormField buildPasswordField(TextEditingController _controller) {
+  TextFormField buildPasswordField(TextEditingController controller) {
     return TextFormField(
-      controller: _controller,
+      controller: controller,
       obscureText: !_passwordVisible,
       textAlign: TextAlign.start,
       keyboardType: TextInputType.visiblePassword,
@@ -186,9 +188,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  TextFormField buildEmailField(TextEditingController _controller) {
+  TextFormField buildEmailField(TextEditingController controller) {
     return TextFormField(
-      controller: _controller,
+      controller: controller,
       textAlign: TextAlign.start,
       keyboardType: TextInputType.emailAddress,
       style: const TextStyle(

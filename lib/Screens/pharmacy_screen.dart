@@ -7,6 +7,8 @@ import 'package:beginapp01/OOP_material/hospital_inventory.dart';
 class PharmacyScreen extends StatefulWidget {
   static String routeName = 'PharmacyScreen';
 
+  const PharmacyScreen({super.key});
+
   @override
   State<PharmacyScreen> createState() => _PharmacyScreenState();
 }
@@ -44,7 +46,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
         String medicineID = generateMedicineID(); // Tạo ID thuốc mới
 
         return AlertDialog(
-          title: Text('Thêm thuốc mới', style: TextStyle(fontSize: 38)),
+          title: const Text('Thêm thuốc mới', style: TextStyle(fontSize: 38)),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -52,29 +54,29 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
               // Hiển thị ID thuốc
               Text(
                 'ID thuốc: $medicineID',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
               ),
               TextField(
                 controller: medicineNameController,
-                decoration: InputDecoration(labelText: 'Tên thuốc'),
+                decoration: const InputDecoration(labelText: 'Tên thuốc'),
               ),
               TextField(
                 controller: quantityController,
-                decoration: InputDecoration(labelText: 'Số lượng'),
+                decoration: const InputDecoration(labelText: 'Số lượng'),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: priceController,
-                decoration: InputDecoration(labelText: 'Giá'),
+                decoration: const InputDecoration(labelText: 'Giá'),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Mô tả'),
+                decoration: const InputDecoration(labelText: 'Mô tả'),
               ),
               Row(
                 children: [
-                  Text("Đơn vị: "),
+                  const Text("Đơn vị: "),
                   Radio(
                     value: 0,
                     groupValue: unit,
@@ -84,7 +86,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                       });
                     },
                   ),
-                  Text("Lỏng"),
+                  const Text("Lỏng"),
                   Radio(
                     value: 1,
                     groupValue: unit,
@@ -94,7 +96,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                       });
                     },
                   ),
-                  Text("Rắn"),
+                  const Text("Rắn"),
                 ],
               ),
             ],
@@ -104,7 +106,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Hủy'),
+              child: const Text('Hủy'),
             ),
             TextButton(
               onPressed: () {
@@ -121,7 +123,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Lưu'),
+              child: const Text('Lưu'),
             ),
           ],
         );
@@ -137,13 +139,13 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Nhập ID thuốc cần xóa'),
+          title: const Text('Nhập ID thuốc cần xóa'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: idToDeleteController,
-                decoration: InputDecoration(labelText: 'Nhập ID thuốc'),
+                decoration: const InputDecoration(labelText: 'Nhập ID thuốc'),
               ),
             ],
           ),
@@ -152,7 +154,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Hủy'),
+              child: const Text('Hủy'),
             ),
             TextButton(
               onPressed: () {
@@ -177,7 +179,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('Xóa'),
+              child: const Text('Xóa'),
             ),
           ],
         );
@@ -210,7 +212,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                   break;
               }
             },
-            backgroundColor: Color(0xFFC1E6BA),
+            backgroundColor: const Color(0xFFC1E6BA),
             destinations: const [
               NavigationRailDestination(
                 icon: Icon(Icons.arrow_back),
@@ -230,14 +232,14 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
             ],
           ),
           const Spacer(),
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width * 0.93,
             height: MediaQuery.of(context).size.height * 0.9,
             child: Column(
               children: [
                 // Tiêu đề
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -245,7 +247,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                     ],
                   ),
                 ),
-                Divider(color: Colors.black, thickness: 2), // Dấu gạch ngang
+                const Divider(color: Colors.black, thickness: 2), // Dấu gạch ngang
                 // Danh sách thuốc
                 Expanded(
                   child: SingleChildScrollView( // Cuộn dọc
@@ -255,37 +257,37 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                       child: DataTable(
                         columnSpacing: 10.0, // Khoảng cách giữa các cột
                         columns: [
-                          DataColumn(label: Text('ID Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))), 
+                          const DataColumn(label: Text('ID Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))), 
                           DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          DataColumn(label: Text('Tên Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
+                          const DataColumn(label: Text('Tên Thuốc', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
                           DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          DataColumn(label: Text('Số Lượng', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42, fontFamily: 'RobotoMono'))),
+                          const DataColumn(label: Text('Số Lượng', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42, fontFamily: 'RobotoMono'))),
                           DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          DataColumn(label: Text('Giá', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
+                          const DataColumn(label: Text('Giá', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
                           DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          DataColumn(label: Text('Đơn Vị', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
+                          const DataColumn(label: Text('Đơn Vị', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
                           DataColumn(label: Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                          DataColumn(label: Text('Hành Động', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
+                          const DataColumn(label: Text('Hành Động', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38, fontFamily: 'RobotoMono'))),
                         ],
                         rows: allMedicines.entries.map((entry) {
                           return DataRow(
                             cells: [
-                              DataCell(Text(entry.value.medicineID, style: TextStyle(fontSize: 38))),
+                              DataCell(Text(entry.value.medicineID, style: const TextStyle(fontSize: 38))),
                               DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(Text(entry.value.medicineName, style: TextStyle(fontSize: 38))),
+                              DataCell(Text(entry.value.medicineName, style: const TextStyle(fontSize: 38))),
                               DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(Text(entry.value.quantity.toString(), style: TextStyle(fontSize: 38))),
+                              DataCell(Text(entry.value.quantity.toString(), style: const TextStyle(fontSize: 38))),
                               DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(Text(entry.value.price.toString(), style: TextStyle(fontSize: 38))),
+                              DataCell(Text(entry.value.price.toString(), style: const TextStyle(fontSize: 38))),
                               DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
-                              DataCell(Text(entry.value.unit == 0 ? 'Lỏng' : 'Rắn', style: TextStyle(fontSize: 38))),
+                              DataCell(Text(entry.value.unit == 0 ? 'Lỏng' : 'Rắn', style: const TextStyle(fontSize: 38))),
                               DataCell(Container(width: 1, color: Colors.black)),  // Dấu gạch đứng
                               DataCell(
                                 IconButton(
                                   onPressed: () {
                                     deletemedicine();
                                   },
-                                  icon: Icon(Icons.delete, color: Colors.red, size: 38),
+                                  icon: const Icon(Icons.delete, color: Colors.red, size: 38),
                                 ),
                               ),
                             ],

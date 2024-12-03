@@ -130,6 +130,7 @@ void addADoctor(BuildContext context) {
                       showCompleteFlushBar(context, 'Thêm thành công');
                       Future.delayed(const Duration(seconds: 3), () {
                       Navigator.push(
+                        // ignore: use_build_context_synchronously
                         context,
                         PageRouteBuilder(
                           pageBuilder: (context, animation, secondaryAnimation) => const DoctorScreen(),
@@ -192,7 +193,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
               style: TextStyle(color: textBlackColor),
             ),
             content: SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -286,9 +287,10 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         showCompleteFlushBar(context, 'Lưu thành công');
                         Future.delayed(const Duration(seconds: 3), () {
                         Navigator.push(
+                          // ignore: use_build_context_synchronously
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => DoctorScreen(),
+                            pageBuilder: (context, animation, secondaryAnimation) => const DoctorScreen(),
                             transitionsBuilder: (context, animation, secondaryAnimation, child) {
                               return child;
                             },
@@ -313,9 +315,10 @@ class _DoctorScreenState extends State<DoctorScreen> {
                   showCompleteFlushBar(context, 'Xóa thành công');
                   Future.delayed(const Duration(seconds: 3), () {
                   Navigator.push(
+                    // ignore: use_build_context_synchronously
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => DoctorScreen(),
+                      pageBuilder: (context, animation, secondaryAnimation) => const DoctorScreen(),
                       transitionsBuilder: (context, animation, secondaryAnimation, child) {
                         return child;
                       },
@@ -351,7 +354,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
       context: context,
       builder: (BuildContext context){
         return AlertDialog(
-          content: Container(
+          content: SizedBox(
             height: MediaQuery.of(context).size.height*0.25,
             width: MediaQuery.of(context).size.width*0.25,
             child: Container(
@@ -408,12 +411,13 @@ class _DoctorScreenState extends State<DoctorScreen> {
   Widget build(BuildContext context) {
     //Định dạng các text trong một hàng
     Container headTableText(String s, int newType){
+      // ignore: sized_box_for_whitespace
       return Container(
         width: MediaQuery.of(context).size.width*0.11,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
+            SizedBox(
               //color: veryGreenBackground,
               width: MediaQuery.of(context).size.width*0.08,
               child: Text(
@@ -423,7 +427,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               //color: veryGreenBackground,
               width: MediaQuery.of(context).size.width*0.03,
               child: IconButton(
@@ -442,6 +446,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
       );
     }
     Container tableText(String s){
+      // ignore: sized_box_for_whitespace
       return Container(
         width: MediaQuery.of(context).size.width*0.08,
         child: Text(
@@ -489,15 +494,15 @@ class _DoctorScreenState extends State<DoctorScreen> {
                     );
   }
 
-    late int _selectedIndex = 0;
+    late int selectedIndex = 0;
     return Scaffold(
       body: Row(
         children: [
           NavigationRail(
-            selectedIndex: _selectedIndex,
+            selectedIndex: selectedIndex,
             onDestinationSelected: (int index) {
               setState(() {
-                _selectedIndex = index; // Cập nhật chỉ mục được chọn
+                selectedIndex = index; // Cập nhật chỉ mục được chọn
               });
               switch(index){
                 case 0:
@@ -584,7 +589,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
     );
   }
 
-  ListView listViewType(Container _showAdoctors(int index, int listType, List<MapEntry<String,Doctor>> entries, String key, Doctor doctor)) {
+  ListView listViewType(Container Function(int index, int listType, List<MapEntry<String,Doctor>> entries, String key, Doctor doctor) showAdoctors) {
     List<MapEntry<String,Doctor>> entries = allDoctors.entries.toList();
     switch (listType){
       // 0 mặc định
@@ -598,7 +603,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
       case 1: setState(() {
         entries = allDoctors.entries.toList();
         entries.sort((a,b){
-          int result = a.value.IDWorker.compareTo(b.value.IDWorker);;
+          int result = a.value.IDWorker.compareTo(b.value.IDWorker);
           return listTypeReverse ? result : -result;
         });
       });
@@ -650,7 +655,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
         }
         entries = findEntries;
       });
-      default: entries = allDoctors.entries.toList();;
+      default: entries = allDoctors.entries.toList();
     }
     return ListView.separated(
                   padding: const EdgeInsets.all(defaultPadding),
@@ -658,7 +663,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                   itemBuilder: (context, index) {
                     String key = entries[index].key;
                     Doctor doctor = allDoctors[key]!;
-                    return _showAdoctors(index, listType,entries,key,doctor);
+                    return showAdoctors(index, listType,entries,key,doctor);
                   },
                   separatorBuilder: (context, index) => const SizedBox(height: 12.0)
                 );
