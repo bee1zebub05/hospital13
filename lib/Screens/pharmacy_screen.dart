@@ -34,279 +34,346 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
 
   // Add a new medicine
   void addMedicine() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        TextEditingController medicineNameController = TextEditingController();
-        TextEditingController quantityController = TextEditingController();
-        TextEditingController priceController = TextEditingController();
-        TextEditingController descriptionController = TextEditingController();
-        bool status = false;
-        int unit = 0;
+  showDialog(
+    context: context,
+    builder: (context) {
+      TextEditingController medicineNameController = TextEditingController();
+      TextEditingController quantityController = TextEditingController();
+      TextEditingController priceController = TextEditingController();
+      TextEditingController descriptionController = TextEditingController();
+      bool status = false;
+      int unit = 0;
 
-        String medicineID = generateMedicineID();
+      String medicineID = generateMedicineID();
 
-        return AlertDialog(
-          title: const Text('Thêm thuốc mới', style: TextStyle(fontSize: 24)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('ID thuốc: $medicineID',
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              TextField(
-                controller: medicineNameController,
-                decoration: const InputDecoration(labelText: 'Tên thuốc'),
-              ),
-              TextField(
-                controller: quantityController,
-                decoration: const InputDecoration(labelText: 'Số lượng'),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: priceController,
-                decoration: const InputDecoration(labelText: 'Giá'),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(labelText: 'Mô tả'),
-              ),
-              Row(
-                children: [
-                  const Text('Đơn vị:'),
-                  Radio(
-                    value: 0,
-                    groupValue: unit,
-                    onChanged: (int? value) {
-                      setState(() {
-                        unit = value!;
-                      });
-                    },
-                  ),
-                  const Text('Lỏng'),
-                  Radio(
-                    value: 1,
-                    groupValue: unit,
-                    onChanged: (int? value) {
-                      setState(() {
-                        unit = value!;
-                      });
-                    },
-                  ),
-                  const Text('Rắn'),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Hủy'),
+      return AlertDialog(
+        title: const Text('Thêm thuốc mới', style: TextStyle(fontSize: 24)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('ID thuốc: $medicineID',
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            TextField(
+              controller: medicineNameController,
+              decoration: const InputDecoration(labelText: 'Tên thuốc'),
             ),
-            TextButton(
-              onPressed: () {
+            TextField(
+              controller: quantityController,
+              decoration: const InputDecoration(labelText: 'Số lượng'),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: priceController,
+              decoration: const InputDecoration(labelText: 'Giá'),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: descriptionController,
+              decoration: const InputDecoration(labelText: 'Mô tả'),
+            ),
+            Row(
+              children: [
+                const Text('Đơn vị:'),
+                Radio(
+                  value: 0,
+                  groupValue: unit,
+                  onChanged: (int? value) {
+                    setState(() {
+                      unit = value!;
+                    });
+                  },
+                ),
+                const Text('Lỏng'),
+                Radio(
+                  value: 1,
+                  groupValue: unit,
+                  onChanged: (int? value) {
+                    setState(() {
+                      unit = value!;
+                    });
+                  },
+                ),
+                const Text('Rắn'),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Hủy'),
+          ),
+          TextButton(
+            onPressed: () {
+              try {
+                // Kiểm tra các trường bị bỏ trống
+                if (medicineNameController.text.isEmpty) {
+                  throw 'Tên thuốc không được bỏ trống';
+                }
+                if (quantityController.text.isEmpty) {
+                  throw 'Số lượng không được bỏ trống';
+                }
+                if (priceController.text.isEmpty) {
+                  throw 'Giá không được bỏ trống';
+                }
+                if (descriptionController.text.isEmpty) {
+                  throw 'Mô tả không được bỏ trống';
+                }
+
+                // Kiểm tra định dạng ID thuốc (đã tự động tạo đúng)
+                if (!RegExp(r'^ME\d{6}$').hasMatch(medicineID)) {
+                  throw 'ID thuốc phải có định dạng MExxxxxx (ME + 6 chữ số)';
+                }
+
+                // Kiểm tra giá trị nhập liệu
+                int quantity = int.tryParse(quantityController.text) ?? -1;
+                double price = double.tryParse(priceController.text) ?? -1;
+
+                if (quantity < 0) {
+                  throw 'Số lượng phải là số nguyên không âm';
+                }
+                if (price < 0) {
+                  throw 'Giá phải là số thực không âm';
+                }
+
+                // Thêm thuốc nếu hợp lệ
                 setState(() {
                   allMedicines[medicineID] = Medicine(
                     medicineID: medicineID,
                     medicineName: medicineNameController.text,
-                    quantity: int.parse(quantityController.text),
-                    price: double.parse(priceController.text),
+                    quantity: quantity,
+                    price: price,
                     description: descriptionController.text,
                     unit: unit,
                     status: status,
                   );
                 });
-                Navigator.pop(context);
-              },
-              child: const Text('Lưu'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+                Navigator.pop(context); // Đóng hộp thoại
+              } catch (e) {
+                // Hiển thị lỗi nếu có ngoại lệ
+                showErorrFlushBar(context, '$e');
+              }
+            },
+            child: const Text('Lưu'),
+          ),
+        ],
+      );
+    },
+  );
+}
 
-  // Show edit medicine dialog
+
   void showEditMedicineDialog(String key, Medicine medicine) {
-    TextEditingController medicineNameController =
-        TextEditingController(text: medicine.medicineName);
-    TextEditingController quantityController =
-        TextEditingController(text: medicine.quantity.toString());
-    TextEditingController priceController =
-        TextEditingController(text: medicine.price.toString());
-    TextEditingController descriptionController =
-        TextEditingController(text: medicine.description);
-    int unit = medicine.unit;
+  TextEditingController medicineNameController =
+      TextEditingController(text: medicine.medicineName);
+  TextEditingController quantityController =
+      TextEditingController(text: medicine.quantity.toString());
+  TextEditingController priceController =
+      TextEditingController(text: medicine.price.toString());
+  TextEditingController descriptionController =
+      TextEditingController(text: medicine.description);
+  TextEditingController medicineIDController =
+      TextEditingController(text: medicine.medicineID);
+      
+  int unit = medicine.unit;
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, void Function(void Function()) setState) {
-            return AlertDialog(
-              title: const Text(
-                'Chỉnh sửa thông tin thuốc',
-                style: TextStyle(fontSize: 24),
-              ),
-              content: SingleChildScrollView(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(),
-                      // Cột thứ nhất
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: Column(
-                          children: [
-                            TextField(
-                              controller: medicineNameController,
-                              decoration:
-                                  const InputDecoration(labelText: 'Tên thuốc'),
-                            ),
-                            const SizedBox(height: 10),
-                            TextField(
-                              controller: quantityController,
-                              decoration:
-                                  const InputDecoration(labelText: 'Số lượng'),
-                              keyboardType: TextInputType.number,
-                            ),
-                            const SizedBox(height: 10),
-                            TextField(
-                              controller: priceController,
-                              decoration: const InputDecoration(labelText: 'Giá'),
-                              keyboardType: TextInputType.number,
-                            ),
-                          ],
-                        ),
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, void Function(void Function()) setState) {
+          return AlertDialog(
+            title: const Text(
+              'Chỉnh sửa thông tin thuốc',
+              style: TextStyle(fontSize: 24),
+            ),
+            content: SingleChildScrollView(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    // Cột thứ nhất
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: medicineNameController,
+                            decoration:
+                                const InputDecoration(labelText: 'Tên thuốc'),
+                          ),
+                          const SizedBox(height: 10),
+                          TextField(
+                            controller: quantityController,
+                            decoration:
+                                const InputDecoration(labelText: 'Số lượng'),
+                            keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 10),
+                          TextField(
+                            controller: priceController,
+                            decoration: const InputDecoration(labelText: 'Giá'),
+                            keyboardType: TextInputType.number,
+                          ),
+                        ],
                       ),
-                      const Spacer(),
-                      // Cột thứ hai
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: Column(
-                          children: [
-                            TextField(
-                              controller: descriptionController,
-                              decoration:
-                                  const InputDecoration(labelText: 'Mô tả'),
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                const Text('Đơn vị:'),
-                                Radio(
-                                  value: 0,
-                                  groupValue: unit,
-                                  onChanged: (int? value) {
-                                    setState(() {
-                                      unit = value!;
-                                    });
-                                  },
-                                ),
-                                const Text('Lỏng'),
-                                Radio(
-                                  value: 1,
-                                  groupValue: unit,
-                                  onChanged: (int? value) {
-                                    setState(() {
-                                      unit = value!;
-                                    });
-                                  },
-                                ),
-                                const Text('Rắn'),
-                              ],
-                            ),
-                          ],
-                        ),
+                    ),
+                    const Spacer(),
+                    // Cột thứ hai
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: descriptionController,
+                            decoration: const InputDecoration(labelText: 'Mô tả'),
+                          ),
+                          const SizedBox(height: 10),
+                          // Hiển thị ID thuốc, không chỉnh sửa
+                          TextFormField(
+                            controller: medicineIDController,
+                            decoration: const InputDecoration(labelText: 'ID thuốc'),
+                            enabled: false, // Không thể chỉnh sửa
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const Text('Đơn vị:'),
+                              Radio(
+                                value: 0,
+                                groupValue: unit,
+                                onChanged: (int? value) {
+                                  setState(() {
+                                    unit = value!;
+                                  });
+                                },
+                              ),
+                              const Text('Lỏng'),
+                              Radio(
+                                value: 1,
+                                groupValue: unit,
+                                onChanged: (int? value) {
+                                  setState(() {
+                                    unit = value!;
+                                  });
+                                },
+                              ),
+                              const Text('Rắn'),
+                            ],
+                          ),
+                        ],
                       ),
-                      const Spacer(),
-                    ],
-                  ),
+                    ),
+                    const Spacer(),
+                  ],
                 ),
               ),
-              actions: [
-                // Xóa thuốc
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      allMedicines.remove(key); // Xóa thuốc khỏi danh sách
-                    });
-                    Navigator.of(context).pop(); // Đóng hộp thoại
-                    showCompleteFlushBar(context, 'Xóa thuốc thành công');
-                    Future.delayed(const Duration(seconds: 3), () {
-                      Navigator.push(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const PharmacyScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return child;
-                          },
-                        ),
-                      );
-                    });
-                  },
-                  child: const Text('Xóa', style: TextStyle(color: Colors.red)),
-                ),
-                // Lưu thay đổi
-                TextButton(
-                  onPressed: () {
+            ),
+            actions: [
+              // Xóa thuốc
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    allMedicines.remove(key); // Xóa thuốc khỏi danh sách
+                  });
+                  Navigator.of(context).pop(); // Đóng hộp thoại
+                  showCompleteFlushBar(context, 'Xóa thuốc thành công');
+                  Future.delayed(const Duration(seconds: 3), () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const PharmacyScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return child;
+                        },
+                      ),
+                    );
+                  });
+                },
+                child: const Text('Xóa', style: TextStyle(color: Colors.red)),
+              ),
+              // Lưu thay đổi
+              TextButton(
+                onPressed: () {
+                  try {
+                    // Kiểm tra ô bị bỏ trống
+                    if (medicineNameController.text.isEmpty) {
+                      throw 'Tên thuốc không được bỏ trống';
+                    }
+                    if (quantityController.text.isEmpty) {
+                      throw 'Số lượng không được bỏ trống';
+                    }
+                    if (priceController.text.isEmpty) {
+                      throw 'Giá không được bỏ trống';
+                    }
+                    if (descriptionController.text.isEmpty) {
+                      throw 'Mô tả không được bỏ trống';
+                    }
+
+                    // Kiểm tra giá trị nhập liệu
+                    int quantity = int.tryParse(quantityController.text) ?? -1;
+                    double price = double.tryParse(priceController.text) ?? -1;
+
+                    if (quantity < 0) {
+                      throw 'Số lượng phải là số nguyên không âm';
+                    }
+                    if (price < 0) {
+                      throw 'Giá phải là số thực không âm';
+                    }
+
+                    // Lưu dữ liệu nếu hợp lệ
                     setState(() {
                       allMedicines[key]?.medicineName =
                           medicineNameController.text;
-                      allMedicines[key]?.quantity =
-                          int.parse(quantityController.text);
-                      allMedicines[key]?.price =
-                          double.parse(priceController.text);
+                      allMedicines[key]?.quantity = quantity;
+                      allMedicines[key]?.price = price;
                       allMedicines[key]?.description =
                           descriptionController.text;
                       allMedicines[key]?.unit = unit;
                     });
+
                     Navigator.of(context).pop(); // Đóng hộp thoại
                     showCompleteFlushBar(context, 'Chỉnh sửa thành công');
                     Future.delayed(const Duration(seconds: 3), () {
                       Navigator.push(
-                        // ignore: use_build_context_synchronously
                         context,
                         PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const PharmacyScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const PharmacyScreen(),
+                          transitionsBuilder: (context, animation,
+                              secondaryAnimation, child) {
                             return child;
                           },
                         ),
                       );
                     });
-                    Future.delayed(const Duration(seconds: 3), () {
-                      Navigator.push(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const PharmacyScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return child;
-                          },
-                        ),
-                      );
-                    });
-                  },
-                  child: const Text('Lưu'),
-                ),
-                // Hủy
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Đóng hộp thoại
-                  },
-                  child: const Text('Hủy'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
+                  } catch (e) {
+                    // Hiển thị thông báo lỗi khi xảy ra ngoại lệ
+                    showErorrFlushBar(context, '$e');
+                  }
+                },
+                child: const Text('Lưu'),
+              ),
+              // Hủy
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Đóng hộp thoại
+                },
+                child: const Text('Hủy'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
 
   // Sort medicines
   List<MapEntry<String, Medicine>> sortMedicines() {
@@ -314,7 +381,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
 
     switch (listType) {
       case 1: // Sort by ID
-        entries.sort(
+        entries.sort( 
             (a, b) => a.key.compareTo(b.key) * (listTypeReverse ? -1 : 1));
         break;
       case 2: // Sort by Name

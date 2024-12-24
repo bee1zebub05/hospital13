@@ -65,13 +65,13 @@ class AppointmentPopup extends StatelessWidget {
                           'Bác sĩ: ${app.toString()}',
                         ),
                         // Nếu có hóa đơn, hiển thị tổng tiền
-                        if (app.payedBill != null)
+                        if (app.payedBill != null&&app.payedBill!.getTotalPrice()!=0)
                           Text(
                             'Tổng tiền: ${app.payedBill!.getTotalPrice()} VND',
                             style: const TextStyle(color: Colors.red),
                           ),
                         // Nếu không có hóa đơn, hiển thị thông báo
-                        if (app.payedBill == null)
+                        if (app.payedBill!.getTotalPrice()==0)
                           const Text(
                             'Chưa có hóa đơn',
                             style: TextStyle(color: Colors.grey),
@@ -83,7 +83,7 @@ class AppointmentPopup extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       // Nếu có hóa đơn, hiển thị thông tin chi tiết thuốc và tổng tiền cho từng cuộc hẹn
-                      if (app.payedBill != null) {
+                      if (app.payedBill != null&&app.payedBill!.getTotalPrice()!=0) {
                         double totalAmount = app.payedBill!.getTotalPrice();
                         // Hiển thị thông báo tổng tiền và các thuốc cho từng cuộc hẹn
                         showDialog(
